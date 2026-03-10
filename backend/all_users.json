@@ -1,0 +1,2282 @@
+[
+  {
+    "_id": "699ec01da57242fef502c86e",
+    "name": "Dr.P.Senthilkumar,M.E.,Ph.D.(IITM)",
+    "email": "principal@mec.edu.in",
+    "password": "$2a$10$73HpwaA8j8e9jgEIgPBQs.yj8EFSD6m8EHSTL7h6YJsFDQSK.NgIm",
+    "role": "principal",
+    "department": null,
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:49.603Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01da57242fef502c870",
+    "name": "Prof. HOD CSE",
+    "email": "hod.cse@mec.edu.in",
+    "password": "$2a$10$O10cLc.rJv8mXpINyuXNKunAB.FwBh9hY1As2o.dzoauLxwORD5/K",
+    "role": "hod",
+    "department": "699ec01da57242fef502c85e",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:49.747Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01da57242fef502c875",
+    "name": "Prof. Staff CSE 1A",
+    "email": "staff.cse1a@mec.edu.in",
+    "password": "$2a$10$Pi2JRbL071UxzF.NBK1YQu5FWcgLoIzHhihg5Xi30Em5CmQcsEoem",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85e",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01da57242fef502c873"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:49.876Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01ea57242fef502c879",
+    "name": "Prof. Staff CSE 1B",
+    "email": "staff.cse1b@mec.edu.in",
+    "password": "$2a$10$sZDb.lAgDKP9HtVFGC8kHuWZGhna36Qe9FgPGLZ9HkgXhoEE4xD7i",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85e",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01da57242fef502c877"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:50.001Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01ea57242fef502c87d",
+    "name": "Prof. Staff CSE 2A",
+    "email": "staff.cse2a@mec.edu.in",
+    "password": "$2a$10$/paX2vNdHsBxTn1oeVGtTOkiJkDL2FGwAs8DRrNdTUeQ2XGBRruMS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85e",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01ea57242fef502c87b"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:50.117Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01ea57242fef502c881",
+    "name": "Prof. Staff CSE 2B",
+    "email": "staff.cse2b@mec.edu.in",
+    "password": "$2a$10$K03Z/Q/CchghG1s1tkBvHuJJn8BbWuMJnmrl6XD0Hvf.4AlByc2Hq",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85e",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01ea57242fef502c87f"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:50.233Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01ea57242fef502c885",
+    "name": "Prof. Staff CSE 3A",
+    "email": "staff.cse3a@mec.edu.in",
+    "password": "$2a$10$74hZQRWWMmEsgPpO9DZFxuQLQKjTBZBnUFIfcpI4gBW58JUCEKo/C",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85e",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01ea57242fef502c883"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:50.349Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01ea57242fef502c889",
+    "name": "Prof. Staff CSE 3B",
+    "email": "staff.cse3b@mec.edu.in",
+    "password": "$2a$10$IchSxMmaoJqTRvDBBe0Zn.2mR3ZjcnKe8U6L2iz4l6CL5Ja1DucAW",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85e",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01ea57242fef502c887"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:50.464Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01ea57242fef502c88d",
+    "name": "Prof. Staff CSE 4A",
+    "email": "staff.cse4a@mec.edu.in",
+    "password": "$2a$10$hZvFTJSekySYFFo4Clxobulv39o.8vXpyZuWH1culXuyOjOjY1b3.",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85e",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01ea57242fef502c88b"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:50.589Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01ea57242fef502c891",
+    "name": "Prof. Staff CSE 4B",
+    "email": "staff.cse4b@mec.edu.in",
+    "password": "$2a$10$3FUo3aP8z8unLBbf4bSSK.4.Noo3fdnbv22OtLVY6IYS0ikGMCrjS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85e",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01ea57242fef502c88f"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:50.724Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01ea57242fef502c90b",
+    "name": "Prof. HOD IT",
+    "email": "hod.it@mec.edu.in",
+    "password": "$2a$10$2w3jmizxyDLgkr2Djuc1lu3AH9i1VdrMfBHCagUAZ3h5AWO.brDtq",
+    "role": "hod",
+    "department": "699ec01da57242fef502c85f",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:50.990Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01fa57242fef502c910",
+    "name": "Prof. Staff IT 1A",
+    "email": "staff.it1a@mec.edu.in",
+    "password": "$2a$10$6fh/wBO04/6SSb1NoqxgZ.rb6uTK7rrVk3gtYcd1D3ys00aDMCceG",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85f",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01fa57242fef502c90e"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:51.114Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01fa57242fef502c914",
+    "name": "Prof. Staff IT 1B",
+    "email": "staff.it1b@mec.edu.in",
+    "password": "$2a$10$EsdBtMqrr85dWDO8zKDk/ucOM5yo8qrP2VwlZG4GF/APpyGJdxITq",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85f",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01fa57242fef502c912"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:51.234Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01fa57242fef502c918",
+    "name": "Prof. Staff IT 2A",
+    "email": "staff.it2a@mec.edu.in",
+    "password": "$2a$10$EG6IH7GswtHQa6QWcPzXO.JFYCf3ynJy66LKAJEC8JfkTq4MGrCxy",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85f",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01fa57242fef502c916"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:51.345Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01fa57242fef502c91c",
+    "name": "Prof. Staff IT 2B",
+    "email": "staff.it2b@mec.edu.in",
+    "password": "$2a$10$c6R3vDqLQwATMnly9BnEBuqy9s8fEJ2vw.NAGvAerMw3N/ZVxbHKK",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85f",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01fa57242fef502c91a"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:51.457Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01fa57242fef502c920",
+    "name": "Prof. Staff IT 3A",
+    "email": "staff.it3a@mec.edu.in",
+    "password": "$2a$10$FjMYUiSELj3jWjC.VNppcuS4zzo9M/Q9Ye/s0Y6V63fYBLjEBF.im",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85f",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01fa57242fef502c91e"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:51.577Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01fa57242fef502c924",
+    "name": "Prof. Staff IT 3B",
+    "email": "staff.it3b@mec.edu.in",
+    "password": "$2a$10$BCMj0OBdSbj4xIs7x9ak/uKlJJKnfw9obC9LgprSmnSKE/FC5XkUG",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85f",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01fa57242fef502c922"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:51.693Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01fa57242fef502c928",
+    "name": "Prof. Staff IT 4A",
+    "email": "staff.it4a@mec.edu.in",
+    "password": "$2a$10$aKAANTGEEw6G3vMvIifXqedpUzKQx.Hm9q/OtDbMsWUzy3W22fIyG",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85f",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01fa57242fef502c926"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:51.812Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec01fa57242fef502c92c",
+    "name": "Prof. Staff IT 4B",
+    "email": "staff.it4b@mec.edu.in",
+    "password": "$2a$10$X/8GuMwYzL4b5/1Zwg2WBeoY8D.L6iaCZw0hUapbZ8hSVUqrE8nmG",
+    "role": "staff",
+    "department": "699ec01da57242fef502c85f",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec01fa57242fef502c92a"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:51.926Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec020a57242fef502c9a6",
+    "name": "Prof. HOD AIDS",
+    "email": "hod.aids@mec.edu.in",
+    "password": "$2a$10$vllobY1KHuH3vrJooNFZ7uTt9rFFPCWkI1WGSIu2GZv.3oFDd9Orm",
+    "role": "hod",
+    "department": "699ec01da57242fef502c860",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:52.179Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec020a57242fef502c9ab",
+    "name": "Prof. Staff AIDS 1A",
+    "email": "staff.aids1a@mec.edu.in",
+    "password": "$2a$10$.A4Ig2MyGRRVETuKYYy7N.SOCOvmOEDAZOO4z.cVLYwp.MN/AyG3S",
+    "role": "staff",
+    "department": "699ec01da57242fef502c860",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec020a57242fef502c9a9"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:52.302Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec020a57242fef502c9af",
+    "name": "Prof. Staff AIDS 1B",
+    "email": "staff.aids1b@mec.edu.in",
+    "password": "$2a$10$4haVObnX7s9WbsxZA60NK.s2n44w9w8Bvy3CWupa2mRbaMyROdn7C",
+    "role": "staff",
+    "department": "699ec01da57242fef502c860",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec020a57242fef502c9ad"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:52.416Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec020a57242fef502c9b3",
+    "name": "Prof. Staff AIDS 2A",
+    "email": "staff.aids2a@mec.edu.in",
+    "password": "$2a$10$8xqIWx1aSKyg2pF59h3Ke.VxTxO/TJ04WfRIfwcbu40R92XM5PRWa",
+    "role": "staff",
+    "department": "699ec01da57242fef502c860",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec020a57242fef502c9b1"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:52.532Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec020a57242fef502c9b7",
+    "name": "Prof. Staff AIDS 2B",
+    "email": "staff.aids2b@mec.edu.in",
+    "password": "$2a$10$RkwiOJP5uL.Tzzoc0d8HN.edrY1GkgGNagz263UcWDOPoq.X8cf9C",
+    "role": "staff",
+    "department": "699ec01da57242fef502c860",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec020a57242fef502c9b5"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:52.648Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec020a57242fef502c9bb",
+    "name": "Prof. Staff AIDS 3A",
+    "email": "staff.aids3a@mec.edu.in",
+    "password": "$2a$10$2E5qUZK4q80YRmN9oW1Fju6oHg1JncOlxPaBqB7JtP8T2rjp9uuHq",
+    "role": "staff",
+    "department": "699ec01da57242fef502c860",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec020a57242fef502c9b9"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:52.762Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec020a57242fef502c9bf",
+    "name": "Prof. Staff AIDS 3B",
+    "email": "staff.aids3b@mec.edu.in",
+    "password": "$2a$10$rvLVFNJmco71PuUlWNwh7e/7NSn.HyU6PJOl4ZCqD/lHhLKx9d.Ni",
+    "role": "staff",
+    "department": "699ec01da57242fef502c860",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec020a57242fef502c9bd"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:52.878Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec020a57242fef502c9c3",
+    "name": "Prof. Staff AIDS 4A",
+    "email": "staff.aids4a@mec.edu.in",
+    "password": "$2a$10$6PMkgbKwXzy5uweT.A3qneaTNcLf8pFssl1UK5b8OLMOeL7B14y2S",
+    "role": "staff",
+    "department": "699ec01da57242fef502c860",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec020a57242fef502c9c1"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:52.988Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec021a57242fef502c9c7",
+    "name": "Prof. Staff AIDS 4B",
+    "email": "staff.aids4b@mec.edu.in",
+    "password": "$2a$10$oKHwLluXruNUDZteNBm7rOtd.QsD3e8dK7qBzRt3kmrqspQMK80Ly",
+    "role": "staff",
+    "department": "699ec01da57242fef502c860",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec021a57242fef502c9c5"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:53.101Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec021a57242fef502ca41",
+    "name": "Prof. HOD AIML",
+    "email": "hod.aiml@mec.edu.in",
+    "password": "$2a$10$l/xaXDfc.wjCdlh8IQEqoO5hznLlcqfbj4SPaA/kIF8wYVkSmexHm",
+    "role": "hod",
+    "department": "699ec01da57242fef502c861",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:53.366Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec021a57242fef502ca46",
+    "name": "Prof. Staff AIML 1A",
+    "email": "staff.aiml1a@mec.edu.in",
+    "password": "$2a$10$mNbzhjCZ3BEug/RLHR6CjuVDjqzhPO77/Lktzh4DLEMSzkNu551yq",
+    "role": "staff",
+    "department": "699ec01da57242fef502c861",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec021a57242fef502ca44"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:53.483Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec021a57242fef502ca4a",
+    "name": "Prof. Staff AIML 1B",
+    "email": "staff.aiml1b@mec.edu.in",
+    "password": "$2a$10$.ZMf2rhadR9tR2RIDkG0WutJ27.J8uAGI4B2RGgwSrMTxcqD9Oj5.",
+    "role": "staff",
+    "department": "699ec01da57242fef502c861",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec021a57242fef502ca48"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:53.600Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec021a57242fef502ca4e",
+    "name": "Prof. Staff AIML 2A",
+    "email": "staff.aiml2a@mec.edu.in",
+    "password": "$2a$10$.kXz7U1ZI6yeyOyeEKhZpuVJBvdzaANkLAZFQQn0EM8z/bnot7cFG",
+    "role": "staff",
+    "department": "699ec01da57242fef502c861",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec021a57242fef502ca4c"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:53.714Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec021a57242fef502ca52",
+    "name": "Prof. Staff AIML 2B",
+    "email": "staff.aiml2b@mec.edu.in",
+    "password": "$2a$10$elI12dJCrEt.nyix9ptMSO4iPzHLjehPWd28pqBVWBAZ61gbZGJCy",
+    "role": "staff",
+    "department": "699ec01da57242fef502c861",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec021a57242fef502ca50"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:53.829Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec021a57242fef502ca56",
+    "name": "Prof. Staff AIML 3A",
+    "email": "staff.aiml3a@mec.edu.in",
+    "password": "$2a$10$yJHW9wAl6uk.UkSH86bww./Or97.CdTpb83wyKzIeRsEXUQEZIj0.",
+    "role": "staff",
+    "department": "699ec01da57242fef502c861",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec021a57242fef502ca54"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:53.942Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec022a57242fef502ca5a",
+    "name": "Prof. Staff AIML 3B",
+    "email": "staff.aiml3b@mec.edu.in",
+    "password": "$2a$10$ec.XI1zGwdiS98snfdH1DOdK2.2zWKI83qp0acogje5g8SbhE9CfO",
+    "role": "staff",
+    "department": "699ec01da57242fef502c861",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec022a57242fef502ca58"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:54.053Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec022a57242fef502ca5e",
+    "name": "Prof. Staff AIML 4A",
+    "email": "staff.aiml4a@mec.edu.in",
+    "password": "$2a$10$I/O5DhZXHWGv3w2UiIUIQOlGZDQ3aT0Eyd1oTUtaMkd0OJY1.dY12",
+    "role": "staff",
+    "department": "699ec01da57242fef502c861",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec022a57242fef502ca5c"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:54.166Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec022a57242fef502ca62",
+    "name": "Prof. Staff AIML 4B",
+    "email": "staff.aiml4b@mec.edu.in",
+    "password": "$2a$10$VyqIyR3XOlPh/y7V7Ssc3OyWBiqzJjYkMd13EhlV1b3yOM9ltk6MW",
+    "role": "staff",
+    "department": "699ec01da57242fef502c861",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec022a57242fef502ca60"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:54.279Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec022a57242fef502cadc",
+    "name": "Prof. HOD CS",
+    "email": "hod.cs@mec.edu.in",
+    "password": "$2a$10$VQQcDqP.YpTQvhGd7UWhxOR0J1LvByHT5JgPFOdXdzpVDpeZP/etG",
+    "role": "hod",
+    "department": "699ec01da57242fef502c862",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:54.534Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec022a57242fef502cae1",
+    "name": "Prof. Staff CS 1A",
+    "email": "staff.cs1a@mec.edu.in",
+    "password": "$2a$10$CpX0D51aqzrp8mhKfF8i1u0zYV0tbpORS3WcCJ5csnFMnCr252I3i",
+    "role": "staff",
+    "department": "699ec01da57242fef502c862",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec022a57242fef502cadf"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:54.653Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec022a57242fef502cae5",
+    "name": "Prof. Staff CS 1B",
+    "email": "staff.cs1b@mec.edu.in",
+    "password": "$2a$10$Zy99C3OAjo/g/fzy6aCkieSPJSBeIVlXZhAe0nSu9zBey2Vc4YZYi",
+    "role": "staff",
+    "department": "699ec01da57242fef502c862",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec022a57242fef502cae3"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:54.771Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec022a57242fef502cae9",
+    "name": "Prof. Staff CS 2A",
+    "email": "staff.cs2a@mec.edu.in",
+    "password": "$2a$10$t0q9lps4LwSQCfvJkPPar.YbMAKzUNXdlh2zx/W/8HpBuAWBtF1qC",
+    "role": "staff",
+    "department": "699ec01da57242fef502c862",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec022a57242fef502cae7"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:54.886Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec023a57242fef502caed",
+    "name": "Prof. Staff CS 2B",
+    "email": "staff.cs2b@mec.edu.in",
+    "password": "$2a$10$PhsTIkw/QSJDXlKZnhN.0OehBK7OKc1z8dzGm56Q.6ouZnWc489YK",
+    "role": "staff",
+    "department": "699ec01da57242fef502c862",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec022a57242fef502caeb"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:55.000Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec023a57242fef502caf1",
+    "name": "Prof. Staff CS 3A",
+    "email": "staff.cs3a@mec.edu.in",
+    "password": "$2a$10$na/Cpy/oFS3QLIhODso/Ne6uDQi5BCgmfX0LMt6eYaip44DFoCj3O",
+    "role": "staff",
+    "department": "699ec01da57242fef502c862",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec023a57242fef502caef"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:55.114Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec023a57242fef502caf5",
+    "name": "Prof. Staff CS 3B",
+    "email": "staff.cs3b@mec.edu.in",
+    "password": "$2a$10$BbjWg78P0dShz0.HkE7etuJZLhZUr.s2POuD51xV2gO5GJoakS9z2",
+    "role": "staff",
+    "department": "699ec01da57242fef502c862",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec023a57242fef502caf3"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:55.231Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec023a57242fef502caf9",
+    "name": "Prof. Staff CS 4A",
+    "email": "staff.cs4a@mec.edu.in",
+    "password": "$2a$10$D/mWNu/ru1zLbZomaSqg2O8udkmtF2Jn8oJiGu.LMJOLwLj/YZc42",
+    "role": "staff",
+    "department": "699ec01da57242fef502c862",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec023a57242fef502caf7"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:55.352Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec023a57242fef502cafd",
+    "name": "Prof. Staff CS 4B",
+    "email": "staff.cs4b@mec.edu.in",
+    "password": "$2a$10$nG7z0fAbZsiHGruRSMo9B.iWvNPzMztUIOvR.aBomb.9cMkBvHQ/y",
+    "role": "staff",
+    "department": "699ec01da57242fef502c862",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec023a57242fef502cafb"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:55.467Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec023a57242fef502cb77",
+    "name": "Prof. HOD CSBS",
+    "email": "hod.csbs@mec.edu.in",
+    "password": "$2a$10$7oWh//Syk1tHFlA/L93Ie.qM4lfNoTkYb1rw1eAcmUflR9PS5Em/G",
+    "role": "hod",
+    "department": "699ec01da57242fef502c863",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:55.703Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec023a57242fef502cb7c",
+    "name": "Prof. Staff CSBS 1A",
+    "email": "staff.csbs1a@mec.edu.in",
+    "password": "$2a$10$pcKqWcO2QpTTDhponlFz5uiKHCJ/4SwAgRvCAw1Al/8jhI7s4gWNe",
+    "role": "staff",
+    "department": "699ec01da57242fef502c863",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec023a57242fef502cb7a"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:55.823Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec023a57242fef502cb80",
+    "name": "Prof. Staff CSBS 1B",
+    "email": "staff.csbs1b@mec.edu.in",
+    "password": "$2a$10$.c6ChiwZ7vrilS1wLVKk5e4K86IfcOLL0Znss1fyOGI1bPszPI0jO",
+    "role": "staff",
+    "department": "699ec01da57242fef502c863",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec023a57242fef502cb7e"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:55.944Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec024a57242fef502cb84",
+    "name": "Prof. Staff CSBS 2A",
+    "email": "staff.csbs2a@mec.edu.in",
+    "password": "$2a$10$7U6o/wSxIAIZYo6zDLEJLev2D211LIuSxzSVdRv5XjQneQ1yChy3C",
+    "role": "staff",
+    "department": "699ec01da57242fef502c863",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec024a57242fef502cb82"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:56.061Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec024a57242fef502cb88",
+    "name": "Prof. Staff CSBS 2B",
+    "email": "staff.csbs2b@mec.edu.in",
+    "password": "$2a$10$eZrLIUDe47cM2Xc6qvmQ7uORYxMpXLuu0QHYvZ8YV64z2liTMz1La",
+    "role": "staff",
+    "department": "699ec01da57242fef502c863",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec024a57242fef502cb86"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:56.175Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec024a57242fef502cb8c",
+    "name": "Prof. Staff CSBS 3A",
+    "email": "staff.csbs3a@mec.edu.in",
+    "password": "$2a$10$2yJzY1toAh8SydLkUHhOeOAkIWdifQkNrS/Rat8MGx9U14dWLVwF6",
+    "role": "staff",
+    "department": "699ec01da57242fef502c863",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec024a57242fef502cb8a"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:56.293Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec024a57242fef502cb90",
+    "name": "Prof. Staff CSBS 3B",
+    "email": "staff.csbs3b@mec.edu.in",
+    "password": "$2a$10$oj8IsWlWab8aIWWyfdvbUu3fgMm1CEFnXoSPkXjJ8re8Y1aLUf27.",
+    "role": "staff",
+    "department": "699ec01da57242fef502c863",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec024a57242fef502cb8e"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:56.410Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec024a57242fef502cb94",
+    "name": "Prof. Staff CSBS 4A",
+    "email": "staff.csbs4a@mec.edu.in",
+    "password": "$2a$10$VYrTnjgqQQEq0AnWsnw7ou187hcHRr2MQXyLbHfifHDlxRLyIvbyi",
+    "role": "staff",
+    "department": "699ec01da57242fef502c863",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec024a57242fef502cb92"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:56.522Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec024a57242fef502cb98",
+    "name": "Prof. Staff CSBS 4B",
+    "email": "staff.csbs4b@mec.edu.in",
+    "password": "$2a$10$rIH7j5jxC9NLj9Y408chUueFuKdwIVB/8njiTU9APAhKqTbjl/c7u",
+    "role": "staff",
+    "department": "699ec01da57242fef502c863",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec024a57242fef502cb96"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:56.636Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec024a57242fef502cc12",
+    "name": "Prof. HOD ECE",
+    "email": "hod.ece@mec.edu.in",
+    "password": "$2a$10$YfvrZyz4nfGxw6seK2eZIe9VDeMuH6vv3wBAAzi/4fkWg48HdoTF2",
+    "role": "hod",
+    "department": "699ec01da57242fef502c864",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:56.890Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec025a57242fef502cc17",
+    "name": "Prof. Staff ECE 1A",
+    "email": "staff.ece1a@mec.edu.in",
+    "password": "$2a$10$Wf.keSdtB1bKwYEWTTOHC.0nEbvRxhOSN8C5A.Yg4zV7y.Zvo97xC",
+    "role": "staff",
+    "department": "699ec01da57242fef502c864",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec025a57242fef502cc15"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:57.012Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec025a57242fef502cc1b",
+    "name": "Prof. Staff ECE 1B",
+    "email": "staff.ece1b@mec.edu.in",
+    "password": "$2a$10$PbNWKZr/KBceDWif.iwx5uwiPKJBiZml2mdgdvq.UbO4M2wsiVyD6",
+    "role": "staff",
+    "department": "699ec01da57242fef502c864",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec025a57242fef502cc19"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:57.131Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec025a57242fef502cc1f",
+    "name": "Prof. Staff ECE 2A",
+    "email": "staff.ece2a@mec.edu.in",
+    "password": "$2a$10$7Y55y7708jZg0HlYYao1v.snV4W.ssCxdl0wX6CtCVlgSIEH0iUcW",
+    "role": "staff",
+    "department": "699ec01da57242fef502c864",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec025a57242fef502cc1d"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:57.248Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec025a57242fef502cc23",
+    "name": "Prof. Staff ECE 2B",
+    "email": "staff.ece2b@mec.edu.in",
+    "password": "$2a$10$ruozIxZ2o/1RPDZNwPqru.HWaWRAlTEhFg2JVdxcDV.ZoKR11XPdG",
+    "role": "staff",
+    "department": "699ec01da57242fef502c864",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec025a57242fef502cc21"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:57.370Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec025a57242fef502cc27",
+    "name": "Prof. Staff ECE 3A",
+    "email": "staff.ece3a@mec.edu.in",
+    "password": "$2a$10$C.HKNiHH/CPGCCiRQXYeK.G12llpojqi3Vc3iXd082WKCe9QE3/kS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c864",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec025a57242fef502cc25"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:57.532Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec025a57242fef502cc2b",
+    "name": "Prof. Staff ECE 3B",
+    "email": "staff.ece3b@mec.edu.in",
+    "password": "$2a$10$JEk2XC9cQdML/GdQQjQ3LekoiBhTGw7zkpfNpTwWDPk99leWmmIZa",
+    "role": "staff",
+    "department": "699ec01da57242fef502c864",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec025a57242fef502cc29"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:57.647Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec025a57242fef502cc2f",
+    "name": "Prof. Staff ECE 4A",
+    "email": "staff.ece4a@mec.edu.in",
+    "password": "$2a$10$5qUiAj4Ii6BFIMvmN9lgbu3vfrBi.2uxD62jk/uuIacz1jt1iWLeK",
+    "role": "staff",
+    "department": "699ec01da57242fef502c864",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec025a57242fef502cc2d"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:57.760Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec025a57242fef502cc33",
+    "name": "Prof. Staff ECE 4B",
+    "email": "staff.ece4b@mec.edu.in",
+    "password": "$2a$10$YBJ7hLgKAch270VJbVJLWeUr3sbCFWlOtjHjvcfLfcBCu.l7XMP0O",
+    "role": "staff",
+    "department": "699ec01da57242fef502c864",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec025a57242fef502cc31"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:57.872Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec026a57242fef502ccad",
+    "name": "Prof. HOD EEE",
+    "email": "hod.eee@mec.edu.in",
+    "password": "$2a$10$4LQocjqmGz85SAUYDZM4U.g.faZktIK86Xcgnmackp1OZq9KiVX3e",
+    "role": "hod",
+    "department": "699ec01da57242fef502c865",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:58.110Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec026a57242fef502ccb2",
+    "name": "Prof. Staff EEE 1A",
+    "email": "staff.eee1a@mec.edu.in",
+    "password": "$2a$10$Q3SR3gNPBLYDyyhbh7JfGukdGGlQK9l6TGwM/GH4flDPwmUATXcDy",
+    "role": "staff",
+    "department": "699ec01da57242fef502c865",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec026a57242fef502ccb0"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:58.229Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec026a57242fef502ccb6",
+    "name": "Prof. Staff EEE 1B",
+    "email": "staff.eee1b@mec.edu.in",
+    "password": "$2a$10$FjSYqqTz1YQmtVWbgckZue4wCw1H/00dl4R0SqFwnF/11umMXagSm",
+    "role": "staff",
+    "department": "699ec01da57242fef502c865",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec026a57242fef502ccb4"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:58.353Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec026a57242fef502ccba",
+    "name": "Prof. Staff EEE 2A",
+    "email": "staff.eee2a@mec.edu.in",
+    "password": "$2a$10$4F4dBMJtxuNpWVKcKTQxZujClIu/YmYFtlQ6sIrmED.wKNJb9E1D2",
+    "role": "staff",
+    "department": "699ec01da57242fef502c865",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec026a57242fef502ccb8"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:58.500Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec026a57242fef502ccbe",
+    "name": "Prof. Staff EEE 2B",
+    "email": "staff.eee2b@mec.edu.in",
+    "password": "$2a$10$hOs9rKPKp6wpSgvOYim3t.0s2ocOYr9PEegz4eUne29dkHRvhfBQW",
+    "role": "staff",
+    "department": "699ec01da57242fef502c865",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec026a57242fef502ccbc"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:58.631Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec026a57242fef502ccc2",
+    "name": "Prof. Staff EEE 3A",
+    "email": "staff.eee3a@mec.edu.in",
+    "password": "$2a$10$vBxaGq3S3wSxi1h0qhaoEOuCC1.61g5lhnyOsdtFKLEbYpQjC5SNS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c865",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec026a57242fef502ccc0"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:58.749Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec026a57242fef502ccc6",
+    "name": "Prof. Staff EEE 3B",
+    "email": "staff.eee3b@mec.edu.in",
+    "password": "$2a$10$LTcJwIDD6ctyykxcjHYpyuW90bIoTGsWpRQxEUthhn8FBZHIOLFxe",
+    "role": "staff",
+    "department": "699ec01da57242fef502c865",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec026a57242fef502ccc4"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:58.870Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec026a57242fef502ccca",
+    "name": "Prof. Staff EEE 4A",
+    "email": "staff.eee4a@mec.edu.in",
+    "password": "$2a$10$poNFDVe8JcKBmGehwRyb8OexNRafe93rRg64Rsh1zMon2ayoxa.Le",
+    "role": "staff",
+    "department": "699ec01da57242fef502c865",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec026a57242fef502ccc8"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:58.988Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec027a57242fef502ccce",
+    "name": "Prof. Staff EEE 4B",
+    "email": "staff.eee4b@mec.edu.in",
+    "password": "$2a$10$NPZlIQJeobyi/uISz3vbpetv4DO5wJNXBnAMWv9qjGLkh4aLwx1DS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c865",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec027a57242fef502cccc"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:59.104Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec027a57242fef502cd48",
+    "name": "Prof. HOD VLSI",
+    "email": "hod.vlsi@mec.edu.in",
+    "password": "$2a$10$d7cwQdWybtWMv2iMSlW.SufQ37hCMf6eqSsfOzhvWPR5ff8/3k6Tu",
+    "role": "hod",
+    "department": "699ec01da57242fef502c866",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:59.346Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec027a57242fef502cd4d",
+    "name": "Prof. Staff VLSI 1A",
+    "email": "staff.vlsi1a@mec.edu.in",
+    "password": "$2a$10$0UEeL/t8h6Bh3c7qJTnr3ec8Ch4zdEEHPODLdRLNHoFz/qlfKwKzi",
+    "role": "staff",
+    "department": "699ec01da57242fef502c866",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec027a57242fef502cd4b"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:59.465Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec027a57242fef502cd51",
+    "name": "Prof. Staff VLSI 1B",
+    "email": "staff.vlsi1b@mec.edu.in",
+    "password": "$2a$10$Q6NVKf4k4GuucW5xkGlW5e5qSdQdslc.anYGmhuWc5v6YxEG66a9S",
+    "role": "staff",
+    "department": "699ec01da57242fef502c866",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec027a57242fef502cd4f"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:59.594Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec027a57242fef502cd55",
+    "name": "Prof. Staff VLSI 2A",
+    "email": "staff.vlsi2a@mec.edu.in",
+    "password": "$2a$10$lnPx.Z1fa7uy4te3xvFvy.E7XXXL9NsPIJrZCa.B6sW31Oqd7lYMy",
+    "role": "staff",
+    "department": "699ec01da57242fef502c866",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec027a57242fef502cd53"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:59.710Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec027a57242fef502cd59",
+    "name": "Prof. Staff VLSI 2B",
+    "email": "staff.vlsi2b@mec.edu.in",
+    "password": "$2a$10$u017geIQ7QQ205j6uxTxIuhRhqkS3n8tyL8/kFuR7BChlx9mEw/SC",
+    "role": "staff",
+    "department": "699ec01da57242fef502c866",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec027a57242fef502cd57"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:59.822Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec027a57242fef502cd5d",
+    "name": "Prof. Staff VLSI 3A",
+    "email": "staff.vlsi3a@mec.edu.in",
+    "password": "$2a$10$VkWMEAUjkwpG1oOMnrQMzetqBmkjTphqqv99yeC1DIN2gNuVgj8WS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c866",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec027a57242fef502cd5b"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:25:59.935Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec028a57242fef502cd61",
+    "name": "Prof. Staff VLSI 3B",
+    "email": "staff.vlsi3b@mec.edu.in",
+    "password": "$2a$10$uFBzW8h/aE7.2e1wZuoEF.jqPYP/Q1lqxTmze159mB/uNi3/2RCfC",
+    "role": "staff",
+    "department": "699ec01da57242fef502c866",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec028a57242fef502cd5f"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:00.055Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec028a57242fef502cd65",
+    "name": "Prof. Staff VLSI 4A",
+    "email": "staff.vlsi4a@mec.edu.in",
+    "password": "$2a$10$ckDQGrOiHLTydGjlDvsr1.Wki2o/.2N8EsUvVzOOJXw2tuL/2JyYi",
+    "role": "staff",
+    "department": "699ec01da57242fef502c866",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec028a57242fef502cd63"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:00.169Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec028a57242fef502cd69",
+    "name": "Prof. Staff VLSI 4B",
+    "email": "staff.vlsi4b@mec.edu.in",
+    "password": "$2a$10$hJ3vf9THSXWD01IKX9BRUelpygyDOQxV9Nr1/Miv11gbCJOe8dixS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c866",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec028a57242fef502cd67"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:00.280Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec028a57242fef502cde3",
+    "name": "Prof. HOD MECH",
+    "email": "hod.mech@mec.edu.in",
+    "password": "$2a$10$PZ/fqaAluYSgzCdLij4yF.fhnv7.Togrqv/LJgg6/Tmgh9D3.nlcu",
+    "role": "hod",
+    "department": "699ec01da57242fef502c867",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:00.523Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec028a57242fef502cde8",
+    "name": "Prof. Staff MECH 1A",
+    "email": "staff.mech1a@mec.edu.in",
+    "password": "$2a$10$1C1U0tt4mQTjmjgWu26vG.PoKwqrNWr.F70jkL7X6p2SEbPU13hOO",
+    "role": "staff",
+    "department": "699ec01da57242fef502c867",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec028a57242fef502cde6"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:00.645Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec028a57242fef502cdec",
+    "name": "Prof. Staff MECH 1B",
+    "email": "staff.mech1b@mec.edu.in",
+    "password": "$2a$10$0VMyCrxWNi3L6.V578pmgOYm/CxIHqzu04iEnDFoSu1TseunYtbFC",
+    "role": "staff",
+    "department": "699ec01da57242fef502c867",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec028a57242fef502cdea"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:00.763Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec028a57242fef502cdf0",
+    "name": "Prof. Staff MECH 2A",
+    "email": "staff.mech2a@mec.edu.in",
+    "password": "$2a$10$.FqBrNZ/thiJx/9JbXf8dOpB4C3Psz95XxdqS1.0eB50OZwPX30lq",
+    "role": "staff",
+    "department": "699ec01da57242fef502c867",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec028a57242fef502cdee"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:00.877Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec028a57242fef502cdf4",
+    "name": "Prof. Staff MECH 2B",
+    "email": "staff.mech2b@mec.edu.in",
+    "password": "$2a$10$jMx/RQ2Cxt1XrulYgyTb0e.ILp9xLLZv.pm45syF0I8/I1q7HDa5m",
+    "role": "staff",
+    "department": "699ec01da57242fef502c867",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec028a57242fef502cdf2"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:00.993Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec029a57242fef502cdf8",
+    "name": "Prof. Staff MECH 3A",
+    "email": "staff.mech3a@mec.edu.in",
+    "password": "$2a$10$/TKjcOQS/9TVPOOQkvNSc.ZIZtE4irNGLmnogjd5ZpzF3UHawDzyO",
+    "role": "staff",
+    "department": "699ec01da57242fef502c867",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec029a57242fef502cdf6"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:01.116Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec029a57242fef502cdfc",
+    "name": "Prof. Staff MECH 3B",
+    "email": "staff.mech3b@mec.edu.in",
+    "password": "$2a$10$x9o5jJAjqAi8xXskQyLH/uLMkqsQhDHHopxWVHKARbr55xt6Ti18e",
+    "role": "staff",
+    "department": "699ec01da57242fef502c867",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec029a57242fef502cdfa"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:01.237Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec029a57242fef502ce00",
+    "name": "Prof. Staff MECH 4A",
+    "email": "staff.mech4a@mec.edu.in",
+    "password": "$2a$10$IlRVLX5alkoCYxuTOIDhaeTNX2GZrtVukMdcWzNubmCE8p7kbQwHy",
+    "role": "staff",
+    "department": "699ec01da57242fef502c867",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec029a57242fef502cdfe"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:01.350Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec029a57242fef502ce04",
+    "name": "Prof. Staff MECH 4B",
+    "email": "staff.mech4b@mec.edu.in",
+    "password": "$2a$10$p61unlT0mIgUbgRlT5cENuHce5IaTZn2Z6/XNl4a70qIB7YCn83BG",
+    "role": "staff",
+    "department": "699ec01da57242fef502c867",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec029a57242fef502ce02"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:01.463Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec029a57242fef502ce7e",
+    "name": "Prof. HOD MECT",
+    "email": "hod.mect@mec.edu.in",
+    "password": "$2a$10$3FT.dLUARmUgPCu67Z2ZVOWATSjqv1IoP9GOq1XL8VNfHiZeeycjm",
+    "role": "hod",
+    "department": "699ec01da57242fef502c868",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:01.700Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec029a57242fef502ce83",
+    "name": "Prof. Staff MECT 1A",
+    "email": "staff.mect1a@mec.edu.in",
+    "password": "$2a$10$dxAAHW5QYKA4hEn7oQ547OOiBNRfv9w9gFcIuo4JCQazLBJN4kVIi",
+    "role": "staff",
+    "department": "699ec01da57242fef502c868",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec029a57242fef502ce81"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:01.816Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec029a57242fef502ce87",
+    "name": "Prof. Staff MECT 1B",
+    "email": "staff.mect1b@mec.edu.in",
+    "password": "$2a$10$lQ6Jcr1YcwP1itYRp3T8i.jsVKcPhH9hzqMEZkmCpv5DQFGdFlcz2",
+    "role": "staff",
+    "department": "699ec01da57242fef502c868",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec029a57242fef502ce85"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:01.934Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02aa57242fef502ce8b",
+    "name": "Prof. Staff MECT 2A",
+    "email": "staff.mect2a@mec.edu.in",
+    "password": "$2a$10$av14LfEtl31ueylbQwglm.dQNIKwQG5gSELz7WULM1wsuulUS5UVq",
+    "role": "staff",
+    "department": "699ec01da57242fef502c868",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02aa57242fef502ce89"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:02.060Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02aa57242fef502ce8f",
+    "name": "Prof. Staff MECT 2B",
+    "email": "staff.mect2b@mec.edu.in",
+    "password": "$2a$10$0QrhSRp4S268s4.WIMvnTumkEN0tSvJBA/gklImgb19BfDTBUkWwC",
+    "role": "staff",
+    "department": "699ec01da57242fef502c868",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02aa57242fef502ce8d"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:02.181Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02aa57242fef502ce93",
+    "name": "Prof. Staff MECT 3A",
+    "email": "staff.mect3a@mec.edu.in",
+    "password": "$2a$10$AVAjbLPT4StgSMLApxpvmuxSu4NPEHbhN.gg0WMhb4AmvpZhxzyY.",
+    "role": "staff",
+    "department": "699ec01da57242fef502c868",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02aa57242fef502ce91"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:02.296Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02aa57242fef502ce97",
+    "name": "Prof. Staff MECT 3B",
+    "email": "staff.mect3b@mec.edu.in",
+    "password": "$2a$10$erFTOArgCMNRQaCODSDsn.71BhmDRaSTJ01JriKaBmMJweiR.GAr.",
+    "role": "staff",
+    "department": "699ec01da57242fef502c868",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02aa57242fef502ce95"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:02.408Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02aa57242fef502ce9b",
+    "name": "Prof. Staff MECT 4A",
+    "email": "staff.mect4a@mec.edu.in",
+    "password": "$2a$10$x/T9UjAyeJcHREXn8eaYeO4slB5uPllXvhl0C10yZGKEZ3e1w95Mm",
+    "role": "staff",
+    "department": "699ec01da57242fef502c868",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02aa57242fef502ce99"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:02.523Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02aa57242fef502ce9f",
+    "name": "Prof. Staff MECT 4B",
+    "email": "staff.mect4b@mec.edu.in",
+    "password": "$2a$10$9mtyzeu/YiQgSDwrS84mb.PvrG.BdoINyDUgzYaDRPSod1/YDWeze",
+    "role": "staff",
+    "department": "699ec01da57242fef502c868",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02aa57242fef502ce9d"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:02.638Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02aa57242fef502cf19",
+    "name": "Prof. HOD CIVIL",
+    "email": "hod.civil@mec.edu.in",
+    "password": "$2a$10$rhT.30xvPLGTWTGz9nGJDeyP8Wi4LJEPLShQSIug1IeR.AYwNBD4O",
+    "role": "hod",
+    "department": "699ec01da57242fef502c869",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:02.882Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ba57242fef502cf1e",
+    "name": "Prof. Staff CIVIL 1A",
+    "email": "staff.civil1a@mec.edu.in",
+    "password": "$2a$10$UhRGlti0GKX84RyRyM4o7OJwij/MIH5ZSxDpDqN0h3Wplm6hG3Jbe",
+    "role": "staff",
+    "department": "699ec01da57242fef502c869",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02aa57242fef502cf1c"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:03.001Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ba57242fef502cf22",
+    "name": "Prof. Staff CIVIL 1B",
+    "email": "staff.civil1b@mec.edu.in",
+    "password": "$2a$10$YpZTEbSBTzuPdyuTbzJMY.0A.Tl8NIqMhn/peZDQGGttidFgioetS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c869",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ba57242fef502cf20"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:03.122Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ba57242fef502cf26",
+    "name": "Prof. Staff CIVIL 2A",
+    "email": "staff.civil2a@mec.edu.in",
+    "password": "$2a$10$9hjbHXEVUvr003uHwXPFku9xwt4y/kXX7oc69bGFMIuZFzQ7F7Lcm",
+    "role": "staff",
+    "department": "699ec01da57242fef502c869",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ba57242fef502cf24"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:03.234Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ba57242fef502cf2a",
+    "name": "Prof. Staff CIVIL 2B",
+    "email": "staff.civil2b@mec.edu.in",
+    "password": "$2a$10$76qhPnzZDuVWh9vh1d4l.O8iPG/trJveAqwiKti3PAVZSY9CIqA8K",
+    "role": "staff",
+    "department": "699ec01da57242fef502c869",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ba57242fef502cf28"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:03.343Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ba57242fef502cf2e",
+    "name": "Prof. Staff CIVIL 3A",
+    "email": "staff.civil3a@mec.edu.in",
+    "password": "$2a$10$WhSvwZ6YSX.vptRmFOPvK.tjYfGDEpj7CZLXHIiZouTMTfNcGILsy",
+    "role": "staff",
+    "department": "699ec01da57242fef502c869",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ba57242fef502cf2c"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:03.460Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ba57242fef502cf32",
+    "name": "Prof. Staff CIVIL 3B",
+    "email": "staff.civil3b@mec.edu.in",
+    "password": "$2a$10$2ZeCMHZ9FjCZhsBTxZ2SceXmt3ihyXjqAsd/BzuMLRWJOvYwWNfla",
+    "role": "staff",
+    "department": "699ec01da57242fef502c869",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ba57242fef502cf30"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:03.580Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ba57242fef502cf36",
+    "name": "Prof. Staff CIVIL 4A",
+    "email": "staff.civil4a@mec.edu.in",
+    "password": "$2a$10$uEvt1QX8HuyRpAK/nykBxeJ3lhAKGG6N.g14PhCO1ilLyicUKbRBe",
+    "role": "staff",
+    "department": "699ec01da57242fef502c869",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ba57242fef502cf34"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:03.695Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ba57242fef502cf3a",
+    "name": "Prof. Staff CIVIL 4B",
+    "email": "staff.civil4b@mec.edu.in",
+    "password": "$2a$10$58n/aJlW9C0lpJSp0MRZEeb07PijyUd/JSaz51nL5QljSZsRzpTuq",
+    "role": "staff",
+    "department": "699ec01da57242fef502c869",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ba57242fef502cf38"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:03.807Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ca57242fef502cfb4",
+    "name": "Prof. HOD BME",
+    "email": "hod.bme@mec.edu.in",
+    "password": "$2a$10$VZ2QnNyRShvkfRyW8er5hO2bBWDt.oMSzSUn05tHin/p3ldYJtQwG",
+    "role": "hod",
+    "department": "699ec01da57242fef502c86a",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:04.055Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ca57242fef502cfb9",
+    "name": "Prof. Staff BME 1A",
+    "email": "staff.bme1a@mec.edu.in",
+    "password": "$2a$10$JAXUXxPlExZQM9V3WqNFDulNnDQpmxnsfqIm.7FfxWhAAbZZkHd/u",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86a",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ca57242fef502cfb7"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:04.180Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ca57242fef502cfbd",
+    "name": "Prof. Staff BME 1B",
+    "email": "staff.bme1b@mec.edu.in",
+    "password": "$2a$10$VaXiM88IOL23q1.WKkvhJupYf3CGwm8OEjivuPB16t./Kpu27rBcm",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86a",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ca57242fef502cfbb"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:04.302Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ca57242fef502cfc1",
+    "name": "Prof. Staff BME 2A",
+    "email": "staff.bme2a@mec.edu.in",
+    "password": "$2a$10$eX7lF3/IJpmyHQ6S8/JW/ufp9NE3o74WnCdfVvLZpdIvg.v.el29S",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86a",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ca57242fef502cfbf"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:04.417Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ca57242fef502cfc5",
+    "name": "Prof. Staff BME 2B",
+    "email": "staff.bme2b@mec.edu.in",
+    "password": "$2a$10$nCC6RtWOI7lMutreS4i6TOQXbQ7lnBJYR3mwgwY/yj1HVoya9x5hq",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86a",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ca57242fef502cfc3"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:04.533Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ca57242fef502cfc9",
+    "name": "Prof. Staff BME 3A",
+    "email": "staff.bme3a@mec.edu.in",
+    "password": "$2a$10$gg1idYDgW5efY2x5vUNbLuMzdUGqJrF8KQgdqJtFTRyF3Qn.8Ks7K",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86a",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ca57242fef502cfc7"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:04.645Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ca57242fef502cfcd",
+    "name": "Prof. Staff BME 3B",
+    "email": "staff.bme3b@mec.edu.in",
+    "password": "$2a$10$VT50FPtEFKZ6j4A45ULcrO.4M/NoWvHykqGuu.JaGQAE/KhPF5mVi",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86a",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ca57242fef502cfcb"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:04.758Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ca57242fef502cfd1",
+    "name": "Prof. Staff BME 4A",
+    "email": "staff.bme4a@mec.edu.in",
+    "password": "$2a$10$XK.lA0m3YDPwnAlPPDSeq.nY/VhRnIx2wB.xs6tAR.UoX3HOP4IQm",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86a",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ca57242fef502cfcf"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:04.871Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ca57242fef502cfd5",
+    "name": "Prof. Staff BME 4B",
+    "email": "staff.bme4b@mec.edu.in",
+    "password": "$2a$10$kv3uRZntb43oQsovGmb4Kuszo3j9R8MQwVUDdIi/Yw6nJC5i4jwWC",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86a",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ca57242fef502cfd3"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:04.988Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02da57242fef502d04f",
+    "name": "Prof. HOD BT",
+    "email": "hod.bt@mec.edu.in",
+    "password": "$2a$10$qqb01.7X9sh.4L/J/Kd3huH3iWmjLG0n66a8vXqPEhDW3eC1irhqS",
+    "role": "hod",
+    "department": "699ec01da57242fef502c86b",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:05.255Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02da57242fef502d054",
+    "name": "Prof. Staff BT 1A",
+    "email": "staff.bt1a@mec.edu.in",
+    "password": "$2a$10$YTRLuFEtDHNVhGxSqWI7VeGBaO2lyIVAUf/5r.9gVB2uITxGEHBvS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86b",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02da57242fef502d052"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:05.372Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02da57242fef502d058",
+    "name": "Prof. Staff BT 1B",
+    "email": "staff.bt1b@mec.edu.in",
+    "password": "$2a$10$JXYSBGe3cCN7.lPwFonEpOJazkt0eQ2uVu8or1Ab8vnR7M8g0ouCK",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86b",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02da57242fef502d056"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:05.489Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02da57242fef502d05c",
+    "name": "Prof. Staff BT 2A",
+    "email": "staff.bt2a@mec.edu.in",
+    "password": "$2a$10$L2qxPyreoriOoU5JxSYw.ebvPSMlSQpF70R60EBlCcKxZz1Tu9/ZG",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86b",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02da57242fef502d05a"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:05.603Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02da57242fef502d060",
+    "name": "Prof. Staff BT 2B",
+    "email": "staff.bt2b@mec.edu.in",
+    "password": "$2a$10$ZY/W5YVg8He8co.PjxMSCuOfruxBA8lv/FRomJFBcJPx.9aRKORzS",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86b",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02da57242fef502d05e"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:05.715Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02da57242fef502d064",
+    "name": "Prof. Staff BT 3A",
+    "email": "staff.bt3a@mec.edu.in",
+    "password": "$2a$10$/YtY8Ip9ZaFwqT5EyJ0Gj.oN.x2JAN2CKID2hvFPjanIik/SlX0Ly",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86b",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02da57242fef502d062"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:05.832Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02da57242fef502d068",
+    "name": "Prof. Staff BT 3B",
+    "email": "staff.bt3b@mec.edu.in",
+    "password": "$2a$10$HKYhyelynpD9uJ1u5os79uV.YgpLLjzzfXwX5.3cYb3NmyalZ3r8a",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86b",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02da57242fef502d066"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:05.944Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ea57242fef502d06c",
+    "name": "Prof. Staff BT 4A",
+    "email": "staff.bt4a@mec.edu.in",
+    "password": "$2a$10$Kn8LawoRX5e75gEX55vaI.jSGS4MANNGyz2JCJNnbuCpnnFquGDZi",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86b",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ea57242fef502d06a"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:06.063Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ea57242fef502d070",
+    "name": "Prof. Staff BT 4B",
+    "email": "staff.bt4b@mec.edu.in",
+    "password": "$2a$10$VQnMCjXtJi0AWJNbfCtTyuPziP0LbwYUWlJSiPsVMvWMQ1AJ72ADm",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86b",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ea57242fef502d06e"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:06.178Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ea57242fef502d0ea",
+    "name": "Prof. HOD AGE",
+    "email": "hod.age@mec.edu.in",
+    "password": "$2a$10$6nIFu5MP7R8rDnZKD6UWfOXLzYn.jaEPy0RUfgVAK03SwSZI00F0e",
+    "role": "hod",
+    "department": "699ec01da57242fef502c86c",
+    "year": null,
+    "section": null,
+    "assignedSubjects": [],
+    "assignedSections": [],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:06.404Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ea57242fef502d0ef",
+    "name": "Prof. Staff AGE 1A",
+    "email": "staff.age1a@mec.edu.in",
+    "password": "$2a$10$LkCCtefF1U92MOsrk3yUgeMFcJwgSXEulATQ1hpWrkWr4wrQ01gG6",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86c",
+    "year": 1,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ea57242fef502d0ed"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:06.532Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ea57242fef502d0f3",
+    "name": "Prof. Staff AGE 1B",
+    "email": "staff.age1b@mec.edu.in",
+    "password": "$2a$10$HRs6mZTmpQxMRDmFkXA0TeMcKhsYLLlZwvbWv.7zk8LJMl32RbJrG",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86c",
+    "year": 1,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ea57242fef502d0f1"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:06.651Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ea57242fef502d0f7",
+    "name": "Prof. Staff AGE 2A",
+    "email": "staff.age2a@mec.edu.in",
+    "password": "$2a$10$2V89DIaWFDJ9xSZut90RgORxIu60Jn6VTg6bI8sukOJcz3bzh2ecm",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86c",
+    "year": 2,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ea57242fef502d0f5"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:06.770Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02ea57242fef502d0fb",
+    "name": "Prof. Staff AGE 2B",
+    "email": "staff.age2b@mec.edu.in",
+    "password": "$2a$10$e2R/GsuagKCGKivur1X8HuWFcC8b35fgmMG4eiRDXC0xz32/iDotC",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86c",
+    "year": 2,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02ea57242fef502d0f9"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:06.895Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02fa57242fef502d0ff",
+    "name": "Prof. Staff AGE 3A",
+    "email": "staff.age3a@mec.edu.in",
+    "password": "$2a$10$.6jjYwiR8qvHOhe.3471Y.kxmDK/zwl79uOUYZkURpOW0FW4iB2X.",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86c",
+    "year": 3,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02fa57242fef502d0fd"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:07.032Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02fa57242fef502d103",
+    "name": "Prof. Staff AGE 3B",
+    "email": "staff.age3b@mec.edu.in",
+    "password": "$2a$10$tskaE45Ge.Yqg8FWB8SX3O2M9GzJ0JrYCfjf0SAT7FIfrps1xNVzi",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86c",
+    "year": 3,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02fa57242fef502d101"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:07.146Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02fa57242fef502d107",
+    "name": "Prof. Staff AGE 4A",
+    "email": "staff.age4a@mec.edu.in",
+    "password": "$2a$10$TWxRWF.kjkcP4GD5wEDCIuN6ifMv4NK2ySvCJLzt0Ow01Fq9hI4Ky",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86c",
+    "year": 4,
+    "section": "A",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02fa57242fef502d105"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:07.260Z",
+    "__v": 0
+  },
+  {
+    "_id": "699ec02fa57242fef502d10b",
+    "name": "Prof. Staff AGE 4B",
+    "email": "staff.age4b@mec.edu.in",
+    "password": "$2a$10$XUuboGBR2n8swsvEyyAuB.fU2cSv5kqWw1bAqMlURBFsKEkL.6Yoa",
+    "role": "staff",
+    "department": "699ec01da57242fef502c86c",
+    "year": 4,
+    "section": "B",
+    "assignedSubjects": [],
+    "assignedSections": [
+      "699ec02fa57242fef502d109"
+    ],
+    "isActive": true,
+    "createdAt": "2026-02-25T09:26:07.374Z",
+    "__v": 0
+  }
+]
