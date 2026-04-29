@@ -71,6 +71,15 @@ const markAttendance = async (req, res) => {
         ]);
 
         res.status(201).json({ success: true, data: populated });
+
+        // --- AUTOMATIC NOTIFICATION LOGIC ---
+        // If any students are Absent, trigger background notification (simulated)
+        const absentees = attendance.filter(a => a.status === 'Absent');
+        if (absentees.length > 0) {
+            console.log(`[AUTO-NOTIFY] Triggering notifications for ${absentees.length} absentees`);
+            // In a real app, we would import notifyParents here or emit a background job
+            // For now, we log it. The HOD can still manually trigger via the UI.
+        }
     } catch (error) {
         if (error.code === 11000) {
             return res.status(400).json({ message: 'Attendance already marked for this slot.' });
@@ -292,64 +301,114 @@ const getAttendanceSummary = async (req, res) => {
     }
 };
 
-// @desc    Get students attendance by student
+// @desc    Get students attendance by student (Summarized stats)
 // @route   GET /api/attendance/student/:studentId
 // @access  HOD, Principal, Staff
 const getStudentAttendance = async (req, res) => {
     try {
         const { studentId } = req.params;
-        const { startDate, endDate } = req.query;
-
-        let matchStage = { 'attendance.student': new mongoose.Types.ObjectId(studentId) };
-
-        if (startDate && endDate) {
-            matchStage.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
-        }
-
-        const pipeline = [
-            { $match: matchStage },
-            { $unwind: '$attendance' },
-            { $match: { 'attendance.student': new mongoose.Types.ObjectId(studentId) } },
-            {
-                $group: {
-                    _id: null,
-                    totalClasses: { $sum: 1 },
-                    presentCount: {
-                        $sum: { $cond: [{ $in: ['$attendance.status', ['Present', 'OD']] }, 1, 0] },
-                    },
-                    records: {
-                        $push: {
-                            date: '$date',
-                            period: '$period',
-                            status: '$attendance.status',
-                        },
-                    },
-                },
-            },
-            {
-                $project: {
-                    totalClasses: 1,
-                    presentCount: 1,
-                    absentCount: { $subtract: ['$totalClasses', '$presentCount'] },
-                    percentage: {
-                        $round: [
-                            { $multiply: [{ $divide: ['$presentCount', '$totalClasses'] }, 100] },
-                            1,
-                        ],
-                    },
-                    records: 1,
-                },
-            },
-        ];
-
-        const data = await AttendanceRecord.aggregate(pipeline);
         const student = await Student.findById(studentId)
             .populate('department', 'name')
             .populate('section', 'name');
 
-        res.json({ success: true, student, data });
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+
+        const now = new Date();
+        
+        // Define Date Ranges
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const startOfYear = new Date(now.getFullYear(), 0, 1);
+        
+        // Week start (Monday)
+        const day = now.getDay();
+        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+        const startOfWeek = new Date(new Date(now).setDate(diff));
+        startOfWeek.setHours(0,0,0,0);
+
+        const getStatsForRange = async (start, end) => {
+            let match = { 
+                'attendance.student': new mongoose.Types.ObjectId(studentId),
+                status: 'approved' // Only count approved records for official stats
+            };
+            
+            if (start) {
+                match.date = { $gte: start };
+                if (end) match.date.$lte = end;
+            }
+
+            const pipeline = [
+                { $match: match },
+                { $unwind: '$attendance' },
+                { $match: { 'attendance.student': new mongoose.Types.ObjectId(studentId) } },
+                {
+                    $group: {
+                        _id: null,
+                        totalClasses: { $sum: 1 },
+                        presentCount: {
+                            $sum: { $cond: [{ $eq: ['$attendance.status', 'Present'] }, 1, 0] },
+                        },
+                        absentCount: {
+                            $sum: { $cond: [{ $eq: ['$attendance.status', 'Absent'] }, 1, 0] },
+                        },
+                        leaveCount: {
+                            $sum: { $cond: [{ $in: ['$attendance.status', ['OD', 'Leave']] }, 1, 0] },
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        totalClasses: 1,
+                        presentCount: 1,
+                        absentCount: 1,
+                        leaveCount: 1,
+                        percentage: {
+                            $cond: [
+                                { $gt: ['$totalClasses', 0] },
+                                { $round: [{ $multiply: [{ $divide: [{ $add: ['$presentCount', '$leaveCount'] }, '$totalClasses'] }, 100] }, 1] },
+                                0
+                            ]
+                        }
+                    },
+                },
+            ];
+            const result = await AttendanceRecord.aggregate(pipeline);
+            return result[0] || { totalClasses: 0, presentCount: 0, absentCount: 0, leaveCount: 0, percentage: 0 };
+        };
+
+        const [week, month, year, total] = await Promise.all([
+            getStatsForRange(startOfWeek),
+            getStatsForRange(startOfMonth),
+            getStatsForRange(startOfYear),
+            getStatsForRange(null) // All time
+        ]);
+
+        // Get last 5 leave reasons
+        const leaveRecords = await AttendanceRecord.find({
+            'attendance.student': new mongoose.Types.ObjectId(studentId),
+            'attendance.status': { $in: ['Absent', 'Leave', 'OD'] }
+        })
+        .sort({ date: -1 })
+        .limit(5)
+        .select('date attendance.$');
+
+        const reasons = leaveRecords.map(r => ({
+            date: r.date,
+            status: r.attendance[0].status,
+            reason: r.attendance[0].reason || 'No reason provided'
+        }));
+
+        res.json({ 
+            success: true, 
+            student: {
+                ...student._doc,
+                residency: student.residency
+            }, 
+            stats: { week, month, year, total },
+            reasons
+        });
     } catch (error) {
-        console.error(error);
+        console.error('Get Student Stats Error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };

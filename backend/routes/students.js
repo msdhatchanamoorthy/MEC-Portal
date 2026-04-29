@@ -14,8 +14,8 @@ router.use(protect);
 
 router.get('/', getStudents);
 router.post('/', roleCheck('principal', 'hod'), createStudent);
-router.post('/upload-excel', roleCheck('staff'), uploadExcel);
-router.delete('/delete-section', roleCheck('staff'), deleteSection);
+router.post('/upload-excel', roleCheck('principal', 'hod', 'staff'), uploadExcel);
+router.delete('/delete-section', roleCheck('principal', 'hod', 'staff'), deleteSection);
 router.put('/:id', roleCheck('principal', 'hod'), updateStudent);
 router.delete('/:id', roleCheck('principal'), deleteStudent);
 

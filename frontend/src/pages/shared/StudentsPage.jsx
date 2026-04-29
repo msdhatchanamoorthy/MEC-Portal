@@ -4,6 +4,7 @@ import Topbar from '../../components/Topbar';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import * as XLSX from 'xlsx';
 
 const StudentsPage = () => {
     const { user } = useAuth();
@@ -25,6 +26,7 @@ const StudentsPage = () => {
         name: '', rollNumber: '', registerNumber: '', email: '', phone: '',
         department: user?.department?._id || '',
         year: '1', section: '',
+        gender: 'Male', residency: 'Day Scholar',
     });
 
     useEffect(() => {
@@ -101,6 +103,8 @@ const StudentsPage = () => {
             department: student.department?._id || student.department,
             year: student.year.toString(),
             section: student.section?._id || student.section,
+            gender: student.gender || 'Male',
+            residency: student.residency || 'Day Scholar',
         });
         setShowModal(true);
     };
@@ -111,8 +115,108 @@ const StudentsPage = () => {
             name: '', rollNumber: '', registerNumber: '', email: '', phone: '',
             department: user?.department?._id || '',
             year: '1', section: '',
+            gender: 'Male', residency: 'Day Scholar',
         });
         setShowModal(true);
+    };
+
+    
+    const handleToggleGender = async (student) => {
+        try {
+            const newGender = student.gender === 'Male' ? 'Female' : 'Male';
+            await api.put(`/students/${student._id}`, { gender: newGender });
+            toast.success(`${student.name} is now marked as a ${newGender === 'Male' ? 'Boy' : 'Girl'}`);
+            fetchStudents();
+        } catch (err) {
+            toast.error('Failed to update gender');
+        }
+    };
+
+    const handleToggleResidency = async (student) => {
+        try {
+            const newRes = student.residency === 'Hosteller' ? 'Day Scholar' : 'Hosteller';
+            await api.put(`/students/${student._id}`, { residency: newRes });
+            toast.success(`${student.name} is now a ${newRes}`);
+            fetchStudents();
+        } catch (err) {
+            toast.error('Failed to update residency');
+        }
+    };
+
+    const handleExcelUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!filters.departmentId || !filters.year || !filters.sectionId) {
+            toast.error('Please select Department, Year, and Section first to specify where to upload these students.');
+            e.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = async (evt) => {
+            try {
+                const bstr = evt.target.result;
+                const wb = XLSX.read(bstr, { type: 'binary' });
+                const wsname = wb.SheetNames[0];
+                const ws = wb.Sheets[wsname];
+                const data = XLSX.utils.sheet_to_json(ws);
+
+                if (data.length === 0) {
+                    toast.error('Excel file is empty');
+                    return;
+                }
+
+                // Map Excel headers to our model
+                const students = data.map(row => {
+                    let name = '', regNo = '', rollNo = '', genderVal = '', resVal = '';
+                    
+                    // Search all keys for matching patterns
+                    Object.keys(row).forEach(key => {
+                        const k = key.toLowerCase().trim();
+                        const val = row[key] ? row[key].toString().trim() : '';
+                        
+                        if (k.includes('name')) name = val;
+                        if (k.includes('num') || k.includes('reg') || k.includes('roll')) {
+                            if (!regNo) regNo = val;
+                            else rollNo = val;
+                        }
+                        if (k.includes('gender') || k.includes('sex')) genderVal = val.toLowerCase();
+                        if (k.includes('residency') || k.includes('type') || k.includes('status')) resVal = val.toLowerCase();
+                    });
+
+                    // If rollNo wasn't found specifically, use regNo
+                    if (!rollNo) rollNo = regNo;
+
+                    return {
+                        name: name || 'Unknown Student',
+                        rollNumber: rollNo || 'N/A',
+                        registerNumber: regNo || 'N/A',
+                        email: row.Email || row.email || '',
+                        phone: (row.Phone || row.phone || '').toString(),
+                        gender: (genderVal.includes('girl') || genderVal.includes('female') || genderVal === 'f') ? 'Female' : 'Male',
+                        residency: (resVal.includes('hostel')) ? 'Hosteller' : 'Day Scholar'
+                    };
+                });
+
+                setLoading(true);
+                await api.post('/students/upload-excel', {
+                    students,
+                    department: filters.departmentId,
+                    year: filters.year,
+                    section: filters.sectionId
+                });
+
+                toast.success(`Successfully uploaded ${students.length} students!`);
+                fetchStudents();
+            } catch (err) {
+                toast.error(err.response?.data?.message || 'Error parsing or uploading Excel');
+            } finally {
+                setLoading(false);
+                e.target.value = '';
+            }
+        };
+        reader.readAsBinaryString(file);
     };
 
     const filteredStudents = students.filter((s) =>
@@ -143,9 +247,21 @@ const StudentsPage = () => {
                                 style={{ width: 220 }}
                             />
                             {(user?.role === 'principal' || user?.role === 'hod' || user?.role === 'staff') && (
-                                <button className="btn btn-primary" onClick={handleAddNewClick}>
-                                    + Add Student
-                                </button>
+                                <div style={{ display: 'flex', gap: 10 }}>
+                                    <button className="btn btn-outline" onClick={() => document.getElementById('excel-input').click()}>
+                                        📤 Bulk Upload (Excel)
+                                    </button>
+                                    <input 
+                                        id="excel-input"
+                                        type="file" 
+                                        accept=".xlsx, .xls, .csv" 
+                                        style={{ display: 'none' }} 
+                                        onChange={handleExcelUpload}
+                                    />
+                                    <button className="btn btn-primary" onClick={handleAddNewClick}>
+                                        + Add Student
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -211,6 +327,8 @@ const StudentsPage = () => {
                                             <th>Register No</th>
                                             <th>Name</th>
                                             <th>Year</th>
+                                            <th>Gender</th>
+                                            <th>Residency</th>
                                             <th>Section</th>
                                             {user?.role === 'principal' && <th>Department</th>}
                                             <th>Email</th>
@@ -226,6 +344,26 @@ const StudentsPage = () => {
                                                 <td style={{ fontFamily: 'monospace', fontSize: 13, color: '#6B7280' }}>{s.registerNumber}</td>
                                                 <td style={{ fontWeight: 500 }}>{s.name}</td>
                                                 <td>{s.year}{['st', 'nd', 'rd', 'th'][s.year - 1]} Yr</td>
+                                                <td>
+                                                    <span 
+                                                        className={`badge ${s.gender === 'Male' ? 'badge-blue' : s.gender === 'Female' ? 'badge-pink' : 'badge-gray'}`} 
+                                                        style={{ fontSize: 11, cursor: 'pointer' }}
+                                                        onClick={() => handleToggleGender(s)}
+                                                        title="Click to toggle gender"
+                                                    >
+                                                        {s.gender === 'Male' ? '♂️ Boy' : s.gender === 'Female' ? '♀️ Girl' : '👤 ' + s.gender}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span 
+                                                        className={`badge ${s.residency === 'Hosteller' ? 'badge-purple' : 'badge-info'}`} 
+                                                        style={{ fontSize: 11, cursor: 'pointer' }}
+                                                        onClick={() => handleToggleResidency(s)}
+                                                        title="Click to toggle residency"
+                                                    >
+                                                        {s.residency === 'Hosteller' ? '🏨 Hosteller' : '🏠 Day Scholar'}
+                                                    </span>
+                                                </td>
                                                 <td><span className="badge badge-gray">Sec {s.section?.name}</span></td>
                                                 {user?.role === 'principal' && <td style={{ fontSize: 12 }}>{s.department?.shortName}</td>}
                                                 <td style={{ fontSize: 12, color: '#6B7280' }}>{s.email || '—'}</td>
@@ -308,6 +446,23 @@ const StudentsPage = () => {
                                             {sections.filter((s) => s.year === parseInt(newStudent.year)).map((s) => (
                                                 <option key={s._id} value={s._id}>Section {s.name}</option>
                                             ))}
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label form-required">Gender</label>
+                                        <select className="form-control" value={newStudent.gender}
+                                            onChange={(e) => setNewStudent((p) => ({ ...p, gender: e.target.value }))}>
+                                            <option value="Male">Male (Boy)</option>
+                                            <option value="Female">Female (Girl)</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label form-required">Residency</label>
+                                        <select className="form-control" value={newStudent.residency}
+                                            onChange={(e) => setNewStudent((p) => ({ ...p, residency: e.target.value }))}>
+                                            <option value="Day Scholar">Day Scholar</option>
+                                            <option value="Hosteller">Hosteller</option>
                                         </select>
                                     </div>
                                 </div>

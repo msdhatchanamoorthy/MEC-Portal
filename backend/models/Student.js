@@ -18,6 +18,8 @@ const studentSchema = new mongoose.Schema({
         required: true,
     },
     isActive: { type: Boolean, default: true },
+    gender: { type: String, enum: ['Male', 'Female', 'Other'], default: 'Male' },
+    residency: { type: String, enum: ['Day Scholar', 'Hosteller'], default: 'Day Scholar' },
     createdAt: { type: Date, default: Date.now },
 });
 

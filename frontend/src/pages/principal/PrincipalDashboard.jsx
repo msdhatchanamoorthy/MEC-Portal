@@ -119,22 +119,45 @@ const PrincipalDashboard = () => {
                 <Topbar title="Principal Dashboard" subtitle="MEC College — Full Attendance Overview" />
                 <div className="page-content">
 
-                    {/* Page Header */}
-                    <div className="page-header">
-                        <div className="page-header-left">
-                            <h2>🏫 College Attendance Overview</h2>
-                            <p>Real-time attendance statistics across all departments</p>
+                    {/* Premium Glassmorphic Hero Header */}
+                    <div className="dashboard-hero" style={{
+                        background: 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)',
+                        borderRadius: 24,
+                        padding: '36px 48px',
+                        marginBottom: 32,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        boxShadow: '0 20px 40px rgba(219, 39, 119, 0.3)',
+                        position: 'relative',
+                        overflow: 'hidden'
+                    }}>
+                        <div style={{ position: 'absolute', top: -50, right: 0, width: 300, height: 300, background: 'rgba(255,255,255,0.2)', borderRadius: '50%', filter: 'blur(100px)' }}></div>
+                        <div style={{ position: 'absolute', bottom: -50, left: 100, width: 200, height: 200, background: 'rgba(0,0,0,0.15)', borderRadius: '50%', filter: 'blur(80px)' }}></div>
+
+                        <div className="header-left" style={{ position: 'relative', zIndex: 1 }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', background: 'rgba(255,255,255,0.1)', borderRadius: 20, color: 'white', fontSize: 12, fontWeight: 700, letterSpacing: 1, marginBottom: 16, backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--info)', boxShadow: '0 0 10px var(--info)' }}></span>
+                                PRINCIPAL'S DESK
+                            </div>
+                            <h1 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.02em', margin: 0, color: 'white' }}>
+                                College <span style={{ background: 'linear-gradient(to right, #ffffff, #bae6fd)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.15))' }}>Overview</span>
+                            </h1>
+                            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.8)', marginTop: 8, maxWidth: 600, fontWeight: 700 }}>
+                                High-level executive dashboard for monitoring real-time attendance statistics and performance across all departments.
+                            </p>
                         </div>
-                        <div className="page-header-right">
-                            <input
-                                type="date"
-                                className="form-control"
-                                value={selectedDate}
-                                onChange={(e) => setSelectedDate(e.target.value)}
-                                style={{ width: 'auto' }}
-                            />
-                            <a href="/principal/reports" className="btn btn-primary">
-                                📄 Reports
+                        <div className="header-right" style={{ display: 'flex', gap: 16, position: 'relative', zIndex: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+                            <div style={{ background: 'rgba(0,0,0,0.2)', padding: '6px', borderRadius: 16, display: 'flex', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                <input
+                                    type="date"
+                                    value={selectedDate}
+                                    onChange={(e) => setSelectedDate(e.target.value)}
+                                    style={{ background: 'transparent', border: 'none', color: 'white', padding: '6px 12px', outline: 'none', colorScheme: 'dark', fontWeight: 800, fontFamily: 'inherit' }}
+                                />
+                            </div>
+                            <a href="/principal/reports" className="btn btn-primary" style={{ padding: '12px 28px', borderRadius: 14, fontWeight: 800, background: 'linear-gradient(135deg, var(--info) 0%, var(--accent) 100%)', boxShadow: '0 8px 20px rgba(59, 130, 246, 0.4)' }}>
+                                📊 Analytics
                             </a>
                         </div>
                     </div>
@@ -187,7 +210,7 @@ const PrincipalDashboard = () => {
                             />
 
                             {/* Charts Row */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, marginBottom: 24 }}>
+                            <div className="chart-row" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 20, marginBottom: 24 }}>
                                 {/* Bar Chart */}
                                 <div className="card">
                                     <div className="card-header">
@@ -284,12 +307,12 @@ const PrincipalDashboard = () => {
                                                                 style={{ cursor: 'pointer' }}
                                                                 className="hover-row"
                                                             >
-                                                                <td style={{ color: '#9CA3AF', fontWeight: 600 }}>{i + 1}</td>
-                                                                <td style={{ fontWeight: 600, color: 'var(--primary)' }}>{d.department}</td>
+                                                                <td style={{ color: '#9CA3AF', fontWeight: 800 }}>{i + 1}</td>
+                                                                <td style={{ fontWeight: 800, color: 'var(--primary)' }}>{d.department}</td>
                                                                 <td><span className="badge badge-ghost">{d.shortName}</span></td>
                                                                 <td>{d.totalStudents}</td>
-                                                                <td style={{ color: 'var(--success)', fontWeight: 600 }}>{d.presentCount}</td>
-                                                                <td style={{ color: 'var(--danger)', fontWeight: 600 }}>{d.absentCount}</td>
+                                                                <td style={{ color: 'var(--success)', fontWeight: 800 }}>{d.presentCount}</td>
+                                                                <td style={{ color: 'var(--danger)', fontWeight: 800 }}>{d.absentCount}</td>
                                                                 <td>
                                                                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                                                         <div className="percentage-bar" style={{ flex: 1, height: 8 }}>
@@ -372,7 +395,7 @@ const PrincipalDashboard = () => {
                                                     </div>
                                                 </div>
 
-                                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: 20 }}>
+                                                <div className="grid-2-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
                                                     {drilldown.data.map((yData) => (
                                                         <div key={yData.year} className="card" style={{ border: '1px solid #f3f4f6', boxShadow: 'none' }}>
                                                             <div className="card-header" style={{ padding: '12px 16px', background: '#f9fafb' }}>

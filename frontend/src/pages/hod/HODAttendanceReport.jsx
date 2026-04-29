@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Sidebar from '../../components/Sidebar';
 import Topbar from '../../components/Topbar';
-import api from '../../services/api';
+import api, { getFileUrl } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -203,6 +203,7 @@ const HODAttendanceReport = () => {
                                             <th>Attendance</th>
                                             <th>Marked By</th>
                                             <th>Period</th>
+                                            <th>Reason & Proof</th>
                                             {showOnlyAbsentees && <th>📱 Parent Phone</th>}
                                         </tr>
                                     </thead>
@@ -224,6 +225,25 @@ const HODAttendanceReport = () => {
                                                 <td style={{ fontSize: 13 }}>{entry.staffName}</td>
                                                 <td>
                                                     <span className="badge badge-info">Period {entry.period}</span>
+                                                </td>
+                                                <td style={{ fontSize: 13 }}>
+                                                    {entry.reason && (
+                                                        <div style={{ color: 'var(--gray-600)', marginBottom: 4 }}>
+                                                            💬 {entry.reason}
+                                                        </div>
+                                                    )}
+                                                    {entry.proofUrl && (
+                                                        <a 
+                                                            href={getFileUrl(entry.proofUrl)} 
+                                                            target="_blank" 
+                                                            rel="noopener noreferrer"
+                                                            className="badge badge-purple"
+                                                            style={{ textDecoration: 'none', cursor: 'pointer' }}
+                                                        >
+                                                            📎 View Proof
+                                                        </a>
+                                                    )}
+                                                    {!entry.reason && !entry.proofUrl && <span style={{ color: 'var(--gray-400)' }}>—</span>}
                                                 </td>
                                                 {showOnlyAbsentees && (
                                                     <td style={{ fontSize: 13 }}>

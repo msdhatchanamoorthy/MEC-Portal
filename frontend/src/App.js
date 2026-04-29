@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { UIProvider } from './contexts/UIContext';
 
 import Login from './pages/Login';
 import PrincipalDashboard from './pages/principal/PrincipalDashboard';
@@ -19,6 +21,7 @@ import StudentsPage from './pages/shared/StudentsPage';
 import ManageUsers from './pages/principal/ManageUsers';
 import ManageAcademicData from './pages/shared/ManageAcademicData';
 import ProfileSettings from './pages/shared/ProfileSettings';
+import StudentPerformance from './pages/staff/StudentPerformance';
 
 const ProtectedRoute = ({ children, roles }) => {
     const { user, loading } = useAuth();
@@ -60,7 +63,9 @@ const RoleRedirect = () => {
 
 function App() {
     return (
-        <AuthProvider>
+        <ThemeProvider>
+            <UIProvider>
+                <AuthProvider>
             <BrowserRouter>
                 <Toaster
                     position="top-right"
@@ -221,6 +226,14 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
+                    <Route
+                        path="/staff/performance"
+                        element={
+                            <ProtectedRoute roles={['staff']}>
+                                <StudentPerformance />
+                            </ProtectedRoute>
+                        }
+                    />
 
                     {/* Settings - Shared */}
                     <Route
@@ -247,7 +260,9 @@ function App() {
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </BrowserRouter>
-        </AuthProvider>
+            </AuthProvider>
+            </UIProvider>
+        </ThemeProvider>
     );
 }
 

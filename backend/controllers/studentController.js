@@ -2,19 +2,31 @@ const Student = require('../models/Student');
 
 const getStudents = async (req, res) => {
     try {
-        const { departmentId, year, sectionId } = req.query;
+        const { departmentId, year, sectionId, search } = req.query;
         let filter = { isActive: true };
         if (departmentId) filter.department = departmentId;
         if (year) filter.year = parseInt(year);
         if (sectionId) filter.section = sectionId;
+        if (search) {
+            console.log('Searching for student:', search);
+            filter.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { rollNumber: { $regex: search, $options: 'i' } },
+                { registerNumber: { $regex: search, $options: 'i' } }
+            ];
+        }
 
         const students = await Student.find(filter)
             .populate('department', 'name shortName')
             .populate('section', 'name year')
-            .sort({ rollNumber: 1 });
+            .sort({ rollNumber: 1 })
+            .limit(search ? 10 : 0);
+
+        console.log(`Found ${students.length} students matching search: "${search || ''}"`);
 
         res.json({ success: true, count: students.length, data: students });
     } catch (e) {
+        console.error('getStudents Error:', e);
         res.status(500).json({ message: 'Server error' });
     }
 };

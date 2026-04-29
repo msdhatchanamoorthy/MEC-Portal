@@ -9,6 +9,8 @@ const HODTopStudents = () => {
     const { user } = useAuth();
     const [sections, setSections] = useState([]);
     const [topStudents, setTopStudents] = useState([]);
+    const [groupedData, setGroupedData] = useState([]);
+    const [isGrouped, setIsGrouped] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const [filters, setFilters] = useState({
@@ -44,8 +46,17 @@ const HODTopStudents = () => {
             if (filters.sectionId) params.append('section', filters.sectionId);
 
             const res = await api.get(`/hod/top-students?${params}`);
-            setTopStudents(res.data.topStudents || []);
-            if (res.data.topStudents?.length === 0) {
+            if (res.data.grouped) {
+                setGroupedData(res.data.data || []);
+                setIsGrouped(true);
+                setTopStudents([]);
+            } else {
+                setTopStudents(res.data.topStudents || []);
+                setIsGrouped(false);
+                setGroupedData([]);
+            }
+
+            if ((res.data.grouped && res.data.data?.length === 0) || (!res.data.grouped && res.data.topStudents?.length === 0)) {
                 toast.success('No records found for selected filters', { icon: 'ℹ️' });
             }
         } catch (err) {
@@ -86,18 +97,89 @@ const HODTopStudents = () => {
         }
     };
 
-    return (
-        <div className="layout">
-            <Sidebar />
-            <main className="main-content">
-                <Topbar title="Top Achievers" />
+    const StudentCard = ({ student, idx }) => {
+        const style = getTrophyColor(idx);
+        const isPodium = idx < 3;
+        return (
+            <div style={{
+                position: 'relative',
+                background: '#fff',
+                borderRadius: '16px',
+                padding: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '15px',
+                boxShadow: isPodium ? '0 10px 25px -5px rgba(0,0,0,0.1)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
+                border: '1px solid #F3F4F6',
+                transition: 'transform 0.2s',
+                cursor: 'default'
+            }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+            >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{
+                        width: '45px', height: '45px', borderRadius: '12px',
+                        background: style.bg, color: style.color,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '20px', fontWeight: 'bold',
+                        boxShadow: style.shadow,
+                        border: style.border
+                    }}>
+                        #{idx + 1}
+                    </div>
+                    <div style={{
+                        background: '#EFF6FF',
+                        color: '#1D4ED8',
+                        padding: '6px 12px',
+                        borderRadius: '20px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                    }}>
+                        Year {student.year} - {student.section}
+                    </div>
+                </div>
 
-                <div className="dashboard-content">
-                    {/* Filters Section */}
-                    <div className="card filter-card mb-4">
-                        <form onSubmit={handleSearch} style={{ display: 'flex', gap: '15px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-                            <div className="form-group" style={{ flex: 1, minWidth: '150px' }}>
-                                <label className="form-label">Period Timeline</label>
+                <div>
+                    <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#111827', margin: '0 0 5px 0' }}>
+                        {student.name}
+                    </h3>
+                    <p style={{ margin: 0, fontSize: '13px', color: '#6B7280', fontFamily: 'monospace' }}>
+                        {student.registerNumber || 'No Register No.'}
+                    </p>
+                </div>
+
+                <div style={{ marginTop: 'auto', paddingTop: '15px', borderTop: '1px solid #F3F4F6', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '12px', color: '#6B7280', marginBottom: '4px' }}>Attendance Percentage</div>
+                        <div style={{ fontSize: '28px', fontWeight: 800, color: isPodium ? '#10B981' : '#374151' }}>
+                            {student.percentage}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <div className="app-layout">
+            <Sidebar />
+            <div className="main-content">
+                <Topbar title="Top Achievers" />
+                <div className="page-content">
+                    {/* Premium Glassmorphic Filters */}
+                    <div className="card glass" style={{ 
+                        borderRadius: 24, 
+                        padding: '24px 32px', 
+                        marginBottom: 32,
+                        border: '1px solid rgba(255,255,255,0.8)',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.05)'
+                    }}>
+                        <form onSubmit={handleSearch} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', alignItems: 'end' }}>
+                            <div className="form-group">
+                                <label className="form-label" style={{ color: 'var(--gray-800)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    📅 Period Timeline
+                                </label>
                                 <select
                                     name="period"
                                     className="form-control"
@@ -110,8 +192,10 @@ const HODTopStudents = () => {
                                 </select>
                             </div>
 
-                            <div className="form-group" style={{ flex: 1, minWidth: '150px' }}>
-                                <label className="form-label">Year</label>
+                            <div className="form-group">
+                                <label className="form-label" style={{ color: 'var(--gray-800)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    🎓 Target Year
+                                </label>
                                 <select
                                     name="year"
                                     className="form-control"
@@ -126,8 +210,10 @@ const HODTopStudents = () => {
                                 </select>
                             </div>
 
-                            <div className="form-group" style={{ flex: 1, minWidth: '150px' }}>
-                                <label className="form-label">Section</label>
+                            <div className="form-group">
+                                <label className="form-label" style={{ color: 'var(--gray-800)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    🏫 Specific Section
+                                </label>
                                 <select
                                     name="sectionId"
                                     className="form-control"
@@ -142,17 +228,25 @@ const HODTopStudents = () => {
                                 </select>
                             </div>
 
-                            <div className="form-group" style={{ flex: 1, minWidth: '150px' }}>
-                                <label className="form-label">&nbsp;</label>
-                                <button type="submit" className="btn btn-primary" disabled={loading} style={{ width: '100%' }}>
-                                    {loading ? <span className="spinner" /> : '🔍 Fetch Ranked Students'}
+                            <div className="form-group">
+                                <button type="submit" className="btn btn-primary" disabled={loading} style={{ 
+                                    width: '100%', 
+                                    height: '46px',
+                                    borderRadius: 12,
+                                    fontSize: 14,
+                                    fontWeight: 700,
+                                    background: 'var(--accent-gradient)',
+                                    border: 'none',
+                                    boxShadow: '0 4px 15px rgba(99, 102, 241, 0.3)'
+                                }}>
+                                    {loading ? <span className="spinner" style={{ width: 18, height: 18 }} /> : '🔍 Apply Filters'}
                                 </button>
                             </div>
                         </form>
                     </div>
 
                     <h2 style={{ fontSize: '20px', fontWeight: 600, color: '#1E3A5F', marginBottom: '15px' }}>
-                        🏆 Top 10 Performers
+                        🏆 Department Top Achievers
                     </h2>
 
                     {loading ? (
@@ -160,7 +254,7 @@ const HODTopStudents = () => {
                             <div className="spinner spinner-dark" style={{ margin: '0 auto 15px' }} />
                             <p style={{ color: '#6B7280' }}>Calculating attendance rankings...</p>
                         </div>
-                    ) : topStudents.length === 0 ? (
+                    ) : (topStudents.length === 0 && groupedData.length === 0) ? (
                         <div className="empty-state" style={{ padding: '60px 0', textAlign: 'center', background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
                             <div className="empty-icon" style={{ fontSize: '48px', marginBottom: '15px' }}>📊</div>
                             <h3 style={{ fontSize: '18px', color: '#374151', marginBottom: '8px' }}>No Data Available</h3>
@@ -168,81 +262,35 @@ const HODTopStudents = () => {
                                 We couldn't find any attendance logs matching your selected filters securely.
                             </p>
                         </div>
+                    ) : isGrouped ? (
+                        <div className="grouped-ranking">
+                            {groupedData.map((group) => (
+                                <div key={group._id} style={{ marginBottom: '40px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '15px', borderBottom: '2px solid #EFF6FF', paddingBottom: '8px' }}>
+                                        <div style={{ background: '#1D4ED8', color: '#fff', padding: '4px 12px', borderRadius: '8px', fontWeight: 700 }}>
+                                            {group.year}{['st', 'nd', 'rd', 'th'][group.year - 1]} Yr
+                                        </div>
+                                        <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1E3A5F', margin: 0 }}>
+                                            Section {group.sectionName} — Top Performers
+                                        </h3>
+                                    </div>
+                                    <div className="ranking-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+                                        {group.topStudents.map((student, idx) => (
+                                            <StudentCard key={student._id} student={student} idx={idx} />
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     ) : (
                         <div className="ranking-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-                            {topStudents.map((student, idx) => {
-                                const style = getTrophyColor(idx);
-                                const isPodium = idx < 3;
-                                return (
-                                    <div key={student._id} style={{
-                                        position: 'relative',
-                                        background: '#fff',
-                                        borderRadius: '16px',
-                                        padding: '20px',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '15px',
-                                        boxShadow: isPodium ? '0 10px 25px -5px rgba(0,0,0,0.1)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
-                                        border: '1px solid #F3F4F6',
-                                        transition: 'transform 0.2s',
-                                        cursor: 'default'
-                                    }}
-                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                                        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                                    >
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                            <div style={{
-                                                width: '45px', height: '45px', borderRadius: '12px',
-                                                background: style.bg, color: style.color,
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                fontSize: '20px', fontWeight: 'bold',
-                                                boxShadow: style.shadow,
-                                                border: style.border
-                                            }}>
-                                                #{idx + 1}
-                                            </div>
-                                            <div style={{
-                                                background: '#EFF6FF',
-                                                color: '#1D4ED8',
-                                                padding: '6px 12px',
-                                                borderRadius: '20px',
-                                                fontSize: '12px',
-                                                fontWeight: 600,
-                                            }}>
-                                                Year {student.year} - {student.section}
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#111827', margin: '0 0 5px 0' }}>
-                                                {student.name}
-                                            </h3>
-                                            <p style={{ margin: 0, fontSize: '13px', color: '#6B7280', fontFamily: 'monospace' }}>
-                                                {student.registerNumber || 'No Register No.'}
-                                            </p>
-                                        </div>
-
-                                        <div style={{ marginTop: 'auto', paddingTop: '15px', borderTop: '1px solid #F3F4F6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <div>
-                                                <div style={{ fontSize: '12px', color: '#6B7280', marginBottom: '4px' }}>Percentage</div>
-                                                <div style={{ fontSize: '24px', fontWeight: 800, color: isPodium ? '#10B981' : '#374151' }}>
-                                                    {student.percentage}%
-                                                </div>
-                                            </div>
-                                            <div style={{ textAlign: 'right' }}>
-                                                <div style={{ fontSize: '12px', color: '#6B7280', marginBottom: '4px' }}>Classes Attended</div>
-                                                <div style={{ fontSize: '16px', fontWeight: 600, color: '#374151' }}>
-                                                    {student.presentCount} / {student.totalClasses}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                            {topStudents.map((student, idx) => (
+                                <StudentCard key={student._id} student={student} idx={idx} />
+                            ))}
                         </div>
                     )}
                 </div>
-            </main>
+            </div>
         </div>
     );
 };

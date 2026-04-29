@@ -91,9 +91,9 @@ const getAbsentees = async (req, res) => {
             return res.status(404).json({ message: 'Attendance record not found or not in your department' });
         }
 
-        // Filter for Absent or Leave students
+        // Filter for Absent, Leave, or OD students
         const absentees = record.attendance.filter(
-            entry => entry.status === 'Absent' || entry.status === 'Leave'
+            entry => entry.status === 'Absent' || entry.status === 'Leave' || entry.status === 'OD'
         );
 
         res.json({
@@ -148,6 +148,8 @@ const getAbsenteeReport = async (req, res) => {
                     _id: '$attendance.student',
                     periods: { $addToSet: '$period' },
                     staffNames: { $addToSet: '$staffName' },
+                    reasons: { $addToSet: '$attendance.reason' },
+                    proofUrls: { $addToSet: '$attendance.proofUrl' },
                     year: { $first: '$year' },
                     section: { $first: '$section' },
                     status: { $first: '$attendance.status' }
@@ -176,12 +178,16 @@ const getAbsenteeReport = async (req, res) => {
                     _id: 1,
                     periods: 1,
                     staffNames: 1,
+                    reasons: 1,
+                    proofUrls: 1,
                     year: 1,
                     status: 1,
                     sectionName: '$sectionInfo.name',
                     studentName: '$student.name',
                     registerNumber: '$student.registerNumber',
-                    phone: '$student.phone'
+                    phone: '$student.phone',
+                    gender: '$student.gender',
+                    residency: '$student.residency'
                 }
             },
             { $sort: { year: 1, sectionName: 1, registerNumber: 1 } }
@@ -398,6 +404,13 @@ const notifyParents = async (req, res) => {
 
             if (phone) {
                 try {
+                    // Skip real SMS if in offline mode
+                    if (process.env.OFFLINE_MODE === 'true') {
+                        console.log(`[OFFLINE MODE] SMS Simulated to: ${phone}`);
+                        results.push({ phone, name, regNo, status: 'sent', message, offline: true });
+                        continue;
+                    }
+
                     // Send real SMS via Twilio
                     const twilioRes = await twilioClient.messages.create({
                         body: message,
@@ -448,13 +461,12 @@ const getTopStudents = async (req, res) => {
         } else if (period === 'yearly') {
             startDate.setFullYear(endDate.getFullYear() - 1);
         } else {
-            // Default fully
-            startDate = new Date(0);
+            startDate = new Date(0); // All time
         }
 
-        // Base Match Stage
+        const deptId = req.user.department._id || req.user.department;
         const matchStage = {
-            department: req.user.department,
+            department: new mongoose.Types.ObjectId(deptId),
             date: { $gte: startDate, $lte: endDate }
         };
 
@@ -469,7 +481,7 @@ const getTopStudents = async (req, res) => {
                     _id: '$attendance.student',
                     totalClasses: { $sum: 1 },
                     presentCount: {
-                        $sum: { $cond: [{ $in: ['$attendance.status', ['Present', 'Late']] }, 1, 0] }
+                        $sum: { $cond: [{ $in: ['$attendance.status', ['Present', 'OD', 'Late']] }, 1, 0] }
                     }
                 }
             },
@@ -482,13 +494,12 @@ const getTopStudents = async (req, res) => {
                         $cond: [
                             { $eq: ['$totalClasses', 0] },
                             0,
-                            { $multiply: [{ $divide: ['$presentCount', '$totalClasses'] }, 100] }
+                            { $round: [{ $multiply: [{ $divide: ['$presentCount', '$totalClasses'] }, 100] }, 1] }
                         ]
                     }
                 }
             },
             { $sort: { percentage: -1, presentCount: -1 } },
-            { $limit: 10 },
             {
                 $lookup: {
                     from: 'students',
@@ -506,32 +517,188 @@ const getTopStudents = async (req, res) => {
                     as: 'sectionInfo'
                 }
             },
-            {
-                $unwind: {
-                    path: '$sectionInfo',
-                    preserveNullAndEmptyArrays: true
-                }
-            },
+            { $unwind: { path: '$sectionInfo', preserveNullAndEmptyArrays: true } },
             {
                 $project: {
                     _id: 1,
                     totalClasses: 1,
                     presentCount: 1,
-                    percentage: { $round: ['$percentage', 2] },
+                    percentage: 1,
                     name: '$studentInfo.name',
                     registerNumber: '$studentInfo.registerNumber',
                     year: '$studentInfo.year',
                     section: '$sectionInfo.name'
                 }
-            }
+            },
+            { $limit: 20 } // Show top 20 students
         ];
 
         const topStudents = await AttendanceRecord.aggregate(pipeline);
-
-        res.json({ success: true, topStudents });
+        
+        // We set grouped: false to keep a flat leaderboard view which the user prefers for "Top Achievers"
+        res.json({ 
+            success: true, 
+            grouped: false, 
+            topStudents,
+            meta: {
+                totalCount: topStudents.length,
+                period,
+                filterApplied: !!(year || section)
+            }
+        });
     } catch (error) {
         console.error('Error fetching top students:', error);
         res.status(500).json({ message: 'Error fetching top students' });
+    }
+};
+
+// @desc    Get whole department analytics (HOD/Principal)
+// @route   GET /api/hod/analytics
+const getAnalytics = async (req, res) => {
+    try {
+        const deptId = req.user.department?._id || req.user.department;
+        const { year } = req.query;
+
+        let match = { department: new mongoose.Types.ObjectId(deptId) };
+        if (year) match.year = parseInt(year);
+
+        const stats = await AttendanceRecord.aggregate([
+            { $match: match },
+            { $unwind: "$attendance" },
+            {
+                $group: {
+                    _id: "$attendance.status",
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        const formattedStats = {
+            Present: 0,
+            Absent: 0,
+            Late: 0,
+            Leave: 0,
+            OD: 0
+        };
+
+        stats.forEach(s => {
+            if (formattedStats.hasOwnProperty(s._id)) {
+                formattedStats[s._id] = s.count;
+            }
+        });
+
+        res.json({ success: true, data: formattedStats });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// @desc    Get attendance percentages for all students in a section
+// @route   GET /api/hod/attendance/percentages
+const getAttendancePercentages = async (req, res) => {
+    try {
+        const { year, section } = req.query;
+        const deptId = req.user.department?._id || req.user.department;
+
+        if (!year || !section) {
+            return res.status(400).json({ message: 'Year and Section are required' });
+        }
+
+        const pipeline = [
+            { 
+                $match: { 
+                    department: new mongoose.Types.ObjectId(deptId),
+                    year: parseInt(year),
+                    section: new mongoose.Types.ObjectId(section)
+                } 
+            },
+            { $unwind: "$attendance" },
+            {
+                $group: {
+                    _id: "$attendance.student",
+                    totalPeriods: { $sum: 1 },
+                    presentPeriods: {
+                        $sum: { $cond: [{ $in: ["$attendance.status", ["Present", "OD"]] }, 1, 0] }
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'students',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'student'
+                }
+            },
+            { $unwind: "$student" },
+            {
+                $project: {
+                    _id: 1,
+                    name: "$student.name",
+                    rollNumber: "$student.rollNumber",
+                    percentage: { 
+                        $round: [{ $multiply: [{ $divide: ["$presentPeriods", "$totalPeriods"] }, 100] }, 1] 
+                    }
+                }
+            },
+            { $sort: { percentage: 1 } }
+        ];
+
+        const data = await AttendanceRecord.aggregate(pipeline);
+        res.json({ success: true, data });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// @desc    Get alert for students below 75% attendance
+// @route   GET /api/hod/alerts/low-attendance
+const getLowAttendanceAlerts = async (req, res) => {
+    try {
+        const deptId = req.user.department?._id || req.user.department;
+        
+        const pipeline = [
+            { $match: { department: new mongoose.Types.ObjectId(deptId) } },
+            { $unwind: "$attendance" },
+            {
+                $group: {
+                    _id: "$attendance.student",
+                    total: { $sum: 1 },
+                    present: {
+                        $sum: { $cond: [{ $in: ["$attendance.status", ["Present", "OD"]] }, 1, 0] }
+                    }
+                }
+            },
+            {
+                $project: {
+                    percentage: { $multiply: [{ $divide: ["$present", "$total"] }, 100] }
+                }
+            },
+            { $match: { percentage: { $lt: 75 } } },
+            {
+                $lookup: {
+                    from: "students",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "info"
+                }
+            },
+            { $unwind: "$info" },
+            {
+                $project: {
+                    name: "$info.name",
+                    rollNumber: "$info.rollNumber",
+                    year: "$info.year",
+                    percentage: { $round: ["$percentage", 1] }
+                }
+            },
+            { $sort: { percentage: 1 } }
+        ];
+
+        const alerts = await AttendanceRecord.aggregate(pipeline);
+        res.json({ success: true, count: alerts.length, data: alerts });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
@@ -543,5 +710,8 @@ module.exports = {
     getYearWiseAttendance,
     getSectionWiseAttendance,
     notifyParents,
-    getTopStudents
+    getTopStudents,
+    getAnalytics,
+    getAttendancePercentages,
+    getLowAttendanceAlerts
 };

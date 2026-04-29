@@ -1,6 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { getStaffList, getHODAttendance, getAbsentees, getAbsenteeReport, getYearWiseAttendance, getSectionWiseAttendance, notifyParents, getTopStudents } = require('../controllers/hodController');
+const { 
+    getStaffList, 
+    getHODAttendance, 
+    getAbsentees, 
+    getAbsenteeReport, 
+    getYearWiseAttendance, 
+    getSectionWiseAttendance, 
+    notifyParents, 
+    getTopStudents,
+    getAnalytics,
+    getAttendancePercentages,
+    getLowAttendanceAlerts
+} = require('../controllers/hodController');
 const { protect, roleCheck } = require('../middleware/auth');
 
 // All HOD routes must be protected and restricted to HOD role
@@ -27,6 +39,15 @@ router.get('/attendance/year-wise', getYearWiseAttendance);
 
 // GET section-wise summary for a year
 router.get('/attendance/section-wise', getSectionWiseAttendance);
+
+// GET whole department analytics
+router.get('/analytics', getAnalytics);
+
+// GET student attendance percentages by section
+router.get('/attendance/percentages', getAttendancePercentages);
+
+// GET low attendance alerts (<75%)
+router.get('/alerts/low-attendance', getLowAttendanceAlerts);
 
 // POST notify parents of absent students
 router.post('/notify-parents', notifyParents);

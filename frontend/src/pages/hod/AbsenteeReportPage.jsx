@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Sidebar from '../../components/Sidebar';
 import Topbar from '../../components/Topbar';
-import api from '../../services/api';
+import api, { getFileUrl } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -203,15 +203,27 @@ const AbsenteeReportPage = () => {
                                             <th>Section</th>
                                             <th>Period(s) Absent</th>
                                             <th>Marked By (Staff)</th>
+                                            <th>Reason & Proof</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filteredData.map((abs, idx) => (
-                                            <tr key={idx} style={{ backgroundColor: abs.status === 'Leave' ? '#FFFBEB' : '#FEF2F2' }}>
-                                                <td style={{ fontWeight: 600 }}>{abs.registerNumber}</td>
-                                                <td>{abs.studentName}</td>
-                                                <td>{abs.year}</td>
+                                        {filteredData.map((abs, idx) => {
+                                            const genderClass = abs.gender === 'Male' ? 'row-boy' : abs.gender === 'Female' ? 'row-girl' : '';
+                                            return (
+                                                <tr key={idx} className={genderClass} style={{ backgroundColor: abs.status === 'Leave' ? '#FFFBEB' : '#FEF2F2' }}>
+                                                    <td style={{ fontWeight: 600 }}>{abs.registerNumber}</td>
+                                                    <td>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                                            {abs.studentName}
+                                                            {abs.residency === 'Hosteller' ? (
+                                                                <span title="Hosteller">🏨</span>
+                                                            ) : (
+                                                                <span title="Day Scholar">🏠</span>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                    <td>{abs.year}</td>
                                                 <td>{abs.sectionName}</td>
                                                 <td>
                                                     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
@@ -223,14 +235,33 @@ const AbsenteeReportPage = () => {
                                                 <td style={{ fontSize: 13, color: '#4B5563' }}>
                                                     {abs.staffNames.join(', ')}
                                                 </td>
+                                                <td style={{ fontSize: 12 }}>
+                                                    {abs.reasons && abs.reasons.filter(r => r).map((r, i) => (
+                                                        <div key={i} style={{ marginBottom: 4 }}>💬 {r}</div>
+                                                    ))}
+                                                    {abs.proofUrls && abs.proofUrls.filter(u => u).map((u, i) => (
+                                                        <a 
+                                                            key={i}
+                                                            href={getFileUrl(u)} 
+                                                            target="_blank" 
+                                                            rel="noopener noreferrer"
+                                                            className="badge badge-purple"
+                                                            style={{ textDecoration: 'none', cursor: 'pointer', display: 'inline-block', marginBottom: 4 }}
+                                                        >
+                                                            📎 View Proof {abs.proofUrls.length > 1 ? i+1 : ''}
+                                                        </a>
+                                                    ))}
+                                                    {(!abs.reasons || abs.reasons.every(r => !r)) && (!abs.proofUrls || abs.proofUrls.every(u => !u)) && <span style={{ color: 'var(--gray-400)' }}>—</span>}
+                                                </td>
                                                 <td>
                                                     <span className={`badge ${abs.status === 'Leave' ? 'badge-warning' : 'badge-danger'}`}>
                                                         {abs.status}
                                                     </span>
                                                 </td>
                                             </tr>
-                                        ))}
-                                    </tbody>
+                                        );
+                                    })}
+                                </tbody>
                                 </table>
                             ) : (
                                 <div className="empty-state" style={{ padding: 60 }}>

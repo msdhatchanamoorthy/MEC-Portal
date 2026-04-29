@@ -14,31 +14,34 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', process.env.FRONTEND_URL].filter(Boolean);
-
 // Socket.IO setup
 const io = new Server(server, {
     cors: {
-        origin: allowedOrigins,
+        origin: true,
         methods: ['GET', 'POST'],
+        credentials: true
     },
 });
 
 // Middleware
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const path = require('path');
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-// Attach io to request object for use in controllers
+// Serve static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Attach io to request object
 app.use((req, res, next) => {
     req.io = io;
     next();
 });
 
-// Routes
+// API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/attendance', require('./routes/attendance'));
 app.use('/api/admin', require('./routes/admin'));
@@ -48,16 +51,28 @@ app.use('/api/duty-reports', require('./routes/dutyReports'));
 app.use('/api/hod', require('./routes/hod'));
 app.use('/api/timetable', require('./routes/timetable'));
 app.use('/api/notices', require('./routes/notices'));
+app.use('/api/marks', require('./routes/marks'));
 
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'MEC Attendance System API is running' });
 });
 
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({ message: `Route ${req.originalUrl} not found` });
-});
+// PRODUCTION: Serve React Frontend
+if (process.env.NODE_ENV === 'production') {
+    const frontendPath = path.join(__dirname, '../frontend/build');
+    app.use(express.static(frontendPath));
+    
+    // Fallback: Send index.html for all other routes (React Router)
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(frontendPath, 'index.html'));
+    });
+} else {
+    // 404 handler for development
+    app.use((req, res) => {
+        res.status(404).json({ message: `Route ${req.originalUrl} not found` });
+    });
+}
 
 // Global error handler
 app.use((err, req, res, next) => {

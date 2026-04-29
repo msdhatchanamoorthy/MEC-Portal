@@ -1,0 +1,64 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        background: "#0a0a0f",
+        foreground: "#ffffff",
+        primary: {
+          DEFAULT: "#6366f1", // Indigo
+          foreground: "#ffffff",
+        },
+        secondary: {
+          DEFAULT: "#a855f7", // Violet
+          foreground: "#ffffff",
+        },
+        accent: {
+          DEFAULT: "#06b6d4", // Cyan
+          foreground: "#ffffff",
+        },
+        card: {
+          DEFAULT: "rgba(255, 255, 255, 0.03)",
+          foreground: "#ffffff",
+        },
+        muted: {
+          DEFAULT: "rgba(255, 255, 255, 0.1)",
+          foreground: "#94a3b8",
+        },
+      },
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+      },
+      animation: {
+        'gradient': 'gradient 8s linear infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+      keyframes: {
+        gradient: {
+          '0%, 100%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        'pulse-glow': {
+          '0%, 100%': { opacity: 1, filter: 'brightness(1)' },
+          '50%': { opacity: 0.8, filter: 'brightness(1.5)' },
+        },
+      },
+      backgroundImage: {
+        'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
+        'neon-gradient': 'linear-gradient(90deg, #6366f1, #a855f7, #06b6d4)',
+      },
+    },
+  },
+  plugins: [],
+}

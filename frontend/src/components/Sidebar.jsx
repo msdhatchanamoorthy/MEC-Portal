@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useUI } from '../contexts/UIContext';
 import toast from 'react-hot-toast';
 
 const NAV_CONFIG = {
@@ -58,6 +59,11 @@ const NAV_CONFIG = {
                 { icon: '📋', label: 'My Records', path: '/staff/my-records' },
             ]
         },
+        {
+            section: 'Academic', items: [
+                { icon: '📈', label: 'Student Performance', path: '/staff/performance' },
+            ]
+        },
     ],
 };
 
@@ -70,7 +76,7 @@ const ROLE_LABELS = {
 const Sidebar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const [mobileOpen, setMobileOpen] = useState(false);
+    const { sidebarOpen, closeSidebar } = useUI();
 
     const navItems = NAV_CONFIG[user?.role] || [];
 
@@ -86,57 +92,68 @@ const Sidebar = () => {
     return (
         <>
             {/* Mobile overlay */}
-            {mobileOpen && (
+            {sidebarOpen && (
                 <div
-                    style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 999 }}
-                    onClick={() => setMobileOpen(false)}
+                    style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 999, backdropFilter: 'blur(4px)' }}
+                    onClick={closeSidebar}
                 />
             )}
 
-            <aside className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`}>
+            <aside className={`sidebar ${sidebarOpen ? 'mobile-open' : ''}`}>
                 {/* Logo */}
                 <div className="sidebar-logo">
-                    <div className="sidebar-logo-inner">
+                    <div className="sidebar-logo-inner" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         <div className="sidebar-logo-icon">M</div>
                         <div className="sidebar-logo-text">
-                            <h2>MEC System</h2>
-                            <span>Attendance Manager</span>
+                            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--primary-dark)', letterSpacing: -1, margin: 0 }}>MEC SYS</h2>
+                            <span style={{ fontSize: 10, color: 'var(--gray-600)', textTransform: 'uppercase', letterSpacing: 1.5 }}>Premium Edition</span>
                         </div>
                     </div>
                 </div>
 
                 {/* User Info */}
                 <div className="sidebar-user-info">
-                    <div className="sidebar-user-inner">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         <div className="sidebar-user-avatar">
-                            {getInitials(user?.name)}
+                            <div style={{ 
+                                width: 38, height: 38, borderRadius: 10,
+                                background: 'var(--accent-gradient)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: 14, fontWeight: 800, color: 'white',
+                                position: 'relative', zIndex: 1
+                            }}>
+                                {getInitials(user?.name)}
+                            </div>
                         </div>
-                        <div className="sidebar-user-details">
-                            <h4>{user?.name}</h4>
-                            <span className={`role-badge ${user?.role}`}>
+                        <div style={{ overflow: 'hidden' }}>
+                            <h4 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: 'var(--primary-dark)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {user?.name}
+                            </h4>
+                            <span style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>
                                 {ROLE_LABELS[user?.role]}
                             </span>
                         </div>
                     </div>
                     {user?.department && (
-                        <div style={{ marginTop: 8, fontSize: 11, color: 'rgba(255,255,255,0.5)', paddingLeft: 48 }}>
-                            🏢 {user.department.shortName} Dept.
+                        <div style={{ marginTop: 10, fontSize: 11, color: 'var(--gray-700)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span>🏢</span> {user.department.name}
                         </div>
                     )}
                 </div>
 
                 {/* Navigation */}
                 <nav className="sidebar-nav">
-                    {navItems.map((section) => (
+                    {navItems.map((section, si) => (
                         <div key={section.section}>
                             <div className="nav-section-title">{section.section}</div>
-                            {section.items.map((item) => (
+                            {section.items.map((item, ii) => (
                                 <NavLink
                                     key={item.path}
                                     to={item.path}
                                     end={item.path === '/principal' || item.path === '/hod' || item.path === '/staff'}
                                     className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-                                    onClick={() => setMobileOpen(false)}
+                                    onClick={closeSidebar}
+                                    style={{ animationDelay: `${(si * 3 + ii) * 60}ms` }}
                                 >
                                     <span className="nav-icon">{item.icon}</span>
                                     {item.label}
@@ -148,9 +165,18 @@ const Sidebar = () => {
 
                 {/* Footer */}
                 <div className="sidebar-footer">
-                    <button className="logout-btn" onClick={handleLogout}>
+                    <button className="logout-btn" onClick={handleLogout} style={{ 
+                        padding: '10px 16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 10,
+                        fontSize: 13,
+                        fontWeight: 700,
+                        letterSpacing: 0.5
+                    }}>
                         <span>🚪</span>
-                        Logout
+                        LOGOUT
                     </button>
                 </div>
             </aside>

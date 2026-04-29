@@ -4,6 +4,7 @@ import Topbar from '../../components/Topbar';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import StudentQuickSearch from '../../components/shared/StudentQuickSearch';
 import * as XLSX from 'xlsx';
 import NoticeBoard from '../../components/shared/NoticeBoard';
 
@@ -108,40 +109,42 @@ const StaffDashboard = () => {
                 const rowErrors = [];
 
                 data.forEach((row, index) => {
-                    const rowNum = index + 2; // +1 for 0-index, +1 for header row
-                    const name = getVal(row, 'name', 'studentname', 'student name', 'fullname');
-                    let regNo = getVal(row, 'registerNumber', 'register number', 'regno', 'reg no', 'reg');
-                    let rollNo = getVal(row, 'rollNumber', 'roll number', 'rollno', 'roll no', 'roll');
+                    const rowNum = index + 2;
 
-                    // Fallback: use one as the other if only one is present
+                    let name = '', regNo = '', rollNo = '', genderVal = '', resVal = '';
+
+                    // Use the same smart scanner logic as StudentsPage
+                    Object.keys(row).forEach(key => {
+                        const k = key.toLowerCase().trim();
+                        const val = row[key] ? row[key].toString().trim() : '';
+
+                        if (k.includes('name')) name = val;
+                        if (k.includes('num') || k.includes('reg') || k.includes('roll')) {
+                            if (!regNo) regNo = val;
+                            else rollNo = val;
+                        }
+                        if (k.includes('gender') || k.includes('sex')) genderVal = val.toLowerCase();
+                        if (k.includes('residency') || k.includes('type') || k.includes('status')) resVal = val.toLowerCase();
+                    });
+
                     if (!regNo && rollNo) regNo = rollNo;
                     if (!rollNo && regNo) rollNo = regNo;
 
                     if (!name) { rowErrors.push(`Row ${rowNum}: Student Name is missing`); return; }
                     if (!regNo) { rowErrors.push(`Row ${rowNum}: Register Number is missing`); return; }
 
-                    // Use section from Excel if provided, otherwise use staff's assigned section
-                    const rowSectionRaw = getVal(row, 'sectionName', 'section', 'section name');
-                    const rowSectionName = rowSectionRaw?.toString().trim().toUpperCase();
-                    const matchedSection = rowSectionName
-                        ? sections.find(s => s.name.trim().toUpperCase() === rowSectionName)
-                        : null;
-                    const finalSectionId = matchedSection?._id || staffSectionId;
-
-                    if (!finalSectionId) {
-                        rowErrors.push(`Row ${rowNum}: Could not determine section. Add a "Section" column or ensure your account has an assigned section.`);
-                        return;
-                    }
+                    const staffSectionId = typeof staffSection === 'string' ? staffSection : staffSection?._id;
 
                     studentsToUpload.push({
                         name: name.toString().trim(),
                         rollNumber: rollNo.toString().trim(),
                         registerNumber: regNo.toString().trim(),
-                        year: staffYear || matchedSection?.year || 1,
-                        section: finalSectionId,
+                        year: staffYear || 1,
+                        section: staffSectionId,
                         department: staffDeptId,
-                        email: getVal(row, 'email')?.toString().trim() ||
-                            `${regNo.toString().trim().toLowerCase()}@student.mec.edu.in`,
+                        email: `${regNo.toString().trim().toLowerCase()}@student.mec.edu.in`,
+                        gender: (genderVal.includes('girl') || genderVal.includes('female') || genderVal === 'f') ? 'Female' : 'Male',
+                        residency: (resVal.includes('hostel')) ? 'Hosteller' : 'Day Scholar'
                     });
                 });
 
@@ -269,92 +272,129 @@ const StaffDashboard = () => {
             <Sidebar />
             <div className="main-content">
                 <Topbar
-                    title={`Welcome, ${user?.name?.split(' ')[0] || 'Staff'}`}
-                    subtitle={`${user?.department?.name || ''} — Staff Dashboard`}
+                    title="Main Dashboard"
                 />
                 <div className="page-content">
-                    <div className="page-header">
-                        <div className="page-header-left">
-                            <h2>📋 Staff Dashboard</h2>
-                            <p>Manage attendance and student data</p>
+                    {/* Premium Glassmorphic Hero Header */}
+                    <div className="dashboard-hero" style={{
+                        background: 'var(--accent-gradient)',
+                        borderRadius: 24,
+                        padding: '32px 40px',
+                        marginBottom: 32,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        boxShadow: '0 20px 40px rgba(99, 102, 241, 0.3)',
+                        position: 'relative',
+                        overflow: 'hidden'
+                    }}>
+                        {/* Decorative background circles */}
+                        <div style={{ position: 'absolute', top: -50, right: -50, width: 250, height: 250, background: 'rgba(255,255,255,0.2)', borderRadius: '50%', filter: 'blur(60px)' }}></div>
+                        <div style={{ position: 'absolute', bottom: -50, left: -50, width: 200, height: 200, background: 'rgba(0,0,0,0.1)', borderRadius: '50%', filter: 'blur(60px)' }}></div>
+
+                        <div className="header-left" style={{ position: 'relative', zIndex: 1 }}>
+
+                            <h1 style={{ fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', margin: 0, color: 'white' }}>
+                                Welcome back, <span style={{ background: 'linear-gradient(to right, #ffffff, #c7d2fe)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.15))' }}>Staff</span> 👋
+                            </h1>
+                            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', marginTop: 8, maxWidth: 500, lineHeight: 1.6, fontWeight: 700 }}>
+                                Manage your students, mark attendance, and monitor performance metrics seamlessly from your command center.
+                            </p>
                         </div>
-                        <div className="page-header-right" style={{ gap: 10 }}>
+                        <div className="header-right" style={{ display: 'flex', gap: 16, position: 'relative', zIndex: 1 }}>
                             <button
-                                className="btn btn-warning"
+                                className="btn"
                                 onClick={handleReportDuty}
                                 disabled={reporting}
+                                style={{
+                                    background: 'rgba(255,255,255,0.05)',
+                                    color: 'white',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    backdropFilter: 'blur(10px)',
+                                    padding: '12px 24px',
+                                    borderRadius: 16,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 10,
+                                    fontWeight: 600,
+                                    transition: 'all 0.3s'
+                                }}
+                                onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                                onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.transform = 'translateY(0)'; }}
                             >
-                                {reporting ? 'Sending...' : '📢 Report Duty to HOD'}
+                                <span style={{ fontSize: 18 }}>🚀</span>
+                                {reporting ? 'Sending...' : 'Report Duty'}
                             </button>
                             <button
-                                className="btn btn-danger"
-                                onClick={handleDeleteSectionData}
-                                title="Delete all students for your section"
+                                className="btn btn-primary"
+                                onClick={() => fileRef.current.click()}
+                                disabled={importing}
+                                style={{ padding: '12px 24px', borderRadius: 16, fontWeight: 600, boxShadow: '0 8px 25px var(--accent-glow)' }}
                             >
-                                🗑️ Delete Student Data
+                                📥 {importing ? 'Importing...' : 'Import Students'}
                             </button>
-                            <label className="btn btn-outline" style={{ cursor: 'pointer' }} title="Columns: name, rollNumber, registerNumber">
-                                {importing ? 'Importing...' : '📁 Bulk Upload Students'}
-                                <input
-                                    type="file"
-                                    ref={fileRef}
-                                    accept=".xlsx, .xls"
-                                    onChange={handleExcelImport}
-                                    style={{ display: 'none' }}
-                                    disabled={importing}
-                                />
-                            </label>
-                            <a href="/staff/mark-attendance" className="btn btn-primary">
-                                ✏️ Mark Attendance
-                            </a>
+                            <input
+                                type="file"
+                                ref={fileRef}
+                                onChange={handleExcelImport}
+                                accept=".xlsx, .xls"
+                                style={{ display: 'none' }}
+                            />
                         </div>
                     </div>
 
+                    <StudentQuickSearch />
+
                     {/* Current Class Banner */}
                     {currentClass && (
-                        <div className="card" style={{ marginBottom: 20, background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: 'white' }}>
-                            <div className="card-body" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="card glass" style={{
+                            marginBottom: 24,
+                            background: 'var(--accent-gradient)',
+                            color: 'white',
+                            border: 'none',
+                            boxShadow: '0 10px 30px var(--accent-glow)',
+                            borderRadius: 20
+                        }}>
+                            <div className="card-body" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 32px' }}>
                                 <div>
-                                    <h3 style={{ margin: 0, fontSize: 20 }}>⏰ Current Class: {currentClass.subject}</h3>
-                                    <p style={{ margin: '4px 0 0', opacity: 0.9 }}>
-                                        {currentClass.year}{['st', 'nd', 'rd', 'th'][currentClass.year - 1]} Year, Sec {currentClass.section?.name} | Period {currentClass.period}
+                                    <h3 style={{ margin: 0, fontSize: 20, color: 'white', fontWeight: 800 }}>⚡ ACTIVE SESSION: {currentClass.subject}</h3>
+                                    <p style={{ margin: '4px 0 0', opacity: 0.9, fontSize: 14, fontWeight: 500 }}>
+                                        {currentClass.year}{['st', 'nd', 'rd', 'th'][currentClass.year - 1]} Year • Section {currentClass.section?.name} • Period {currentClass.period}
                                     </p>
                                 </div>
-                                <a href="/staff/mark-attendance" className="btn" style={{ background: 'white', color: '#059669', fontWeight: 'bold' }}>
-                                    ✅ Mark Attendance Now
+                                <a
+                                    href={`/staff/mark-attendance?period=${currentClass.period}&sectionId=${currentClass.section?._id || currentClass.section}&subject=${encodeURIComponent(currentClass.subject)}`}
+                                    className="btn"
+                                    style={{ background: 'white', color: 'var(--accent)', fontWeight: 800, borderRadius: 30, padding: '12px 28px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                                >
+                                    MARK ATTENDANCE NOW
                                 </a>
                             </div>
                         </div>
                     )}
 
-                    {/* Stats */}
+                    {/* Stats Grid */}
                     <div className="dashboard-grid">
-                        <div className="stat-card blue">
-                            <div className="stat-icon blue">📝</div>
+                        <div className="stat-card" style={{ borderLeft: '5px solid var(--accent)' }}>
+                            <div className="stat-icon" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent)' }}>📋</div>
                             <div className="stat-info">
+                                <p>TOTAL SUBMISSIONS</p>
                                 <h3>{myRecords.length}</h3>
-                                <p>Total Submissions</p>
                             </div>
                         </div>
-                        <div className="stat-card amber">
-                            <div className="stat-icon amber">⏳</div>
+                        <div className="stat-card" style={{ borderLeft: '5px solid var(--warning)' }}>
+                            <div className="stat-icon" style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)' }}>⏳</div>
                             <div className="stat-info">
+                                <p>PENDING REVIEW</p>
                                 <h3>{pendingCount}</h3>
-                                <p>Pending Approval</p>
                             </div>
                         </div>
-                        <div className="stat-card green">
-                            <div className="stat-icon green">✅</div>
+                        <div className="stat-card" style={{ borderLeft: '5px solid var(--success)' }}>
+                            <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)' }}>✅</div>
                             <div className="stat-info">
+                                <p>APPROVED RECORDS</p>
                                 <h3>{approvedCount}</h3>
-                                <p>Approved Records</p>
-                            </div>
-                        </div>
-                        <div className="stat-card purple">
-                            <div className="stat-icon purple">📊</div>
-                            <div className="stat-info">
-                                <h3>{avgPct}%</h3>
-                                <p>Overall Attendance</p>
+                                <p>Performance</p>
                             </div>
                         </div>
                     </div>
@@ -390,8 +430,8 @@ const StaffDashboard = () => {
                                                     <td>Period {r.period}</td>
                                                     <td>{r.year}{['st', 'nd', 'rd', 'th'][r.year - 1]} Yr — Sec {r.section?.name}</td>
                                                     <td>{total}</td>
-                                                    <td style={{ color: 'var(--success)', fontWeight: 600 }}>{present}</td>
-                                                    <td style={{ color: 'var(--danger)', fontWeight: 600 }}>{total - present}</td>
+                                                    <td style={{ color: 'var(--success)', fontWeight: 800 }}>{present}</td>
+                                                    <td style={{ color: 'var(--danger)', fontWeight: 800 }}>{total - present}</td>
                                                     <td>
                                                         <span className={`badge ${r.status === 'approved' ? 'badge-success' :
                                                             r.status === 'rejected' ? 'badge-danger' : 'badge-warning'
@@ -473,8 +513,8 @@ const StaffDashboard = () => {
                                                     <td>Period {r.period}</td>
                                                     <td>{r.year}{['st', 'nd', 'rd', 'th'][r.year - 1]} Yr — Sec {r.section?.name}</td>
                                                     <td>
-                                                        <span style={{ color: 'var(--success)', fontWeight: 600 }}>{present}</span>
-                                                        <span style={{ color: '#9CA3AF' }}> / {r.attendance.length}</span>
+                                                        <span style={{ color: 'var(--success)', fontWeight: 800 }}>{present}</span>
+                                                        <span style={{ color: 'var(--gray-500)', fontWeight: 700 }}> / {r.attendance.length}</span>
                                                     </td>
                                                     <td>
                                                         <span className={`badge ${r.status === 'approved' ? 'badge-success' :

@@ -16,8 +16,19 @@ const { protect, roleCheck } = require('../middleware/auth');
 // All routes require authentication
 router.use(protect);
 
+const upload = require('../utils/upload');
+
 // Staff: Mark attendance
 router.post('/mark', roleCheck('staff', 'hod', 'principal'), markAttendance);
+
+// Upload proof file
+router.post('/upload-proof', roleCheck('staff', 'hod', 'principal'), upload.single('proof'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+    const fileUrl = `/uploads/proofs/${req.file.filename}`;
+    res.json({ success: true, url: fileUrl });
+});
 
 // Get attendance records (filtered)
 router.get('/', getAttendance);

@@ -1,11 +1,17 @@
 import axios from 'axios';
+import { API_URL } from '../config/env';
 
+/**
+ * Modern Axios instance with production-ready interceptors.
+ */
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || '/api',
-    headers: { 'Content-Type': 'application/json' },
+    baseURL: API_URL,
+    headers: { 
+        'Content-Type': 'application/json' 
+    },
 });
 
-// Request interceptor to attach token
+// Request interceptor: Attach Auth Token
 api.interceptors.request.use(
     (config) => {
         const token = sessionStorage.getItem('mec_token');
@@ -17,22 +23,47 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// Response interceptor for global error handling
+// Response interceptor: Handle Global Errors (like 401 Unauthorized)
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        const isAuthCheck = error.config?.url?.includes('/auth/me');
-        const is401 = error.response?.status === 401;
-        const notOnLogin = !window.location.pathname.includes('/login');
+        const { response, config } = error;
+        
+        // Prevent infinite loops on /auth/me checks
+        const isAuthCheck = config?.url?.includes('/auth/me');
+        const is401 = response?.status === 401;
+        const isLoginPage = window.location.pathname.includes('/login');
 
-        // Only auto-redirect on 401 if it's NOT the initial auth check
-        // (AuthContext handles /auth/me failures itself)
-        if (is401 && notOnLogin && !isAuthCheck) {
+        if (is401 && !isLoginPage && !isAuthCheck) {
             sessionStorage.removeItem('mec_token');
-            window.location.href = '/login';
+            // Use window.location for hard reload on auth failure
+            window.location.href = '/login?session=expired';
         }
-        return Promise.reject(error);
+
+        // Standardized error object for frontend consumption
+        const errorMessage = response?.data?.message || error.message || 'An unexpected error occurred';
+        return Promise.reject({ ...error, errorMessage });
     }
 );
+
+/**
+ * Helper to resolve file paths from the backend (Images/PDFs)
+ */
+export const getFileUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    
+    // Clean base URL (remove /api if present)
+    const cleanBase = API_URL.replace(/\/api$/, '');
+    
+    // Fallback for local development if base is just a path
+    if (!cleanBase || cleanBase === '/') {
+        if (window.location.hostname === 'localhost') {
+            return `http://localhost:5001${path}`;
+        }
+    }
+    
+    return `${cleanBase}${path}`;
+};
 
 export default api;

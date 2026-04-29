@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
 import Topbar from '../../components/Topbar';
-import api from '../../services/api';
+import api, { getFileUrl } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -87,8 +87,8 @@ const AttendanceReports = () => {
         }
     };
 
-    const handleExport = async (type, recordId = null) => {
-        setExporting(type + (recordId || ''));
+    const handleExport = async (type, recordId = null, filterType = null) => {
+        setExporting(type + (recordId || '') + (filterType || ''));
         try {
             const params = new URLSearchParams();
             if (recordId) {
@@ -96,14 +96,17 @@ const AttendanceReports = () => {
             } else {
                 Object.entries(filters).forEach(([k, v]) => { if (v) params.append(k, v); });
             }
+            if (filterType) params.append('filterType', filterType);
+            
             const res = await api.get(`/reports/${type}?${params}`, { responseType: 'blob' });
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const a = document.createElement('a');
             a.href = url;
-            a.download = `attendance_report.${type === 'excel' ? 'xlsx' : 'pdf'}`;
+            const filename = filterType === 'absentees' ? 'absentee_report.pdf' : `attendance_report.${type === 'excel' ? 'xlsx' : 'pdf'}`;
+            a.download = filename;
             a.click();
             window.URL.revokeObjectURL(url);
-            toast.success(`${type.toUpperCase()} downloaded!`);
+            toast.success(`${filterType === 'absentees' ? 'Absentee List' : type.toUpperCase()} downloaded!`);
         } catch {
             toast.error('Export failed');
         } finally {
@@ -133,24 +136,32 @@ const AttendanceReports = () => {
                             <h2>📋 {pageTitle}</h2>
                             <p>Filter records and download reports in Excel or PDF format</p>
                         </div>
-                        {user?.role === 'principal' && (
-                            <div className="page-header-right">
-                                <button
-                                    className="btn btn-success"
-                                    onClick={() => handleExport('excel')}
-                                    disabled={!!exporting}
-                                >
-                                    {exporting === 'excel' ? <><span className="spinner" /> Exporting...</> : '📊 Export Excel'}
-                                </button>
-                                <button
-                                    className="btn btn-danger"
-                                    onClick={() => handleExport('pdf')}
-                                    disabled={!!exporting}
-                                >
-                                    {exporting === 'pdf' ? <><span className="spinner" /> Exporting...</> : '📄 Export PDF'}
-                                </button>
-                            </div>
-                        )}
+                        <div className="page-header-right" style={{ display: 'flex', gap: 10 }}>
+                            <button
+                                className="btn btn-success"
+                                onClick={() => handleExport('excel')}
+                                disabled={!!exporting}
+                                style={{ borderRadius: 12 }}
+                            >
+                                {exporting === 'excel' ? <><span className="spinner" /> EXPORTING...</> : '📊 EXCEL REPORT'}
+                            </button>
+                            <button
+                                className="btn btn-danger"
+                                onClick={() => handleExport('pdf')}
+                                disabled={!!exporting}
+                                style={{ borderRadius: 12 }}
+                            >
+                                {exporting === 'pdf' ? <><span className="spinner" /> EXPORTING...</> : '📄 WHOLE PDF'}
+                            </button>
+                            <button
+                                className="btn btn-warning"
+                                onClick={() => handleExport('pdf', null, 'absentees')}
+                                disabled={!!exporting}
+                                style={{ borderRadius: 12, background: '#F59E0B', color: 'white' }}
+                            >
+                                {exporting === 'pdfabsentees' ? <><span className="spinner" /> EXPORTING...</> : '🚫 ABSENTEES PDF'}
+                            </button>
+                        </div>
                     </div>
 
                     {/* Filters */}
@@ -342,12 +353,21 @@ const AttendanceReports = () => {
                                                                     </button>
                                                                     <button
                                                                         className="btn btn-danger btn-sm"
-                                                                        title="Download this record"
+                                                                        title="Download Whole PDF"
                                                                         onClick={() => handleExport('pdf', r._id)}
-                                                                        disabled={exporting === 'pdf' + r._id}
+                                                                        disabled={exporting.includes('pdf' + r._id)}
                                                                         style={{ padding: '4px 8px', minWidth: '32px' }}
                                                                     >
-                                                                        {exporting === 'pdf' + r._id ? '⌛' : '📄'}
+                                                                        📄
+                                                                    </button>
+                                                                    <button
+                                                                        className="btn btn-warning btn-sm"
+                                                                        title="Download Absentees Only PDF"
+                                                                        onClick={() => handleExport('pdf', r._id, 'absentees')}
+                                                                        disabled={exporting.includes('absentees')}
+                                                                        style={{ padding: '4px 8px', minWidth: '32px', background: '#F59E0B', color: 'white', border: 'none' }}
+                                                                    >
+                                                                        🚫
                                                                     </button>
                                                                     <button
                                                                         className="btn btn-ghost btn-sm"
@@ -407,20 +427,23 @@ const AttendanceReports = () => {
                 }}>
                     <div className="modal-content card" style={{
                         maxWidth: 700, width: '100%', maxHeight: '90vh', overflowY: 'auto',
-                        padding: 0, background: '#fff', borderRadius: 12, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'
+                        padding: 0, background: 'var(--card-bg)', borderRadius: 16, 
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                        border: '1px solid var(--gray-200)'
                     }}>
                         <div className="card-header" style={{
                             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                            padding: '16px 24px', borderBottom: '1px solid #eee'
+                            padding: '20px 24px', borderBottom: '1px solid var(--gray-100)',
+                            background: 'var(--gray-50)'
                         }}>
                             <div>
-                                <h3 style={{ margin: 0 }}>
+                                <h3 style={{ margin: 0, color: 'var(--gray-900)', fontWeight: 800 }}>
                                     {absenteeModal.loading ? 'Loading Details...' :
-                                        `Absent Students – ${absenteeModal.data?.meta?.sectionName} (${absenteeModal.data?.meta?.year}${['st', 'nd', 'rd', 'th'][absenteeModal.data?.meta?.year - 1]} Year)`
+                                        `Student Details – ${absenteeModal.data?.meta?.sectionName} (${absenteeModal.data?.meta?.year}${['st', 'nd', 'rd', 'th'][absenteeModal.data?.meta?.year - 1]} Year)`
                                     }
                                 </h3>
                                 {!absenteeModal.loading && (
-                                    <p style={{ margin: '4px 0 0', fontSize: 13, color: '#6B7280' }}>
+                                    <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--gray-500)', fontWeight: 500 }}>
                                         {new Date(absenteeModal.data?.meta?.date).toLocaleDateString('en-IN')} — Period {absenteeModal.data?.meta?.period} — {absenteeModal.data?.meta?.staffName}
                                     </p>
                                 )}
@@ -444,11 +467,11 @@ const AttendanceReports = () => {
                                 <>
                                     <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div>
-                                            <span style={{ fontSize: 14, color: '#374151', fontWeight: 500 }}>Subject:</span>
-                                            <span style={{ marginLeft: 8, fontSize: 14, color: '#6B7280' }}>{absenteeModal.data?.meta?.subject}</span>
+                                            <span style={{ fontSize: 14, color: 'var(--gray-600)', fontWeight: 600 }}>Subject:</span>
+                                            <span style={{ marginLeft: 8, fontSize: 14, color: 'var(--gray-900)', fontWeight: 700 }}>{absenteeModal.data?.meta?.subject}</span>
                                         </div>
-                                        <div className="badge badge-danger" style={{ fontSize: 14, padding: '6px 12px' }}>
-                                            Total Absentees: {absenteeModal.count}
+                                        <div className="badge badge-info" style={{ fontSize: 14, padding: '8px 16px', borderRadius: 10, background: 'var(--primary-gradient)', color: 'white', border: 'none' }}>
+                                            Total Flagged: {absenteeModal.count}
                                         </div>
                                     </div>
 
@@ -459,18 +482,42 @@ const AttendanceReports = () => {
                                                     <tr>
                                                         <th>Register Number</th>
                                                         <th>Student Name</th>
-                                                        <th style={{ textAlign: 'center' }}>Status</th>
+                                                        <th>Status</th>
+                                                        <th>Reason & Proof</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {absenteeModal.data.data.map((abs, idx) => (
-                                                        <tr key={idx} style={{ backgroundColor: '#FEF2F2' }}>
+                                                        <tr key={idx} style={{ 
+                                                            backgroundColor: abs.status === 'Present' ? '' : 
+                                                                           abs.status === 'OD' ? 'rgba(59, 130, 246, 0.08)' : 
+                                                                           'rgba(239, 68, 68, 0.08)' 
+                                                        }}>
                                                             <td style={{ fontWeight: 600 }}>{abs.student?.registerNumber}</td>
                                                             <td>{abs.student?.name}</td>
-                                                            <td style={{ textAlign: 'center' }}>
-                                                                <span className={`badge ${abs.status === 'Leave' ? 'badge-warning' : 'badge-danger'}`}>
+                                                            <td>
+                                                                <span className={`badge ${abs.status === 'Leave' ? 'badge-warning' : abs.status === 'OD' ? 'badge-od' : 'badge-danger'}`}>
                                                                     {abs.status}
                                                                 </span>
+                                                            </td>
+                                                            <td style={{ fontSize: 13 }}>
+                                                                {abs.reason && (
+                                                                    <div style={{ color: 'var(--gray-600)', marginBottom: 4 }}>
+                                                                        💬 {abs.reason}
+                                                                    </div>
+                                                                )}
+                                                                {abs.proofUrl && (
+                                                                    <a 
+                                                                        href={getFileUrl(abs.proofUrl)} 
+                                                                        target="_blank" 
+                                                                        rel="noopener noreferrer"
+                                                                        className="badge badge-purple"
+                                                                        style={{ textDecoration: 'none', cursor: 'pointer' }}
+                                                                    >
+                                                                        📎 View Proof
+                                                                    </a>
+                                                                )}
+                                                                {!abs.reason && !abs.proofUrl && <span style={{ color: 'var(--gray-400)' }}>—</span>}
                                                             </td>
                                                         </tr>
                                                     ))}
