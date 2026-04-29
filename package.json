@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "description": "MEC Attendance Management System - Full Stack",
     "scripts": {
-        "install-all": "npm install --prefix backend && npm install --prefix frontend",
-        "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+        "install-all": "npm install --prefix backend --legacy-peer-deps && npm install --prefix frontend --legacy-peer-deps",
+        "build": "npm install --prefix backend --legacy-peer-deps && npm install --prefix frontend --legacy-peer-deps && npm run build --prefix frontend",
         "backend": "npm run dev --prefix backend",
         "frontend": "npm start --prefix frontend",
         "seed": "npm run seed --prefix backend",
