@@ -58,15 +58,14 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'MEC Attendance System API is running' });
 });
 
-// Serve React Frontend (Always serve if build exists)
-const frontendPath = path.join(__dirname, '../frontend/build');
+// PRODUCTION: Serve React Frontend
+const frontendPath = path.resolve(__dirname, '..', 'frontend', 'build');
 app.use(express.static(frontendPath));
 
-// Fallback: Send index.html for React Router
+// Fallback: Send index.html for all non-API routes (React Router)
 app.get('*', (req, res) => {
-    // Only serve index.html if it's not an API request
     if (!req.path.startsWith('/api')) {
-        res.sendFile(path.resolve(frontendPath, 'index.html'));
+        res.sendFile(path.join(frontendPath, 'index.html'));
     } else {
         res.status(404).json({ message: `API Route ${req.originalUrl} not found` });
     }
