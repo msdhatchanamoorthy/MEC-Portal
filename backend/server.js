@@ -58,21 +58,19 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'MEC Attendance System API is running' });
 });
 
-// PRODUCTION: Serve React Frontend
-if (process.env.NODE_ENV === 'production') {
-    const frontendPath = path.join(__dirname, '../frontend/build');
-    app.use(express.static(frontendPath));
-    
-    // Fallback: Send index.html for all other routes (React Router)
-    app.get('*', (req, res) => {
+// Serve React Frontend (Always serve if build exists)
+const frontendPath = path.join(__dirname, '../frontend/build');
+app.use(express.static(frontendPath));
+
+// Fallback: Send index.html for React Router
+app.get('*', (req, res) => {
+    // Only serve index.html if it's not an API request
+    if (!req.path.startsWith('/api')) {
         res.sendFile(path.resolve(frontendPath, 'index.html'));
-    });
-} else {
-    // 404 handler for development
-    app.use((req, res) => {
-        res.status(404).json({ message: `Route ${req.originalUrl} not found` });
-    });
-}
+    } else {
+        res.status(404).json({ message: `API Route ${req.originalUrl} not found` });
+    }
+});
 
 // Global error handler
 app.use((err, req, res, next) => {
