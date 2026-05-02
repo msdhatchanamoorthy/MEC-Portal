@@ -25,6 +25,7 @@ const HODDashboard = () => {
     const [pendingRecords, setPendingRecords] = useState([]);
     const [dutyReports, setDutyReports] = useState([]);
     const [staffList, setStaffList] = useState([]);
+    const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [staffLoading, setStaffLoading] = useState(true);
     const [analytics, setAnalytics] = useState(null);
@@ -43,13 +44,14 @@ const HODDashboard = () => {
 
         try {
             setLoading(true);
-            const [overviewRes, summaryRes, pendingRes, dutyRes, analyticsRes, alertsRes] = await Promise.all([
+            const [overviewRes, summaryRes, pendingRes, dutyRes, analyticsRes, alertsRes, notificationsRes] = await Promise.all([
                 api.get(`/attendance/daily-overview?date=${selectedDate}`),
                 api.get('/attendance/summary'),
                 api.get(`/attendance?status=pending&date=${selectedDate}`),
                 api.get(`/duty-reports?date=${selectedDate}`),
                 api.get('/hod/analytics'),
-                api.get('/hod/alerts/low-attendance')
+                api.get('/hod/alerts/low-attendance'),
+                api.get('/notifications')
             ]);
             setOverview(overviewRes.data);
             setSummary(summaryRes.data.data || []);
@@ -57,6 +59,7 @@ const HODDashboard = () => {
             setDutyReports(dutyRes.data.data || []);
             setAnalytics(analyticsRes.data.data);
             setAlerts(alertsRes.data.data || []);
+            setNotifications(notificationsRes.data.data || []);
         } catch (err) {
             console.error('HOD Dashboard Fetch Error:', err);
             if (err.response?.status !== 401) {
@@ -437,6 +440,39 @@ const HODDashboard = () => {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Real-time System Notifications */}
+                            {notifications.filter(n => !n.read).length > 0 && (
+                                <div className="card glass" style={{ marginBottom: 24, border: 'none', background: 'rgba(99, 102, 241, 0.05)', borderLeft: '4px solid var(--accent)' }}>
+                                    <div className="card-header" style={{ padding: '12px 24px' }}>
+                                        <div className="card-title" style={{ fontSize: 13, color: 'var(--accent)' }}>🔔 SYSTEM ALERTS</div>
+                                        <button 
+                                            onClick={async () => {
+                                                await api.put('/notifications/read-all');
+                                                setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+                                            }}
+                                            style={{ background: 'none', border: 'none', color: 'var(--gray-500)', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
+                                        >
+                                            Dismiss All
+                                        </button>
+                                    </div>
+                                    <div className="card-body" style={{ padding: '0 24px 16px' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                            {notifications.filter(n => !n.read).slice(0, 3).map(n => (
+                                                <div key={n._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', padding: '10px 16px', borderRadius: 12, boxShadow: '0 2px 5px rgba(0,0,0,0.02)' }}>
+                                                    <div>
+                                                        <span style={{ fontWeight: 800, fontSize: 13, color: 'var(--primary-dark)' }}>{n.title}</span>
+                                                        <p style={{ margin: 0, fontSize: 12, color: 'var(--gray-600)', fontWeight: 600 }}>{n.message}</p>
+                                                    </div>
+                                                    <span style={{ fontSize: 10, color: 'var(--gray-400)', fontWeight: 700 }}>
+                                                        {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Notice Board */}
                             <NoticeBoard

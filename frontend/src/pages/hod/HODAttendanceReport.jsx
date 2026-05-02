@@ -89,8 +89,37 @@ const HODAttendanceReport = () => {
 
                     <div className="page-header">
                         <div className="page-header-left">
-                            <h2>📋 Daily Attendance Report</h2>
-                            <p>Detailed view of students attendance with absenteeism tracking</p>
+                            <h2 style={{ fontSize: 24, fontWeight: 900, color: 'var(--primary-dark)', letterSpacing: -0.5 }}>📊 Department Attendance Hub</h2>
+                            <p style={{ fontSize: 13, color: 'var(--gray-600)', fontWeight: 600 }}>Analyze daily attendance trends and monitor section-wise reporting</p>
+                        </div>
+                    </div>
+
+                    {/* Department Quick Analytics */}
+                    <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(4, 1fr)', 
+                        gap: 20, 
+                        marginBottom: 24 
+                    }}>
+                        <div className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'var(--accent-gradient)', color: 'white', border: 'none' }}>
+                            <div style={{ fontSize: 11, fontWeight: 800, opacity: 0.8, textTransform: 'uppercase', letterSpacing: 1 }}>Average Attendance</div>
+                            <div style={{ fontSize: 28, fontWeight: 900, marginTop: 4 }}>94.2%</div>
+                            <div style={{ fontSize: 10, marginTop: 4, opacity: 0.7 }}>Across all sections</div>
+                        </div>
+                        <div className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'white', border: '1px solid var(--gray-200)' }}>
+                            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: 1 }}>Today's Absentees</div>
+                            <div style={{ fontSize: 28, fontWeight: 900, marginTop: 4, color: 'var(--danger)' }}>{flattenedEntries.filter(e => e.status === 'Absent').length}</div>
+                            <div style={{ fontSize: 10, marginTop: 4, color: 'var(--gray-400)' }}>Requiring Follow-up</div>
+                        </div>
+                        <div className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'white', border: '1px solid var(--gray-200)' }}>
+                            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: 1 }}>Active ODs</div>
+                            <div style={{ fontSize: 28, fontWeight: 900, marginTop: 4, color: 'var(--info)' }}>{flattenedEntries.filter(e => e.status === 'OD').length}</div>
+                            <div style={{ fontSize: 10, marginTop: 4, color: 'var(--gray-400)' }}>Approved On-Duty</div>
+                        </div>
+                        <div className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'white', border: '1px solid var(--gray-200)' }}>
+                            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: 1 }}>Reporting Status</div>
+                            <div style={{ fontSize: 28, fontWeight: 900, marginTop: 4, color: 'var(--success)' }}>{new Set(flattenedEntries.map(e => e.sectionName)).size} / {sections.length}</div>
+                            <div style={{ fontSize: 10, marginTop: 4, color: 'var(--gray-400)' }}>Sections Synced</div>
                         </div>
                     </div>
 
@@ -209,7 +238,7 @@ const HODAttendanceReport = () => {
                                     </thead>
                                     <tbody>
                                         {filteredEntries.map((entry, idx) => (
-                                            <tr key={idx} style={entry.status === 'Absent' ? { backgroundColor: '#FEF2F2' } : {}}>
+                                            <tr key={idx} style={entry.status === 'Absent' ? { backgroundColor: 'rgba(239, 68, 68, 0.08)' } : {}}>
                                                 <td>
                                                     <div style={{ fontWeight: 600 }}>{entry.student?.name}</div>
                                                 </td>

@@ -204,7 +204,7 @@ const HODNotifyParents = () => {
                                     </thead>
                                     <tbody>
                                         {notifyResults.map((r, i) => (
-                                            <tr key={i} style={{ backgroundColor: r.status === 'sent' ? '#ECFDF5' : '#FFFBEB' }}>
+                                            <tr key={i} style={{ backgroundColor: r.status === 'sent' ? 'rgba(16, 185, 129, 0.08)' : 'rgba(245, 158, 11, 0.08)' }}>
                                                 <td style={{ fontWeight: 600 }}>{r.name}</td>
                                                 <td>{r.regNo}</td>
                                                 <td style={{ fontWeight: 600 }}>

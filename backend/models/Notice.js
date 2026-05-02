@@ -7,7 +7,9 @@ const noticeSchema = new mongoose.Schema({
     authorName: { type: String },
     authorRole: { type: String },
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', default: null }, // Null means all departments
-    targetRoles: [{ type: String, enum: ['staff', 'hod', 'principal', 'all'], default: ['all'] }],
+    targetRoles: [{ type: String, enum: ['staff', 'hod', 'principal', 'student', 'all'], default: ['all'] }],
+    year: { type: Number, default: null }, // Target specific year
+    section: { type: String, default: null }, // Target specific section
     isActive: { type: Boolean, default: true },
     createdAt: { type: Date, default: Date.now },
 });

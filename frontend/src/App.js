@@ -22,6 +22,27 @@ import ManageUsers from './pages/principal/ManageUsers';
 import ManageAcademicData from './pages/shared/ManageAcademicData';
 import ProfileSettings from './pages/shared/ProfileSettings';
 import StudentPerformance from './pages/staff/StudentPerformance';
+import StudentDashboard from './pages/student/StudentDashboard';
+import StudentDocuments from './pages/student/StudentDocuments';
+import StudentChat from './pages/student/StudentChat';
+import AdvisorDocuments from './pages/staff/AdvisorDocuments';
+import AdvisorMessages from './pages/staff/AdvisorMessages';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+
+const DynamicThemeHandler = () => {
+    const { user } = useAuth();
+
+    React.useEffect(() => {
+        if (user?.role) {
+            document.body.setAttribute('data-role', user.role);
+        } else {
+            document.body.removeAttribute('data-role');
+        }
+    }, [user]);
+
+    return null;
+};
 
 const ProtectedRoute = ({ children, roles }) => {
     const { user, loading } = useAuth();
@@ -58,6 +79,7 @@ const RoleRedirect = () => {
     if (user.role === 'principal') return <Navigate to="/principal" replace />;
     if (user.role === 'hod') return <Navigate to="/hod" replace />;
     if (user.role === 'staff') return <Navigate to="/staff" replace />;
+    if (user.role === 'student') return <Navigate to="/student" replace />;
     return <Navigate to="/login" replace />;
 };
 
@@ -66,7 +88,8 @@ function App() {
         <ThemeProvider>
             <UIProvider>
                 <AuthProvider>
-            <BrowserRouter>
+                    <DynamicThemeHandler />
+                    <BrowserRouter>
                 <Toaster
                     position="top-right"
                     toastOptions={{
@@ -83,6 +106,8 @@ function App() {
                 />
                 <Routes>
                     <Route path="/login" element={<Login />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password/:token" element={<ResetPassword />} />
                     <Route path="/" element={<RoleRedirect />} />
 
                     {/* Principal Routes */}
@@ -231,6 +256,48 @@ function App() {
                         element={
                             <ProtectedRoute roles={['staff']}>
                                 <StudentPerformance />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/advisor/documents"
+                        element={
+                            <ProtectedRoute roles={['staff']}>
+                                <AdvisorDocuments />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/advisor/messages"
+                        element={
+                            <ProtectedRoute roles={['staff']}>
+                                <AdvisorMessages />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* Student Routes */}
+                    <Route
+                        path="/student"
+                        element={
+                            <ProtectedRoute roles={['student']}>
+                                <StudentDashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/student/documents"
+                        element={
+                            <ProtectedRoute roles={['student']}>
+                                <StudentDocuments />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/student/chat"
+                        element={
+                            <ProtectedRoute roles={['student']}>
+                                <StudentChat />
                             </ProtectedRoute>
                         }
                     />

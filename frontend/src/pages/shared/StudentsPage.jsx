@@ -99,6 +99,8 @@ const StudentsPage = () => {
             rollNumber: student.rollNumber,
             registerNumber: student.registerNumber,
             email: student.email || '',
+            personalEmail: student.personalEmail || '',
+            internalMarks: student.internalMarks || 0,
             phone: student.phone || '',
             department: student.department?._id || student.department,
             year: student.year.toString(),
@@ -112,7 +114,7 @@ const StudentsPage = () => {
     const handleAddNewClick = () => {
         setEditingStudent(null);
         setNewStudent({
-            name: '', rollNumber: '', registerNumber: '', email: '', phone: '',
+            name: '', rollNumber: '', registerNumber: '', email: '', personalEmail: '', internalMarks: 0, phone: '',
             department: user?.department?._id || '',
             year: '1', section: '',
             gender: 'Male', residency: 'Day Scholar',
@@ -169,7 +171,7 @@ const StudentsPage = () => {
 
                 // Map Excel headers to our model
                 const students = data.map(row => {
-                    let name = '', regNo = '', rollNo = '', genderVal = '', resVal = '';
+                    let name = '', regNo = '', rollNo = '', genderVal = '', resVal = '', personalMail = '', marks = 0;
                     
                     // Search all keys for matching patterns
                     Object.keys(row).forEach(key => {
@@ -183,6 +185,8 @@ const StudentsPage = () => {
                         }
                         if (k.includes('gender') || k.includes('sex')) genderVal = val.toLowerCase();
                         if (k.includes('residency') || k.includes('type') || k.includes('status')) resVal = val.toLowerCase();
+                        if (k.includes('personal') || k.includes('mail')) personalMail = val;
+                        if (k.includes('mark')) marks = parseFloat(val) || 0;
                     });
 
                     // If rollNo wasn't found specifically, use regNo
@@ -192,7 +196,9 @@ const StudentsPage = () => {
                         name: name || 'Unknown Student',
                         rollNumber: rollNo || 'N/A',
                         registerNumber: regNo || 'N/A',
-                        email: row.Email || row.email || '',
+                        email: `${regNo.toString().trim().toLowerCase()}@student.mec.edu.in`,
+                        personalEmail: personalMail || row.Email || row.email || '',
+                        internalMarks: marks,
                         phone: (row.Phone || row.phone || '').toString(),
                         gender: (genderVal.includes('girl') || genderVal.includes('female') || genderVal === 'f') ? 'Female' : 'Male',
                         residency: (resVal.includes('hostel')) ? 'Hosteller' : 'Day Scholar'
@@ -234,22 +240,25 @@ const StudentsPage = () => {
 
                     <div className="page-header">
                         <div className="page-header-left">
-                            <h2>🎓 Students</h2>
-                            <p>{filteredStudents.length} students found</p>
+                            <h2 style={{ fontSize: 24, fontWeight: 900, color: 'var(--primary-dark)', letterSpacing: -0.5 }}>🎓 Student Management</h2>
+                            <p style={{ fontSize: 13, color: 'var(--gray-600)', fontWeight: 600 }}>Manage and monitor student records across departments</p>
                         </div>
-                        <div className="page-header-right">
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="🔍 Search students..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                style={{ width: 220 }}
-                            />
+                        <div className="page-header-right" style={{ display: 'flex', gap: 12 }}>
+                            <div className="search-wrapper" style={{ position: 'relative' }}>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search by name, roll, or reg no..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    style={{ width: 280, borderRadius: 12, paddingLeft: 40 }}
+                                />
+                                <span style={{ position: 'absolute', left: 15, top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }}>🔍</span>
+                            </div>
                             {(user?.role === 'principal' || user?.role === 'hod' || user?.role === 'staff') && (
                                 <div style={{ display: 'flex', gap: 10 }}>
-                                    <button className="btn btn-outline" onClick={() => document.getElementById('excel-input').click()}>
-                                        📤 Bulk Upload (Excel)
+                                    <button className="btn btn-outline" onClick={() => document.getElementById('excel-input').click()} style={{ borderRadius: 12, fontWeight: 700 }}>
+                                        📤 Import
                                     </button>
                                     <input 
                                         id="excel-input"
@@ -258,11 +267,58 @@ const StudentsPage = () => {
                                         style={{ display: 'none' }} 
                                         onChange={handleExcelUpload}
                                     />
-                                    <button className="btn btn-primary" onClick={handleAddNewClick}>
-                                        + Add Student
+                                    <button className="btn btn-primary" onClick={handleAddNewClick} style={{ borderRadius: 12, fontWeight: 700, boxShadow: '0 4px 12px var(--accent-glow)' }}>
+                                        + Add New
                                     </button>
                                 </div>
                             )}
+                        </div>
+                    </div>
+
+                    {/* Quick Stats Grid */}
+                    <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(4, 1fr)', 
+                        gap: 20, 
+                        marginBottom: 24 
+                    }}>
+                        <div className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'var(--accent-gradient)', color: 'white', border: 'none' }}>
+                            <div style={{ fontSize: 11, fontWeight: 800, opacity: 0.8, textTransform: 'uppercase', letterSpacing: 1 }}>Total Enrollment</div>
+                            <div style={{ fontSize: 28, fontWeight: 900, marginTop: 4 }}>{students.length}</div>
+                            <div style={{ fontSize: 10, marginTop: 4, opacity: 0.7 }}>Active Students</div>
+                        </div>
+                        <div className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'white', border: '1px solid var(--gray-200)' }}>
+                            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: 1 }}>Gender Mix</div>
+                            <div style={{ display: 'flex', gap: 15, marginTop: 8 }}>
+                                <div>
+                                    <span style={{ fontSize: 18, fontWeight: 900, color: '#3B82F6' }}>{students.filter(s => s.gender === 'Male').length}</span>
+                                    <span style={{ fontSize: 10, color: 'var(--gray-400)', marginLeft: 4 }}>Boys</span>
+                                </div>
+                                <div>
+                                    <span style={{ fontSize: 18, fontWeight: 900, color: '#EC4899' }}>{students.filter(s => s.gender === 'Female').length}</span>
+                                    <span style={{ fontSize: 10, color: 'var(--gray-400)', marginLeft: 4 }}>Girls</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'white', border: '1px solid var(--gray-200)' }}>
+                            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: 1 }}>Residency</div>
+                            <div style={{ display: 'flex', gap: 15, marginTop: 8 }}>
+                                <div>
+                                    <span style={{ fontSize: 18, fontWeight: 900, color: 'var(--primary-dark)' }}>{students.filter(s => s.residency === 'Day Scholar').length}</span>
+                                    <span style={{ fontSize: 10, color: 'var(--gray-400)', marginLeft: 4 }}>Day</span>
+                                </div>
+                                <div>
+                                    <span style={{ fontSize: 18, fontWeight: 900, color: '#8B5CF6' }}>{students.filter(s => s.residency === 'Hosteller').length}</span>
+                                    <span style={{ fontSize: 10, color: 'var(--gray-400)', marginLeft: 4 }}>Hostel</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'white', border: '1px solid var(--gray-200)' }}>
+                            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: 1 }}>Average Marks</div>
+                            <div style={{ fontSize: 24, fontWeight: 900, marginTop: 4, color: 'var(--success)' }}>
+                                {(students.reduce((acc, s) => acc + (s.internalMarks || 0), 0) / (students.length || 1)).toFixed(1)}
+                            </div>
+                            <div style={{ fontSize: 10, marginTop: 4, color: 'var(--gray-400)' }}>Section Performance</div>
                         </div>
                     </div>
 
@@ -324,14 +380,14 @@ const StudentsPage = () => {
                                         <tr>
                                             <th>#</th>
                                             <th>Roll Number</th>
-                                            <th>Register No</th>
                                             <th>Name</th>
                                             <th>Year</th>
                                             <th>Gender</th>
                                             <th>Residency</th>
                                             <th>Section</th>
                                             {user?.role === 'principal' && <th>Department</th>}
-                                            <th>Email</th>
+                                            <th>Personal Email</th>
+                                            <th>Marks</th>
                                             <th>Phone</th>
                                             {(user?.role === 'principal' || user?.role === 'hod' || user?.role === 'staff') && <th>Actions</th>}
                                         </tr>
@@ -341,7 +397,6 @@ const StudentsPage = () => {
                                             <tr key={s._id}>
                                                 <td style={{ color: '#9CA3AF' }}>{i + 1}</td>
                                                 <td style={{ fontFamily: 'monospace', fontWeight: 600 }}>{s.rollNumber}</td>
-                                                <td style={{ fontFamily: 'monospace', fontSize: 13, color: '#6B7280' }}>{s.registerNumber}</td>
                                                 <td style={{ fontWeight: 500 }}>{s.name}</td>
                                                 <td>{s.year}{['st', 'nd', 'rd', 'th'][s.year - 1]} Yr</td>
                                                 <td>
@@ -366,7 +421,8 @@ const StudentsPage = () => {
                                                 </td>
                                                 <td><span className="badge badge-gray">Sec {s.section?.name}</span></td>
                                                 {user?.role === 'principal' && <td style={{ fontSize: 12 }}>{s.department?.shortName}</td>}
-                                                <td style={{ fontSize: 12, color: '#6B7280' }}>{s.email || '—'}</td>
+                                                <td style={{ fontSize: 12, color: '#6B7280' }} title={s.email}>{s.personalEmail || '—'}</td>
+                                                <td><span className="badge badge-success" style={{ fontSize: 11, fontWeight: 800 }}>{s.internalMarks || 0}</span></td>
                                                 <td style={{ fontSize: 12, color: '#6B7280' }}>{s.phone || '—'}</td>
                                                 {(user?.role === 'principal' || user?.role === 'hod' || user?.role === 'staff') && (
                                                     <td>
@@ -422,9 +478,19 @@ const StudentsPage = () => {
                                             value={newStudent.registerNumber} onChange={(e) => setNewStudent((p) => ({ ...p, registerNumber: e.target.value }))} />
                                     </div>
                                     <div className="form-group">
-                                        <label className="form-label">Email</label>
-                                        <input type="email" className="form-control" placeholder="student@email.com"
+                                        <label className="form-label">College Email</label>
+                                        <input type="email" className="form-control" placeholder="student@mec.edu.in"
                                             value={newStudent.email} onChange={(e) => setNewStudent((p) => ({ ...p, email: e.target.value }))} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">Personal Email</label>
+                                        <input type="email" className="form-control" placeholder="personal@gmail.com"
+                                            value={newStudent.personalEmail} onChange={(e) => setNewStudent((p) => ({ ...p, personalEmail: e.target.value }))} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">Internal Marks</label>
+                                        <input type="number" className="form-control" placeholder="e.g. 85"
+                                            value={newStudent.internalMarks} onChange={(e) => setNewStudent((p) => ({ ...p, internalMarks: e.target.value }))} />
                                     </div>
                                     <div className="form-group">
                                         <label className="form-label">Parent's Phone</label>

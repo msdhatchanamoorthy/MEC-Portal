@@ -2,7 +2,27 @@ const AttendanceRecord = require('../models/AttendanceRecord');
 const Student = require('../models/Student');
 const Section = require('../models/Section');
 const Department = require('../models/Department');
+const User = require('../models/User');
+const Notification = require('../models/Notification');
 const mongoose = require('mongoose');
+
+// Helper to get current period based on time
+const getCurrentPeriod = () => {
+    const now = new Date();
+    const hours = now.getHours();
+    const mins = now.getMinutes();
+    const time = hours * 60 + mins;
+
+    if (time >= 550 && time < 605) return 1;    // 09:10 - 10:05
+    if (time >= 605 && time < 660) return 2;    // 10:05 - 11:00
+    if (time >= 675 && time < 730) return 3;    // 11:15 - 12:10
+    if (time >= 730 && time < 780) return 4;    // 12:10 - 01:00
+    if (time >= 825 && time < 880) return 5;    // 01:45 - 02:40
+    if (time >= 880 && time < 935) return 6;    // 02:40 - 03:35
+    if (time >= 935 && time < 990) return 7;    // 03:35 - 04:30
+    
+    return null;
+};
 
 // @desc    Mark attendance for a section
 // @route   POST /api/attendance/mark
@@ -17,20 +37,29 @@ const markAttendance = async (req, res) => {
 
         // --- STRICT RULE VALIDATION ---
         if (req.user.role === 'staff') {
-            // Check department
+            const isStaffMember = req.user.email.includes('.staff@mec.in');
+            
+            // 1. Only mark for current hour if they are a regular Staff
+            if (isStaffMember) {
+                const currentSystemPeriod = getCurrentPeriod();
+                if (!currentSystemPeriod || parseInt(period) !== currentSystemPeriod) {
+                    return res.status(403).json({ 
+                        message: `Staff can only mark attendance for the current hour (Period ${currentSystemPeriod || 'None'}).` 
+                    });
+                }
+            }
+
+            // 2. Check department
             if (req.user.department._id.toString() !== departmentId) {
                 return res.status(403).json({ message: 'Unauthorized: Department mismatch' });
             }
 
-            // If they have a specific year/section assigned on their profile, check it
-            // Logic: They can only mark for sections in their list
+            // 3. Section assignment check
             const assignedSectionIds = (req.user.assignedSections || []).map(s =>
                 (s && s._id) ? s._id.toString() : s.toString()
             );
             const isAssigned = assignedSectionIds.includes(sectionId.toString());
 
-            // Note: In the new system, we also have req.user.year and req.user.section
-            // But usually we rely on assignedSectionIds which is more flexible.
             if (!isAssigned && assignedSectionIds.length > 0) {
                 return res.status(403).json({ message: 'Unauthorized: This section is not assigned to you' });
             }
@@ -72,13 +101,45 @@ const markAttendance = async (req, res) => {
 
         res.status(201).json({ success: true, data: populated });
 
-        // --- AUTOMATIC NOTIFICATION LOGIC ---
-        // If any students are Absent, trigger background notification (simulated)
-        const absentees = attendance.filter(a => a.status === 'Absent');
-        if (absentees.length > 0) {
-            console.log(`[AUTO-NOTIFY] Triggering notifications for ${absentees.length} absentees`);
-            // In a real app, we would import notifyParents here or emit a background job
-            // For now, we log it. The HOD can still manually trigger via the UI.
+        // --- NOTIFICATION LOGIC FOR CA & HOD ---
+        if (req.user.email.includes('.staff@mec.in')) {
+            try {
+                const section = await Section.findById(sectionId).populate('department');
+                const deptCode = section.department.shortName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const caEmail = `${deptCode}${section.year}${section.name.toLowerCase()}.ca@mec.in`;
+
+                // 1. Find CA
+                const ca = await User.findOne({ email: caEmail });
+                
+                // 2. Find HOD
+                const hod = await User.findOne({ 
+                    role: 'hod', 
+                    department: section.department._id 
+                });
+
+                const notificationData = {
+                    sender: req.user._id,
+                    title: `Attendance Marked - Period ${period}`,
+                    message: `✅ Period ${period} attendance for ${section.year}${section.name} has been marked by ${req.user.name}.`,
+                    type: 'staff_attendance',
+                    relatedId: record._id
+                };
+
+                if (ca) {
+                    await Notification.create({ ...notificationData, recipient: ca._id });
+                }
+                if (hod) {
+                    await Notification.create({ ...notificationData, recipient: hod._id });
+                }
+                
+                // Emit socket event if needed (req.io is available)
+                if (req.io) {
+                    if (ca) req.io.to(ca._id.toString()).emit('new_notification', notificationData);
+                    if (hod) req.io.to(hod._id.toString()).emit('new_notification', notificationData);
+                }
+            } catch (notifyErr) {
+                console.error('Failed to send CA/HOD notifications:', notifyErr);
+            }
         }
     } catch (error) {
         if (error.code === 11000) {
@@ -101,6 +162,11 @@ const updateAttendance = async (req, res) => {
 
         if (record.staff.toString() !== req.user._id.toString()) {
             return res.status(403).json({ message: 'Not authorized to update this record' });
+        }
+
+        // --- STAFF RESTRICTION ---
+        if (req.user.email.includes('.staff@mec.in')) {
+            return res.status(403).json({ message: 'Staff members are not allowed to edit attendance records once submitted.' });
         }
 
         if (record.status === 'approved') {
@@ -605,9 +671,13 @@ const deleteAttendance = async (req, res) => {
 
         if (!record) return res.status(404).json({ message: 'Record not found' });
 
-        // Staff can only delete their own records
+        // Staff can only delete their own records, but .staff users are blocked entirely
         if (req.user.role === 'staff' && record.staff.toString() !== req.user._id.toString()) {
             return res.status(403).json({ message: 'Not authorized to delete this record' });
+        }
+
+        if (req.user.email.includes('.staff@mec.in')) {
+            return res.status(403).json({ message: 'Staff members are not allowed to delete attendance records.' });
         }
 
         // HOD can delete any record in their department
@@ -628,6 +698,56 @@ const deleteAttendance = async (req, res) => {
     }
 };
 
+// @desc    Get morning absentees for a section
+// @route   GET /api/attendance/morning-absentees
+// @access  Staff
+const getMorningAbsentees = async (req, res) => {
+    try {
+        const { sectionId, date } = req.query;
+        if (!sectionId) return res.status(400).json({ message: 'Section ID is required' });
+
+        const targetDate = date ? new Date(date) : new Date();
+        const start = new Date(targetDate.setHours(0, 0, 0, 0));
+        const end = new Date(targetDate.setHours(23, 59, 59, 999));
+
+        const currentPeriod = getCurrentPeriod() || 9; // If outside hours, show all for day
+
+        // Find all records for this section today before the current period
+        const records = await AttendanceRecord.find({
+            section: sectionId,
+            date: { $gte: start, $lte: end },
+            period: { $lt: currentPeriod }
+        }).populate('attendance.student', 'name rollNumber registerNumber');
+
+        // Aggregate absentees
+        const absenteeMap = {}; // { studentId: { student, reasons: [] } }
+
+        records.forEach(record => {
+            record.attendance.forEach(att => {
+                if (att.status === 'Absent' || att.status === 'OD' || att.status === 'Leave' || att.status === 'Permission') {
+                    const sId = att.student._id.toString();
+                    if (!absenteeMap[sId]) {
+                        absenteeMap[sId] = {
+                            student: att.student,
+                            reasons: []
+                        };
+                    }
+                    absenteeMap[sId].reasons.push({
+                        period: record.period,
+                        status: att.status,
+                        reason: att.reason || 'No reason provided'
+                    });
+                }
+            });
+        });
+
+        res.json({ success: true, data: Object.values(absenteeMap) });
+    } catch (error) {
+        console.error('Morning absentees error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 module.exports = {
     markAttendance,
     updateAttendance,
@@ -638,4 +758,5 @@ module.exports = {
     getStudentAttendance,
     getDailyOverview,
     getDepartmentDrilldown,
+    getMorningAbsentees,
 };

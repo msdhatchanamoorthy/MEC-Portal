@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const REASONS = [
-    'Temple Function (Kovil Function)',
-    'Going to Home',
+    'Sick Leave',
+    'Permission',
+    'Leave',
+    'OD (On-Duty)',
     'Medical Leave',
     'Sports',
-    'Competition',
-    'NSS / NCC',
     'Family Event',
-    'Travel',
-    'Exam',
-    'Internship'
+    'NSS / NCC'
 ];
 
 const ReasonProofModal = ({ isOpen, onClose, onConfirm, studentName, initialData }) => {

@@ -10,6 +10,7 @@ const {
     getStudentAttendance,
     getDailyOverview,
     getDepartmentDrilldown,
+    getMorningAbsentees,
 } = require('../controllers/attendanceController');
 const { protect, roleCheck } = require('../middleware/auth');
 
@@ -21,8 +22,11 @@ const upload = require('../utils/upload');
 // Staff: Mark attendance
 router.post('/mark', roleCheck('staff', 'hod', 'principal'), markAttendance);
 
+// Get morning absentees for a section
+router.get('/morning-absentees', getMorningAbsentees);
+
 // Upload proof file
-router.post('/upload-proof', roleCheck('staff', 'hod', 'principal'), upload.single('proof'), (req, res) => {
+router.post('/upload-proof', roleCheck('staff', 'hod', 'principal', 'student'), upload.single('proof'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
     }

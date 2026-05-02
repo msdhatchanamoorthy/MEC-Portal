@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Login = () => {
     const [role, setRole] = useState('principal');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -20,6 +22,15 @@ const Login = () => {
 
     const { login } = useAuth();
     const navigate = useNavigate();
+
+    // Smart Role Detection
+    useEffect(() => {
+        const lowerEmail = email.toLowerCase();
+        if (lowerEmail.includes('@student')) setRole('student');
+        else if (lowerEmail.includes('.ca@') || lowerEmail.includes('.staff@')) setRole('staff');
+        else if (lowerEmail.includes('.hod@')) setRole('hod');
+        else if (lowerEmail.includes('principal@')) setRole('principal');
+    }, [email]);
 
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -46,7 +57,8 @@ const Login = () => {
             setTimeout(() => {
                 if (user.role === 'principal') navigate('/principal');
                 else if (user.role === 'hod') navigate('/hod');
-                else navigate('/staff');
+                else if (user.role === 'staff') navigate('/staff');
+                else if (user.role === 'student') navigate('/student');
             }, 1200);
         } catch (err) {
             const msg = err.response?.data?.message || 'Login failed. Please try again.';
@@ -66,7 +78,7 @@ const Login = () => {
     // --- Animation Configurations ---
     const isSuccess = loginStatus === 'success';
     const isError = loginStatus === 'error';
-    const isPwd = focusState === 'password' && !isSuccess && !isError;
+    const isPwd = focusState === 'password' && !showPassword && !isSuccess && !isError;
     const isEmail = focusState === 'email' && !isSuccess && !isError;
 
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
@@ -117,32 +129,32 @@ const Login = () => {
             if (shape === 'blue') return { transform: 'translate(0, -15px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
             if (shape === 'black') return { transform: 'translate(0, -20px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
             if (shape === 'yellow') return { transform: 'translate(0, -10px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
-            if (shape === 'orange') return { transform: 'translate(0, -12px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
+            if (shape === 'violet') return { transform: 'translate(0, -12px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
         } else if (isError) {
             if (shape === 'blue') return { transform: 'rotate(-5deg) translate(-5px, 5px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
             if (shape === 'black') return { transform: 'rotate(5deg) translate(5px, 10px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
             if (shape === 'yellow') return { transform: 'rotate(-3deg) translate(-2px, 8px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
-            if (shape === 'orange') return { transform: 'scale(1.05, 0.95) translate(0, 15px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
+            if (shape === 'violet') return { transform: 'scale(1.05, 0.95) translate(0, 15px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
         } else if (isEmail) {
             if (isMobile) {
                 // Front vanthu kela paakara maari (Scale up and lean forward)
                 if (shape === 'blue') return { transform: 'scale(1.18) translate(0, 25px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
                 if (shape === 'black') return { transform: 'scale(1.15) translate(0, 30px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
                 if (shape === 'yellow') return { transform: 'scale(1.15) rotate(-5deg) translate(-15px, 20px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
-                if (shape === 'orange') return { transform: 'scale(1.15) rotate(5deg) translate(15px, 15px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
+                if (shape === 'violet') return { transform: 'scale(1.15) rotate(5deg) translate(15px, 15px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
             } else {
                 // Extreme lean right (Etti paakura)
                 if (shape === 'blue') return { transform: 'rotate(22deg) scale(1.05) translate(35px, -8px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
                 if (shape === 'black') return { transform: 'rotate(28deg) translate(45px, -15px)', transition: baseTransition, transformOrigin: 'bottom left', animation: anim };
                 if (shape === 'yellow') return { transform: 'rotate(15deg) translate(25px, 5px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
-                if (shape === 'orange') return { transform: 'rotate(18deg) scale(1.1, 0.9) translate(35px, 8px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
+                if (shape === 'violet') return { transform: 'rotate(18deg) scale(1.1, 0.9) translate(35px, 8px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
             }
         } else if (isPwd) {
             // Hunch down / Close eyes (NO SPLITTING)
             if (shape === 'blue') return { transform: 'scale(0.95) translate(0, 10px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
             if (shape === 'black') return { transform: 'scale(1, 0.85) translate(0, 15px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
             if (shape === 'yellow') return { transform: 'scale(1, 0.85) translate(0, 10px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
-            if (shape === 'orange') return { transform: 'scale(0.95, 0.9) translate(0, 8px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
+            if (shape === 'violet') return { transform: 'scale(0.95, 0.9) translate(0, 8px)', transition: baseTransition, transformOrigin: 'bottom center', animation: anim };
         }
         // Idle breathing or mouse follow
         const hoverX = mousePos.x * 0.4;
@@ -201,8 +213,8 @@ const Login = () => {
                             <clipPath id="eye-black-r"><circle cx="262" cy="225" r="12" /></clipPath>
                             <clipPath id="eye-yellow-l"><circle cx="295" cy="230" r="12" /></clipPath>
                             <clipPath id="eye-yellow-r"><circle cx="325" cy="230" r="12" /></clipPath>
-                            <clipPath id="eye-orange-l"><circle cx="125" cy="282" r="11" /></clipPath>
-                            <clipPath id="eye-orange-r"><circle cx="170" cy="282" r="11" /></clipPath>
+                            <clipPath id="eye-violet-l"><circle cx="125" cy="282" r="11" /></clipPath>
+                            <clipPath id="eye-violet-r"><circle cx="170" cy="282" r="11" /></clipPath>
                         </defs>
 
                         {/* Blue Character Group (Organic Blob Shape) */}
@@ -289,17 +301,17 @@ const Login = () => {
                             </g>
                         </g>
 
-                        {/* Orange Shape Group */}
+                        {/* Violet Shape Group */}
                         <g style={getDropStyle(0)}>
-                            <g style={getBodyTransform('orange')}>
-                                <path d="M 50 320 A 110 110 0 0 1 270 320 Z" fill="#F97316" />
+                            <g style={getBodyTransform('violet')}>
+                                <path d="M 50 320 A 110 110 0 0 1 270 320 Z" fill="#8B5CF6" />
                                 <circle cx="125" cy="282" r="11" fill="white" opacity="0.9" />
                                 <circle cx="170" cy="282" r="11" fill="white" opacity="0.9" />
 
-                                <g clipPath="url(#eye-orange-l)">
+                                <g clipPath="url(#eye-violet-l)">
                                     <g style={eyeTransform}><circle cx="125" cy="282" r="6" fill="#1A1A1A" style={eyeBaseStyle} /></g>
                                 </g>
-                                <g clipPath="url(#eye-orange-r)">
+                                <g clipPath="url(#eye-violet-r)">
                                     <g style={eyeTransform}><circle cx="170" cy="282" r="6" fill="#1A1A1A" style={eyeBaseStyle} /></g>
                                 </g>
 
@@ -337,16 +349,16 @@ const Login = () => {
 
                         {/* Role Selection */}
                         <div className="flex p-1 rounded-2xl mb-8 border border-white/5" style={{ background: 'var(--gray-100)' }}>
-                            {['principal', 'hod', 'staff'].map((r) => (
+                            {['principal', 'hod', 'staff', 'student'].map((r) => (
                                 <button
                                     key={r}
                                     type="button"
                                     onClick={() => setRole(r)}
-                                    className={`flex-1 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${role === r ? 'shadow-xl text-white' : 'text-gray-500 hover:text-gray-900'
+                                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-tighter rounded-xl transition-all duration-300 ${role === r ? 'shadow-xl text-white' : 'text-gray-500 hover:text-gray-900'
                                         }`}
                                     style={role === r ? { background: 'var(--accent-gradient)' } : {}}
                                 >
-                                    {r}
+                                    {r === 'staff' ? 'Advisor' : r}
                                 </button>
                             ))}
                         </div>
@@ -354,43 +366,52 @@ const Login = () => {
                         <form onSubmit={handleSubmit}>
                             {/* Email Field */}
                             <div className="mb-6 relative group">
-                                <label className="block text-xs font-black uppercase tracking-widest mb-2 pl-1" style={{ color: 'var(--gray-500)' }}>Email Address</label>
+                                <label className="block text-xs font-black uppercase tracking-widest mb-2 pl-1" style={{ color: 'var(--gray-500)' }}>Email or Roll Number</label>
                                 <input
-                                    type="email"
+                                    type="text"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     onFocus={() => handleFocus('email')}
                                     onBlur={() => setFocusState('idle')}
-                                    placeholder="Enter your email"
+                                    placeholder="Enter Email or Roll Number"
                                     required
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm font-semibold transition-all focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm font-semibold transition-all focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
                                     style={{ background: 'var(--gray-100)', color: 'var(--gray-900)', borderColor: 'var(--gray-200)' }}
                                 />
                             </div>
 
-                            {/* Password Field */}
                             <div className="mb-6 relative group">
                                 <label className="block text-xs font-black uppercase tracking-widest mb-2 pl-1" style={{ color: 'var(--gray-500)' }}>Secure Password</label>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    onFocus={() => handleFocus('password')}
-                                    onBlur={() => setFocusState('idle')}
-                                    placeholder="••••••••"
-                                    required
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm font-semibold transition-all focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10"
-                                    style={{ background: 'var(--gray-100)', color: 'var(--gray-900)', borderColor: 'var(--gray-200)' }}
-                                />
+                                <div className="relative">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        onFocus={() => handleFocus('password')}
+                                        onBlur={() => setFocusState('idle')}
+                                        placeholder="••••••••"
+                                        required
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 pr-12 text-sm font-semibold transition-all focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                                        style={{ background: 'var(--gray-100)', color: 'var(--gray-900)', borderColor: 'var(--gray-200)' }}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-200/50 transition-all"
+                                        tabIndex="-1"
+                                    >
+                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Remember & Forgot Password */}
                             <div className="flex items-center justify-between mb-8">
                                 <label className="flex items-center text-sm font-medium cursor-pointer transition-colors" style={{ color: 'var(--gray-600)' }}>
-                                    <input type="checkbox" className="mr-2 w-4 h-4 rounded border-gray-300 accent-orange-500" />
+                                    <input type="checkbox" className="mr-2 w-4 h-4 rounded border-gray-300 accent-violet-500" />
                                     Remember session
                                 </label>
-                                <a href="#" className="text-sm font-bold hover:underline transition-colors" style={{ color: 'var(--primary)' }}>
+                                <a href="/forgot-password" className="text-sm font-bold hover:underline transition-colors" style={{ color: 'var(--primary)' }}>
                                     Reset Password?
                                 </a>
                             </div>

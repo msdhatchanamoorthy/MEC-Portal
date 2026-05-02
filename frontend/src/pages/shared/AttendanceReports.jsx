@@ -427,8 +427,8 @@ const AttendanceReports = () => {
                 }}>
                     <div className="modal-content card" style={{
                         maxWidth: 700, width: '100%', maxHeight: '90vh', overflowY: 'auto',
-                        padding: 0, background: 'var(--card-bg)', borderRadius: 16, 
-                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                        padding: 0, background: 'white', borderRadius: 24, 
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.2)',
                         border: '1px solid var(--gray-200)'
                     }}>
                         <div className="card-header" style={{
@@ -437,13 +437,13 @@ const AttendanceReports = () => {
                             background: 'var(--gray-50)'
                         }}>
                             <div>
-                                <h3 style={{ margin: 0, color: 'var(--gray-900)', fontWeight: 800 }}>
+                                <h3 style={{ margin: 0, color: 'var(--gray-900)', fontWeight: 900, fontSize: 24, fontFamily: 'Outfit, sans-serif' }}>
                                     {absenteeModal.loading ? 'Loading Details...' :
-                                        `Student Details – ${absenteeModal.data?.meta?.sectionName} (${absenteeModal.data?.meta?.year}${['st', 'nd', 'rd', 'th'][absenteeModal.data?.meta?.year - 1]} Year)`
+                                        `Student Details — ${absenteeModal.data?.meta?.sectionName} (${absenteeModal.data?.meta?.year}${['st', 'nd', 'rd', 'th'][absenteeModal.data?.meta?.year - 1]} Year)`
                                     }
                                 </h3>
                                 {!absenteeModal.loading && (
-                                    <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--gray-500)', fontWeight: 500 }}>
+                                    <p style={{ margin: '4px 0 0', fontSize: 14, color: 'var(--gray-600)', fontWeight: 700 }}>
                                         {new Date(absenteeModal.data?.meta?.date).toLocaleDateString('en-IN')} — Period {absenteeModal.data?.meta?.period} — {absenteeModal.data?.meta?.staffName}
                                     </p>
                                 )}
@@ -493,10 +493,10 @@ const AttendanceReports = () => {
                                                                            abs.status === 'OD' ? 'rgba(59, 130, 246, 0.08)' : 
                                                                            'rgba(239, 68, 68, 0.08)' 
                                                         }}>
-                                                            <td style={{ fontWeight: 600 }}>{abs.student?.registerNumber}</td>
-                                                            <td>{abs.student?.name}</td>
+                                                            <td style={{ fontWeight: 800, color: 'var(--gray-900)', fontSize: 14 }}>{abs.student?.registerNumber}</td>
+                                                            <td style={{ fontWeight: 700, color: 'var(--gray-800)', fontSize: 14 }}>{abs.student?.name}</td>
                                                             <td>
-                                                                <span className={`badge ${abs.status === 'Leave' ? 'badge-warning' : abs.status === 'OD' ? 'badge-od' : 'badge-danger'}`}>
+                                                                <span className={`badge ${abs.status === 'Leave' ? 'badge-warning' : abs.status === 'OD' ? 'badge-od' : 'badge-danger'}`} style={{ fontWeight: 800, fontSize: 12 }}>
                                                                     {abs.status}
                                                                 </span>
                                                             </td>

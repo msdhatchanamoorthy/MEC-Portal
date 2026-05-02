@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const attendanceRecordSchema = new mongoose.Schema({
     date: { type: Date, required: true },
-    period: { type: Number, required: true, min: 1, max: 8 }, // Hour/Period number
+    period: { type: Number, required: true, min: 1, max: 7 }, // Hour/Period number updated to 7
     department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Department',
@@ -62,8 +62,11 @@ attendanceRecordSchema.index(
 );
 
 // Index for fast queries
-attendanceRecordSchema.index({ department: 1, date: 1 });
-attendanceRecordSchema.index({ section: 1, date: 1 });
-attendanceRecordSchema.index({ staff: 1, date: 1 });
+attendanceRecordSchema.index({ department: 1, date: -1 });
+attendanceRecordSchema.index({ section: 1, date: -1 });
+attendanceRecordSchema.index({ staff: 1, date: -1 });
+attendanceRecordSchema.index({ status: 1, date: -1 });
+attendanceRecordSchema.index({ 'attendance.student': 1, date: -1 }); // Critical for student report speed
+attendanceRecordSchema.index({ department: 1, year: 1, section: 1, date: -1 }); // Multi-filter index
 
 module.exports = mongoose.model('AttendanceRecord', attendanceRecordSchema);

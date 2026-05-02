@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useUI } from '../contexts/UIContext';
+import { NotificationCenter } from './shared/NotificationCenter';
+import { motion } from 'framer-motion';
 
 const Topbar = ({ title, subtitle }) => {
     const [now, setNow] = useState(new Date());
@@ -38,9 +40,16 @@ const Topbar = ({ title, subtitle }) => {
     });
 
     return (
-        <header className="topbar">
+        <motion.header 
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="topbar"
+        >
             <div className="topbar-left" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <button 
+                <motion.button 
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
                     className="mobile-toggle"
                     onClick={toggleSidebar}
                     style={{
@@ -57,20 +66,43 @@ const Topbar = ({ title, subtitle }) => {
                     }}
                 >
                     ☰
-                </button>
+                </motion.button>
                 <div>
-                    <h1 style={{ fontSize: 16, fontWeight: 900, color: 'var(--primary-dark)', margin: 0 }}>{title}</h1>
-                    {subtitle && <p style={{ fontSize: 11, color: 'var(--gray-900)', margin: '2px 0 0 0', fontWeight: 800 }}>{subtitle}</p>}
+                    <motion.h1 
+                        initial={{ x: -10, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        style={{ fontSize: 16, fontWeight: 900, color: 'var(--primary-dark)', margin: 0 }}
+                    >{title}</motion.h1>
+                    {subtitle && (
+                        <motion.p 
+                            initial={{ x: -10, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            style={{ fontSize: 11, color: 'var(--gray-900)', margin: '2px 0 0 0', fontWeight: 800 }}
+                        >{subtitle}</motion.p>
+                    )}
                 </div>
             </div>
             <div className="topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                 {!isOnline && (
-                    <div style={{ background: '#FEF2F2', border: '1px solid #FCA5A5', color: '#B91C1C', padding: '6px 12px', borderRadius: '10px', fontSize: '11px', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '6px', animation: 'pulse 2s infinite' }}>
-                        <span style={{ width: 8, height: 8, background: '#EF4444', borderRadius: '50%' }}></span>
+                    <motion.div 
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        style={{ background: '#FEF2F2', border: '1px solid #FCA5A5', color: '#B91C1C', padding: '6px 12px', borderRadius: '10px', fontSize: '11px', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '6px' }}
+                    >
+                        <motion.span 
+                            animate={{ opacity: [1, 0.4, 1] }}
+                            transition={{ repeat: Infinity, duration: 1.5 }}
+                            style={{ width: 8, height: 8, background: '#EF4444', borderRadius: '50%' }}
+                        ></motion.span>
                         OFFLINE MODE
-                    </div>
+                    </motion.div>
                 )}
-                <button 
+                <NotificationCenter />
+                <motion.button 
+                    whileHover={{ scale: 1.1, rotate: 180 }}
+                    whileTap={{ scale: 0.9 }}
                     onClick={toggleTheme}
                     className="theme-toggle-btn"
                     style={{
@@ -91,15 +123,24 @@ const Topbar = ({ title, subtitle }) => {
                     title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                 >
                     {isDarkMode ? '🌙' : '☀️'}
-                </button>
+                </motion.button>
 
-                <div className="topbar-date" style={{ fontSize: 13, fontWeight: 800, color: 'var(--gray-900)', background: 'var(--gray-100)', padding: '8px 18px', borderRadius: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
+                <motion.div 
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="topbar-date" style={{ fontSize: 13, fontWeight: 800, color: 'var(--gray-900)', background: 'var(--gray-100)', padding: '8px 18px', borderRadius: 24, display: 'flex', alignItems: 'center', gap: 10 }}
+                >
                     <span>🗓️ {dateStr}</span>
                     <span style={{ color: 'var(--gray-600)' }}>|</span>
-                    <span style={{ color: 'var(--accent)', fontWeight: 800 }}>🕛 {timeStr}</span>
-                </div>
+                    <motion.span 
+                        animate={{ opacity: [1, 0.7, 1] }}
+                        transition={{ repeat: Infinity, duration: 1 }}
+                        style={{ color: 'var(--accent)', fontWeight: 800 }}
+                    >🕛 {timeStr}</motion.span>
+                </motion.div>
             </div>
-        </header>
+        </motion.header>
     );
 };
 

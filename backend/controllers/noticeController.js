@@ -16,6 +16,22 @@ const getNotices = async (req, res) => {
                 { department: null, targetRoles: { $in: ['all', 'hod'] } },
                 { department: user.department?._id || user.department }
             ];
+        } else if (user.role === 'student') {
+            // Students see:
+            // 1. Global all-student notices
+            // 2. Their department specific notices
+            // 3. Their year/section specific notices
+            filter.$or = [
+                { department: null, targetRoles: { $in: ['all', 'student'] } },
+                { 
+                    department: user.department?._id || user.department, 
+                    targetRoles: { $in: ['all', 'student'] },
+                    $and: [
+                        { $or: [{ year: null }, { year: user.year }] },
+                        { $or: [{ section: null }, { section: user.section }] }
+                    ]
+                }
+            ];
         }
 
         const notices = await Notice.find(filter)
@@ -30,10 +46,10 @@ const getNotices = async (req, res) => {
 
 const createNotice = async (req, res) => {
     try {
-        const { title, content, targetRoles } = req.body;
+        const { title, content, targetRoles, year, section } = req.body;
 
         let department = null;
-        if (req.user.role === 'hod') {
+        if (['hod', 'staff'].includes(req.user.role)) {
             department = req.user.department?._id || req.user.department;
         }
 
@@ -44,7 +60,9 @@ const createNotice = async (req, res) => {
             authorName: req.user.name,
             authorRole: req.user.role,
             department,
-            targetRoles: targetRoles || ['all']
+            targetRoles: targetRoles || ['all'],
+            year: year || null,
+            section: section || null
         });
 
         res.status(201).json({ success: true, data: notice });

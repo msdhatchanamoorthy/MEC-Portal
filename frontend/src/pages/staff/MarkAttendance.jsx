@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import ReasonProofModal from '../../components/shared/ReasonProofModal';
 import VoiceControl from '../../components/shared/VoiceControl';
 
-const PERIODS = [1, 2, 3, 4, 5, 6, 7, 8];
+const PERIODS = [1, 2, 3, 4, 5, 6, 7];
 
 const MarkAttendance = () => {
     const { user } = useAuth();
@@ -41,6 +41,8 @@ const MarkAttendance = () => {
     const [proofFiles, setProofFiles] = useState({}); // { studentId: File }
     const [proofUrls, setProofUrls] = useState({}); // { studentId: string }
     const [currentPage, setCurrentPage] = useState(1);
+    const [morningAbsentees, setMorningAbsentees] = useState([]);
+    const [loadingAbsentees, setLoadingAbsentees] = useState(false);
     const studentsPerPage = 20;
 
     const deptId = user?.department?._id;
@@ -113,11 +115,32 @@ const MarkAttendance = () => {
             const p = params.get('period');
             const s = params.get('sectionId');
             const subj = params.get('subject');
-            if (p) setPeriod(p);
+            
+            // --- STAFF RESTRICTION: Default to current period ---
+            if (user?.email?.includes('.staff@mec.in')) {
+                const now = new Date();
+                const hours = now.getHours();
+                const mins = now.getMinutes();
+                const time = hours * 60 + mins;
+                let autoPeriod = null;
+                if (time >= 550 && time < 605) autoPeriod = 1;
+                else if (time >= 605 && time < 660) autoPeriod = 2;
+                else if (time >= 675 && time < 730) autoPeriod = 3;
+                else if (time >= 730 && time < 780) autoPeriod = 4;
+                else if (time >= 825 && time < 880) autoPeriod = 5;
+                else if (time >= 880 && time < 935) autoPeriod = 6;
+                else if (time >= 935 && time < 990) autoPeriod = 7;
+                
+                if (autoPeriod) setPeriod(autoPeriod.toString());
+                else setPeriod(p || '1');
+            } else {
+                if (p) setPeriod(p);
+            }
+
             if (s) setSectionId(s);
             if (subj) setSubject(subj);
         }
-    }, [deptId, fetchSections, fetchExistingRecord]);
+    }, [deptId, fetchSections, fetchExistingRecord, user?.email]);
 
     // Update staffName when user is loaded
     useEffect(() => {
@@ -152,13 +175,27 @@ const MarkAttendance = () => {
         }
     }, [deptId, sectionId, sections, editMode]);
 
-    // Load students when section changes
+    // Load students and morning absentees when section changes
     useEffect(() => {
+        const fetchMorningAbsentees = async () => {
+            if (!sectionId) return;
+            setLoadingAbsentees(true);
+            try {
+                const res = await api.get(`/attendance/morning-absentees?sectionId=${sectionId}&date=${date}`);
+                setMorningAbsentees(res.data.data || []);
+            } catch (err) {
+                console.error('Failed to load morning absentees');
+            } finally {
+                setLoadingAbsentees(false);
+            }
+        };
+
         if (sectionId) {
             fetchStudents();
+            fetchMorningAbsentees();
             setCurrentPage(1); // Reset to first page on section change
         }
-    }, [sectionId, fetchStudents]);
+    }, [sectionId, date, fetchStudents]);
 
     // Initial section setting after loading
     useEffect(() => {
@@ -446,12 +483,17 @@ const MarkAttendance = () => {
                                         className="form-control"
                                         value={period}
                                         onChange={(e) => setPeriod(e.target.value)}
-                                        disabled={editMode}
+                                        disabled={editMode || user?.email?.includes('.staff@mec.in')}
                                     >
                                         {PERIODS.map((p) => (
                                             <option key={p} value={p}>Period {p}</option>
                                         ))}
                                     </select>
+                                    {user?.email?.includes('.staff@mec.in') && !editMode && (
+                                        <p style={{ fontSize: 11, color: 'var(--accent)', marginTop: 4, fontWeight: 600 }}>
+                                            ⚠️ Auto-locked to current session
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="form-group">
@@ -485,7 +527,7 @@ const MarkAttendance = () => {
                                     />
                                 </div>
                                 <div className="form-group" style={{ marginBottom: 0 }}>
-                                    <label className="form-label">Staff Name</label>
+                                    <label className="form-label">Advisor Name</label>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -497,6 +539,45 @@ const MarkAttendance = () => {
                             </div>
                         </div>
                         {editMode && <p style={{ fontSize: 12, color: 'var(--accent)', marginTop: 8 }}>ℹ️ Date, period, and section cannot be changed in edit mode.</p>}
+                        
+                        {/* Morning Absentees View for Staff */}
+                        {user?.email?.includes('.staff@mec.in') && morningAbsentees.length > 0 && (
+                            <div style={{ padding: '0 24px 24px' }}>
+                                <div style={{ background: 'rgba(239, 68, 68, 0.05)', borderRadius: 16, border: '1px solid rgba(239, 68, 68, 0.2)', padding: 20 }}>
+                                    <h4 style={{ margin: '0 0 12px', color: 'var(--danger)', display: 'flex', alignItems: 'center', gap: 8, fontSize: 15, fontWeight: 800 }}>
+                                        <span>🚫</span> MORNING ABSENTEES LIST
+                                        <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--gray-500)', marginLeft: 'auto' }}>
+                                            View Only — Based on previous periods today
+                                        </span>
+                                    </h4>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                                        {morningAbsentees.map(item => (
+                                            <div key={item.student._id} style={{ 
+                                                background: 'white', 
+                                                padding: '10px 16px', 
+                                                borderRadius: 12, 
+                                                border: '1px solid #fee2e2',
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: 2,
+                                                minWidth: 160
+                                            }}>
+                                                <span style={{ fontWeight: 800, fontSize: 13, color: 'var(--primary)' }}>{item.student.name}</span>
+                                                <span style={{ fontSize: 11, color: 'var(--gray-500)', fontFamily: 'monospace' }}>{item.student.registerNumber}</span>
+                                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
+                                                    {item.reasons.map((r, ri) => (
+                                                        <span key={ri} className="badge badge-danger" style={{ fontSize: 9, padding: '2px 6px' }}>
+                                                            P{r.period}: {r.status} {r.reason !== 'No reason provided' && `(${r.reason})`}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Attendance Summary Bar */}

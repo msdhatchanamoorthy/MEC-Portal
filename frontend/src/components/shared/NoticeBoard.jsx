@@ -39,7 +39,7 @@ const NoticeBoard = ({ userRole, onCreateClick }) => {
                 <div className="card-title" style={{ fontSize: 16, color: 'var(--primary-dark)' }}>
                     <span style={{ fontSize: 18 }}>📢</span> NOTICE BOARD & CIRCULARS
                 </div>
-                {(userRole === 'principal' || userRole === 'hod') && (
+                {['principal', 'hod', 'staff'].includes(userRole) && (
                     <button className="btn btn-primary btn-sm" onClick={onCreateClick} style={{ borderRadius: 30, padding: '6px 16px' }}>
                         + NEW NOTICE
                     </button>
@@ -64,7 +64,7 @@ const NoticeBoard = ({ userRole, onCreateClick }) => {
                             }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                                     <h4 style={{ margin: 0, color: 'var(--primary)', fontSize: 17, fontWeight: 900 }}>{notice.title}</h4>
-                                    {(userRole === 'principal' || userRole === 'hod') && (
+                                    {['principal', 'hod', 'staff'].includes(userRole) && (
                                         <button className="btn btn-ghost btn-sm" onClick={() => handleDelete(notice._id)} style={{ padding: '6px', borderRadius: '50%', color: 'var(--danger)' }}>
                                             🗑️
                                         </button>

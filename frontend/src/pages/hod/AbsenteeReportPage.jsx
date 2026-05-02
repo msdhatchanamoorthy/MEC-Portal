@@ -82,44 +82,30 @@ const AbsenteeReportPage = () => {
 
                     <div className="page-header">
                         <div className="page-header-left">
-                            <h2>📊 Department-Wide Absentee Report</h2>
-                            <p>Tracking all absent and leave students across all years and sections</p>
+                            <h2 style={{ fontSize: 24, fontWeight: 900, color: 'var(--primary-dark)', letterSpacing: -0.5 }}>📊 Department Absentee Report</h2>
+                            <p style={{ fontSize: 13, color: 'var(--gray-600)', fontWeight: 600 }}>Real-time monitoring of student absences and leave applications</p>
                         </div>
                     </div>
 
-                    {/* Summary Cards */}
-                    <div className="dashboard-grid" style={{ marginBottom: 24 }}>
-                        <div className="stat-card red">
-                            <div className="stat-icon red">🚨</div>
-                            <div className="stat-info">
-                                <h3>{summary.total}</h3>
-                                <p>Total Absent Today</p>
-                            </div>
+                    {/* Department Quick Stats */}
+                    <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(5, 1fr)', 
+                        gap: 20, 
+                        marginBottom: 24 
+                    }}>
+                        <div className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'var(--accent-gradient)', color: 'white', border: 'none' }}>
+                            <div style={{ fontSize: 11, fontWeight: 800, opacity: 0.8, textTransform: 'uppercase', letterSpacing: 1 }}>Total Absentees</div>
+                            <div style={{ fontSize: 28, fontWeight: 900, marginTop: 4 }}>{summary.total}</div>
+                            <div style={{ fontSize: 10, marginTop: 4, opacity: 0.7 }}>Across all sections</div>
                         </div>
-                        <div className="stat-card blue">
-                            <div className="stat-info">
-                                <h3>{summary.y1}</h3>
-                                <p>1st Year Absents</p>
+                        {[1, 2, 3, 4].map(y => (
+                            <div key={y} className="stat-card" style={{ padding: '20px', borderRadius: 20, background: 'white', border: '1px solid var(--gray-200)' }}>
+                                <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: 1 }}>{y}{['st', 'nd', 'rd', 'th'][y - 1]} Year</div>
+                                <div style={{ fontSize: 24, fontWeight: 900, marginTop: 4, color: 'var(--primary-dark)' }}>{summary[`y${y}`]}</div>
+                                <div style={{ fontSize: 10, marginTop: 4, color: 'var(--gray-400)' }}>Students Absent</div>
                             </div>
-                        </div>
-                        <div className="stat-card purple">
-                            <div className="stat-info">
-                                <h3>{summary.y2}</h3>
-                                <p>2nd Year Absents</p>
-                            </div>
-                        </div>
-                        <div className="stat-card amber">
-                            <div className="stat-info">
-                                <h3>{summary.y3}</h3>
-                                <p>3rd Year Absents</p>
-                            </div>
-                        </div>
-                        <div className="stat-card green">
-                            <div className="stat-info">
-                                <h3>{summary.y4}</h3>
-                                <p>4th Year Absents</p>
-                            </div>
-                        </div>
+                        ))}
                     </div>
 
                     {/* Filters & Search */}
@@ -211,7 +197,7 @@ const AbsenteeReportPage = () => {
                                         {filteredData.map((abs, idx) => {
                                             const genderClass = abs.gender === 'Male' ? 'row-boy' : abs.gender === 'Female' ? 'row-girl' : '';
                                             return (
-                                                <tr key={idx} className={genderClass} style={{ backgroundColor: abs.status === 'Leave' ? '#FFFBEB' : '#FEF2F2' }}>
+                                                <tr key={idx} className={genderClass} style={{ backgroundColor: abs.status === 'Leave' ? 'rgba(245, 158, 11, 0.08)' : 'rgba(239, 68, 68, 0.08)' }}>
                                                     <td style={{ fontWeight: 600 }}>{abs.registerNumber}</td>
                                                     <td>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -232,7 +218,7 @@ const AbsenteeReportPage = () => {
                                                         ))}
                                                     </div>
                                                 </td>
-                                                <td style={{ fontSize: 13, color: '#4B5563' }}>
+                                                <td style={{ fontSize: 13, color: 'var(--gray-300)' }}>
                                                     {abs.staffNames.join(', ')}
                                                 </td>
                                                 <td style={{ fontSize: 12 }}>

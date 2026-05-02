@@ -7,15 +7,18 @@ import toast from 'react-hot-toast';
 import StudentQuickSearch from '../../components/shared/StudentQuickSearch';
 import * as XLSX from 'xlsx';
 import NoticeBoard from '../../components/shared/NoticeBoard';
+import CreateNoticeModal from '../../components/shared/CreateNoticeModal';
 
 const StaffDashboard = () => {
     const { user } = useAuth();
+    const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
     const [myRecords, setMyRecords] = useState([]);
     const [loading, setLoading] = useState(true);
     const [reporting, setReporting] = useState(false);
     const [importing, setImporting] = useState(false);
     const [sections, setSections] = useState([]);
     const [timetable, setTimetable] = useState([]);
+    const [notifications, setNotifications] = useState([]);
     const fileRef = useRef(null);
     const isFetching = useRef(false);
 
@@ -23,12 +26,14 @@ const StaffDashboard = () => {
         if (isFetching.current) return;
         isFetching.current = true;
         try {
-            const [attRes, ttRes] = await Promise.all([
+            const [attRes, ttRes, notifyRes] = await Promise.all([
                 api.get('/attendance?'),
-                api.get('/timetable/my-timetable')
+                api.get('/timetable/my-timetable'),
+                user?.email?.includes('.ca@mec.in') ? api.get('/notifications') : Promise.resolve({ data: { data: [] } })
             ]);
             setMyRecords(attRes.data.data || []);
             setTimetable(ttRes.data.data || []);
+            setNotifications(notifyRes.data.data || []);
         } catch (err) {
             console.error('Staff Records Fetch Error:', err);
             if (err.response?.status !== 401) {
@@ -111,7 +116,7 @@ const StaffDashboard = () => {
                 data.forEach((row, index) => {
                     const rowNum = index + 2;
 
-                    let name = '', regNo = '', rollNo = '', genderVal = '', resVal = '';
+                    let name = '', regNo = '', rollNo = '', genderVal = '', resVal = '', personalMail = '', marks = 0;
 
                     // Use the same smart scanner logic as StudentsPage
                     Object.keys(row).forEach(key => {
@@ -125,6 +130,8 @@ const StaffDashboard = () => {
                         }
                         if (k.includes('gender') || k.includes('sex')) genderVal = val.toLowerCase();
                         if (k.includes('residency') || k.includes('type') || k.includes('status')) resVal = val.toLowerCase();
+                        if (k.includes('personal') || k.includes('mail')) personalMail = val;
+                        if (k.includes('mark')) marks = parseFloat(val) || 0;
                     });
 
                     if (!regNo && rollNo) regNo = rollNo;
@@ -143,6 +150,8 @@ const StaffDashboard = () => {
                         section: staffSectionId,
                         department: staffDeptId,
                         email: `${regNo.toString().trim().toLowerCase()}@student.mec.edu.in`,
+                        personalEmail: personalMail,
+                        internalMarks: marks,
                         gender: (genderVal.includes('girl') || genderVal.includes('female') || genderVal === 'f') ? 'Female' : 'Male',
                         residency: (resVal.includes('hostel')) ? 'Hosteller' : 'Day Scholar'
                     });
@@ -295,7 +304,9 @@ const StaffDashboard = () => {
                         <div className="header-left" style={{ position: 'relative', zIndex: 1 }}>
 
                             <h1 style={{ fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', margin: 0, color: 'white' }}>
-                                Welcome back, <span style={{ background: 'linear-gradient(to right, #ffffff, #c7d2fe)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.15))' }}>Staff</span> 👋
+                                Welcome back, <span style={{ background: 'linear-gradient(to right, #ffffff, #c7d2fe)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.15))' }}>
+                                    {user?.email?.includes('.ca@') ? 'Advisor' : 'Staff'}
+                                </span> 👋
                             </h1>
                             <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', marginTop: 8, maxWidth: 500, lineHeight: 1.6, fontWeight: 700 }}>
                                 Manage your students, mark attendance, and monitor performance metrics seamlessly from your command center.
@@ -397,9 +408,70 @@ const StaffDashboard = () => {
                                 <p>Performance</p>
                             </div>
                         </div>
+
+                        {/* Integrated Alerts Card */}
+                        {user?.email?.includes('.ca@mec.in') && (
+                            <div className="stat-card" style={{ 
+                                borderLeft: '5px solid #F43F5E', 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                alignItems: 'stretch',
+                                padding: '16px',
+                                gap: 10,
+                                height: '100%',
+                                minHeight: 180
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <span style={{ background: 'rgba(244, 63, 94, 0.1)', color: '#F43F5E', width: 28, height: 28, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🔔</span>
+                                        <p style={{ margin: 0, fontSize: 11, fontWeight: 900, color: '#F43F5E', letterSpacing: 0.5 }}>ALERTS</p>
+                                    </div>
+                                    {notifications.filter(n => !n.read).length > 0 && (
+                                        <button 
+                                            onClick={async () => {
+                                                await api.put('/notifications/read-all');
+                                                setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+                                            }}
+                                            style={{ background: 'none', border: 'none', color: 'var(--gray-400)', fontSize: 9, fontWeight: 800, cursor: 'pointer' }}
+                                        >
+                                            DISMISS
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6, overflowY: 'auto' }}>
+                                    {notifications.filter(n => !n.read).length > 0 ? (
+                                        notifications.filter(n => !n.read).slice(0, 2).map(n => (
+                                            <div key={n._id} style={{ background: 'var(--gray-50)', padding: '8px 12px', borderRadius: 10, border: '1px solid var(--gray-100)' }}>
+                                                <span style={{ fontWeight: 800, fontSize: 11, color: 'var(--gray-800)', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.title}</span>
+                                                <p style={{ margin: 0, fontSize: 10, color: 'var(--gray-500)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.message}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--gray-400)', fontSize: 11, fontWeight: 600 }}>
+                                            No new alerts
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    <NoticeBoard userRole="staff" />
+
+
+                    <NoticeBoard 
+                        userRole="staff" 
+                        onCreateClick={() => setIsNoticeModalOpen(true)} 
+                    />
+
+                    <CreateNoticeModal 
+                        isOpen={isNoticeModalOpen} 
+                        onClose={() => setIsNoticeModalOpen(false)} 
+                        onSuccess={() => {
+                            setIsNoticeModalOpen(false);
+                            // Refresh logic for NoticeBoard is internal via useEffect/fetchNotices
+                        }} 
+                    />
 
                     {/* Today's Records */}
                     <div className="card" style={{ marginBottom: 20 }}>
@@ -441,7 +513,7 @@ const StaffDashboard = () => {
                                                     </td>
                                                     <td>
                                                         <div style={{ display: 'flex', gap: 6 }}>
-                                                            {r.status !== 'approved' && (
+                                                            {r.status !== 'approved' && !user?.email?.includes('.staff@mec.in') && (
                                                                 <>
                                                                     <button
                                                                         className="btn btn-ghost btn-sm"
@@ -525,7 +597,7 @@ const StaffDashboard = () => {
                                                     </td>
                                                     <td>
                                                         <div style={{ display: 'flex', gap: 6 }}>
-                                                            {r.status !== 'approved' && (
+                                                            {r.status !== 'approved' && !user?.email?.includes('.staff@mec.in') && (
                                                                 <>
                                                                     <button
                                                                         className="btn btn-ghost btn-sm"

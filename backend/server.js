@@ -52,6 +52,9 @@ app.use('/api/hod', require('./routes/hod'));
 app.use('/api/timetable', require('./routes/timetable'));
 app.use('/api/notices', require('./routes/notices'));
 app.use('/api/marks', require('./routes/marks'));
+app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/student', require('./routes/student'));
+app.use('/api/advisor', require('./routes/advisor'));
 
 // Health check
 app.get('/api/health', (req, res) => {

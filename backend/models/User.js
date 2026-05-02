@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     role: {
         type: String,
-        enum: ['principal', 'hod', 'staff'],
+        enum: ['principal', 'hod', 'staff', 'student'],
         required: true,
     },
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', default: null },
@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema({
     // For staff: additional sections they teach
     assignedSections: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Section' }],
     isActive: { type: Boolean, default: true },
+    resetPasswordToken: { type: String, default: null },
+    resetPasswordExpires: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now },
 });
 

@@ -80,21 +80,32 @@ const seed = async () => {
                     });
                     sections.push(section);
 
-                    // 3. STAFF (One staff for every section)
-                    // Pattern: staff.<dept><year><sec>@mec.edu.in
+                    // 3. ADVISOR & STAFF (Two logins for every section)
                     const secLower = secName.toLowerCase();
-                    const staffEmail = `staff.${deptCode}${year}${secLower}@mec.edu.in`;
-                    const staffPass = `${deptCode}${year}${secLower}`;
+                    const prefix = `${deptCode}${year}${secLower}`;
 
+                    // Advisor (CA)
                     await User.create({
-                        name: `Prof. Staff ${dept.shortName} ${year}${secName}`,
-                        email: staffEmail,
-                        password: staffPass,
+                        name: `Prof. CA ${dept.shortName} ${year}${secName}`,
+                        email: `${prefix}.ca@mec.in`,
+                        password: `${prefix}.ca`,
                         role: 'staff',
                         department: dept._id,
                         year,
                         section: secName,
-                        assignedSections: [section._id], // Also assign to array for logic consistency
+                        assignedSections: [section._id],
+                    });
+
+                    // Staff
+                    await User.create({
+                        name: `Prof. Staff ${dept.shortName} ${year}${secName}`,
+                        email: `${prefix}.staff@mec.in`,
+                        password: `${prefix}.staff`,
+                        role: 'staff',
+                        department: dept._id,
+                        year,
+                        section: secName,
+                        assignedSections: [section._id],
                     });
                 }
             }
@@ -130,9 +141,9 @@ const seed = async () => {
         console.log('   Example:  hod.it@mec.edu.in / ithod');
         console.log('   Example:  hod.cse@mec.edu.in / csehod');
         console.log('');
-        console.log('3. STAFF (Pattern: staff.<dept><year><sec>@, pass: <dept><year><sec>):');
-        console.log('   Example:  staff.it1a@mec.edu.in / it1a');
-        console.log('   Example:  staff.cse2b@mec.edu.in / cse2b');
+        console.log('3. ADVISOR & STAFF (Pattern: <dept><year><sec>.[ca|staff]@mec.in):');
+        console.log('   Advisor:  it1a.ca@mec.in / it1a.ca');
+        console.log('   Staff:    it1a.staff@mec.in / it1a.staff');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
         process.exit(0);
