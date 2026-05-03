@@ -76,7 +76,7 @@ export function NotificationCenter() {
 
     return (
         <div className="notification-center" style={{ position: 'relative' }}>
-            <button 
+            <button
                 onClick={() => setIsOpen(!isOpen)}
                 style={{
                     background: 'var(--gray-100)',
@@ -145,12 +145,12 @@ export function NotificationCenter() {
                             </div>
                         ) : notifications.length > 0 ? (
                             notifications.map(n => (
-                                <div 
-                                    key={n._id} 
+                                <div
+                                    key={n._id}
                                     onClick={() => !n.read && markAsRead(n._id)}
-                                    style={{ 
-                                        padding: '16px', 
-                                        borderBottom: '1px solid var(--gray-50)', 
+                                    style={{
+                                        padding: '16px',
+                                        borderBottom: '1px solid var(--gray-50)',
                                         background: n.read ? 'transparent' : 'rgba(99, 102, 241, 0.05)',
                                         cursor: 'pointer',
                                         transition: 'background 0.2s'

@@ -138,7 +138,7 @@ const Sidebar = () => {
                 )}
             </AnimatePresence>
 
-            <motion.aside 
+            <motion.aside
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -146,11 +146,11 @@ const Sidebar = () => {
             >
                 {/* Logo */}
                 <div className="sidebar-logo">
-                    <motion.div 
+                    <motion.div
                         whileHover={{ scale: 1.05 }}
                         className="sidebar-logo-inner" style={{ display: 'flex', alignItems: 'center', gap: 12 }}
                     >
-                        <motion.div 
+                        <motion.div
                             animate={{ rotate: [0, 10, -10, 0] }}
                             transition={{ repeat: Infinity, duration: 5 }}
                             className="sidebar-logo-icon"
@@ -163,15 +163,15 @@ const Sidebar = () => {
                 </div>
 
                 {/* User Info */}
-                <motion.div 
+                <motion.div
                     whileHover={{ scale: 1.02 }}
                     className="sidebar-user-info"
                 >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         <div className="sidebar-user-avatar">
-                            <motion.div 
+                            <motion.div
                                 whileHover={{ rotate: 15 }}
-                                style={{ 
+                                style={{
                                     width: 38, height: 38, borderRadius: 10,
                                     background: 'var(--accent-gradient)',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -186,7 +186,7 @@ const Sidebar = () => {
                                 {user?.name}
                             </h4>
                             <span style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                                {user?.role === 'staff' 
+                                {user?.role === 'staff'
                                     ? (user?.email?.includes('.ca@') ? 'Class Advisor' : 'Staff Member')
                                     : ROLE_LABELS[user?.role]}
                             </span>
@@ -203,7 +203,7 @@ const Sidebar = () => {
                 <nav className="sidebar-nav">
                     {navItems.map((section, si) => (
                         <div key={section.section}>
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: si * 0.1 }}
@@ -217,7 +217,7 @@ const Sidebar = () => {
                                     className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                                     onClick={closeSidebar}
                                 >
-                                    <motion.div 
+                                    <motion.div
                                         className="nav-item-inner"
                                         style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%' }}
                                         whileHover={{ x: 5 }}
@@ -234,10 +234,10 @@ const Sidebar = () => {
 
                 {/* Footer */}
                 <div className="sidebar-footer">
-                    <motion.button 
+                    <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="logout-btn" onClick={handleLogout} style={{ 
+                        className="logout-btn" onClick={handleLogout} style={{
                             padding: '10px 16px',
                             display: 'flex',
                             alignItems: 'center',

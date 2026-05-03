@@ -45,12 +45,18 @@
   --gray-100: #F1F5F9;
   --gray-200: #E2E8F0;
   --gray-300: #CBD5E1;
-  --gray-400: #64748B; /* Darkened from 94A3B8 */
-  --gray-500: #475569; /* Darkened from 64748B */
-  --gray-600: #334155; /* Darkened from 475569 */
-  --gray-700: #1E293B; /* Darkened from 334155 */
-  --gray-800: #0F172A; /* Darkened from 1E293B */
-  --gray-900: #020617; /* Darkened from 0F172A */
+  --gray-400: #64748B;
+  /* Darkened from 94A3B8 */
+  --gray-500: #475569;
+  /* Darkened from 64748B */
+  --gray-600: #334155;
+  /* Darkened from 475569 */
+  --gray-700: #1E293B;
+  /* Darkened from 334155 */
+  --gray-800: #0F172A;
+  /* Darkened from 1E293B */
+  --gray-900: #020617;
+  /* Darkened from 0F172A */
 
   /* UI Dimensions */
   --sidebar-width: 240px;
@@ -144,7 +150,7 @@ body::before {
   right: 0;
   bottom: 0;
   z-index: -1;
-  background: 
+  background:
     radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(217, 70, 239, 0.15) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
@@ -155,9 +161,17 @@ body::before {
 }
 
 @keyframes living-gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .dashboard-hero {
@@ -168,7 +182,7 @@ body::before {
 }
 
 .dark body::before {
-  background: 
+  background:
     radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(217, 70, 239, 0.1) 0px, transparent 50%),
     radial-gradient(at 50% 50%, #020617 0px, transparent 100%);
@@ -181,7 +195,8 @@ h4,
 h5,
 h6 {
   font-family: 'Syne', sans-serif;
-  font-weight: 800; /* Increased from 700 */
+  font-weight: 800;
+  /* Increased from 700 */
   color: var(--gray-900);
   letter-spacing: -0.02em;
 }
@@ -274,17 +289,19 @@ h6 {
     box-shadow: 0 6px 24px rgba(37, 99, 235, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     filter: hue-rotate(0deg);
   }
+
   50% {
     box-shadow: 0 6px 28px rgba(139, 92, 246, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     filter: hue-rotate(15deg);
   }
+
   100% {
     box-shadow: 0 6px 24px rgba(37, 99, 235, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     filter: hue-rotate(0deg);
   }
 }
 
-  /* Neon blink on the active icon box */
+/* Neon blink on the active icon box */
 @keyframes icon-neon {
   0% {
     background: rgba(255, 255, 255, 0.2);
@@ -306,8 +323,13 @@ h6 {
 }
 
 @keyframes logo-hue {
-  from { filter: hue-rotate(0deg) brightness(1); }
-  to { filter: hue-rotate(360deg) brightness(1.2); }
+  from {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+
+  to {
+    filter: hue-rotate(360deg) brightness(1.2);
+  }
 }
 
 .sidebar-logo-icon {
@@ -449,7 +471,8 @@ h6 {
 .nav-section-title {
   padding: 16px 18px 6px;
   font-size: 10px;
-  font-weight: 900; /* Increased from 800 */
+  font-weight: 900;
+  /* Increased from 800 */
   color: var(--gray-700);
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -485,7 +508,8 @@ h6 {
   gap: 12px;
   color: var(--gray-800);
   text-decoration: none;
-  font-weight: 800; /* Increased from 700 */
+  font-weight: 800;
+  /* Increased from 700 */
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   border: 1px solid transparent;
 }
@@ -671,9 +695,17 @@ h6 {
 }
 
 @keyframes shimmer {
-  0% { left: -200%; }
-  20% { left: 100%; }
-  100% { left: 100%; }
+  0% {
+    left: -200%;
+  }
+
+  20% {
+    left: 100%;
+  }
+
+  100% {
+    left: 100%;
+  }
 }
 
 .stat-card:hover::after {
@@ -696,7 +728,8 @@ h6 {
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
-  background: rgba(139, 92, 246, 0.1); /* Default fallback */
+  background: rgba(139, 92, 246, 0.1);
+  /* Default fallback */
   color: var(--accent);
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -713,15 +746,17 @@ h6 {
   font-size: 28px;
   /* Increased from 22px */
   font-family: 'Syne', sans-serif;
-  font-weight: 900; /* Increased from 800 */
+  font-weight: 900;
+  /* Increased from 800 */
   margin: 4px 0;
-  color: var(--primary-dark);
+  color: var(--text-primary);
 }
 
 .stat-info p {
   font-size: 14px;
-  color: var(--gray-500);
-  font-weight: 700; /* Increased from 500 */
+  color: var(--text-secondary);
+  font-weight: 700;
+  /* Increased from 500 */
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -756,7 +791,8 @@ h6 {
 
 .card-title {
   font-size: 15px;
-  font-weight: 800; /* Increased from 600 */
+  font-weight: 800;
+  /* Increased from 600 */
   color: var(--gray-800);
   display: flex;
   align-items: center;
@@ -789,7 +825,8 @@ thead th {
   padding: 12px 16px;
   text-align: left;
   font-size: 12px;
-  font-weight: 800; /* Increased from 600 */
+  font-weight: 800;
+  /* Increased from 600 */
   color: var(--gray-600);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -870,7 +907,8 @@ tbody td {
   padding: 12px 16px;
   color: var(--gray-700);
   vertical-align: middle;
-  font-weight: 600; /* Added font weight */
+  font-weight: 600;
+  /* Added font weight */
 }
 
 tbody tr:last-child {
@@ -972,7 +1010,8 @@ tbody tr:last-child {
   padding: 9px 18px;
   border-radius: var(--border-radius-sm);
   font-size: 14px;
-  font-weight: 700; /* Increased from 500 */
+  font-weight: 700;
+  /* Increased from 500 */
   cursor: pointer;
   transition: var(--transition);
   border: none;
@@ -1084,7 +1123,8 @@ tbody tr:last-child {
 .form-label {
   display: block;
   font-size: 13px;
-  font-weight: 800; /* Increased from 500 */
+  font-weight: 800;
+  /* Increased from 500 */
   color: var(--gray-700);
   margin-bottom: 6px;
 }
@@ -1704,7 +1744,8 @@ tbody tr:last-child {
   }
 
   /* Fix for charts and tables on mobile */
-  .chart-row, .grid-2-1 {
+  .chart-row,
+  .grid-2-1 {
     grid-template-columns: 1fr !important;
   }
 

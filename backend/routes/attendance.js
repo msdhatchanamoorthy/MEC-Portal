@@ -11,6 +11,8 @@ const {
     getDailyOverview,
     getDepartmentDrilldown,
     getMorningAbsentees,
+    getStudentTodayStatus,
+    getMyAttendanceStats,
 } = require('../controllers/attendanceController');
 const { protect, roleCheck } = require('../middleware/auth');
 
@@ -24,6 +26,12 @@ router.post('/mark', roleCheck('staff', 'hod', 'principal'), markAttendance);
 
 // Get morning absentees for a section
 router.get('/morning-absentees', getMorningAbsentees);
+
+// Get today's status (for student dashboard)
+router.get('/today-status', getStudentTodayStatus);
+
+// Get current student's own statistics
+router.get('/my-stats', getMyAttendanceStats);
 
 // Upload proof file
 router.post('/upload-proof', roleCheck('staff', 'hod', 'principal', 'student'), upload.single('proof'), (req, res) => {

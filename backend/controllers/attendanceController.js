@@ -479,6 +479,38 @@ const getStudentAttendance = async (req, res) => {
     }
 };
 
+// @desc    Get current student's attendance stats
+// @route   GET /api/attendance/my-stats
+// @access  Student
+const getMyAttendanceStats = async (req, res) => {
+    try {
+        if (req.user.role !== 'student') {
+            return res.status(403).json({ message: 'Only students can access this.' });
+        }
+
+        // Find student doc
+        const emailPrefix = req.user.email.split('@')[0];
+        const student = await Student.findOne({
+            $or: [
+                { rollNumber: new RegExp(`^${emailPrefix}$`, 'i') },
+                { registerNumber: new RegExp(`^${emailPrefix}$`, 'i') },
+                { email: req.user.email.toLowerCase() }
+            ]
+        });
+
+        if (!student) {
+            return res.status(404).json({ message: 'Student record not found.' });
+        }
+
+        // Reuse the logic from getStudentAttendance by mocking req.params
+        req.params.studentId = student._id;
+        return getStudentAttendance(req, res);
+    } catch (error) {
+        console.error('My stats error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 // @desc    Get daily attendance overview for principal dashboard
 // @route   GET /api/attendance/daily-overview
 // @access  Principal, HOD
@@ -748,6 +780,66 @@ const getMorningAbsentees = async (req, res) => {
     }
 };
 
+// @desc    Get student's attendance status for today (Morning Status)
+// @route   GET /api/attendance/today-status
+// @access  Student
+const getStudentTodayStatus = async (req, res) => {
+    try {
+        if (req.user.role !== 'student') {
+            return res.status(403).json({ message: 'Only students can access this.' });
+        }
+
+        const today = new Date();
+        const start = new Date(today.setHours(0, 0, 0, 0));
+        const end = new Date(today.setHours(23, 59, 59, 999));
+
+        // Find student doc
+        const emailPrefix = req.user.email.split('@')[0];
+        const student = await Student.findOne({
+            $or: [
+                { rollNumber: new RegExp(`^${emailPrefix}$`, 'i') },
+                { registerNumber: new RegExp(`^${emailPrefix}$`, 'i') },
+                { email: req.user.email.toLowerCase() }
+            ]
+        });
+
+        if (!student) {
+            return res.status(404).json({ message: 'Student record not found.' });
+        }
+
+        // Find all records for this student's section today
+        const records = await AttendanceRecord.find({
+            section: student.section,
+            date: { $gte: start, $lte: end }
+        }).sort({ period: 1 });
+
+        // Identify "Morning" status
+        // Usually it's the one marked by CA or Period 1
+        let morningRecord = records.find(r => r.staffEmail.includes('.ca@'));
+        if (!morningRecord) morningRecord = records.find(r => r.period === 1);
+
+        if (!morningRecord) {
+            return res.json({ success: true, data: null, message: 'Morning attendance not yet marked.' });
+        }
+
+        const myEntry = morningRecord.attendance.find(a => a.student.toString() === student._id.toString());
+        
+        res.json({
+            success: true,
+            data: {
+                period: morningRecord.period,
+                status: myEntry ? myEntry.status : 'Not marked',
+                markedAt: morningRecord.createdAt,
+                staffName: morningRecord.staffName,
+                isCA: morningRecord.staffEmail.includes('.ca@')
+            }
+        });
+    } catch (error) {
+        console.error('Today status error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 module.exports = {
     markAttendance,
     updateAttendance,
@@ -759,4 +851,6 @@ module.exports = {
     getDailyOverview,
     getDepartmentDrilldown,
     getMorningAbsentees,
+    getStudentTodayStatus,
+    getMyAttendanceStats,
 };
