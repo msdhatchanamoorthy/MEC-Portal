@@ -13,7 +13,6 @@ const StudentDashboard = () => {
         messages: 0
     });
     const [todayStatus, setTodayStatus] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -36,8 +35,6 @@ const StudentDashboard = () => {
                 }
             } catch (err) {
                 console.error('Error fetching student dashboard data:', err);
-            } finally {
-                setLoading(false);
             }
         };
         fetchDashboardData();
