@@ -164,46 +164,39 @@ const forgotPassword = async (req, res) => {
                 return res.status(404).json({ message: 'No student found with this roll number.' });
             }
 
-            // 2. Verify if the entered email matches official or personal email
-            const isOfficialMatch = student.email && student.email.toLowerCase() === trimmedEmail;
+            // 2. Verify if the entered email matches personal email (Official email no longer allowed for reset per user request)
             const isPersonalMatch = student.personalEmail && student.personalEmail.toLowerCase() === trimmedEmail;
 
-            if (!isOfficialMatch && !isPersonalMatch) {
-                // Provide a hint to the user
-                const mailToHint = student.personalEmail || student.email;
-                const hint = mailToHint.split('@');
-                const masked = hint[0].substring(0, 3) + '****' + '@' + hint[1];
+            if (!isPersonalMatch) {
                 return res.status(400).json({ 
-                    message: `The email does not match. Hint: ${masked}` 
+                    message: `For security, please use your Personal Email to reset your password.` 
                 });
             }
 
-            // Find user by roll number
+            // Find user by roll number (to verify account exists)
             const rollPattern = new RegExp(`^${student.rollNumber.toLowerCase()}@`, 'i');
             user = await User.findOne({ email: rollPattern, role: 'student' });
         } else {
-            // Search by exact email
-            user = await User.findOne({ email });
+            // Check if this is a student's personal email
+            const student = await Student.findOne({ personalEmail: email.toLowerCase() });
             
-            if (!user) {
-                // If not found, try searching by username (register number) in student emails
-                const usernamePattern = new RegExp(`^${email.toLowerCase()}@`, 'i');
-                user = await User.findOne({ email: usernamePattern, role: 'student' });
-            }
-
-            // --- NEW: Search by Student's personalEmail ---
-            if (!user) {
-                const student = await Student.findOne({ personalEmail: email.toLowerCase() });
-                if (student) {
-                    // Find user by student's roll number (email starts with roll number)
-                    const rollPattern = new RegExp(`^${student.rollNumber.toLowerCase()}@`, 'i');
-                    user = await User.findOne({ email: rollPattern, role: 'student' });
+            if (student) {
+                // Find user account linked to this student
+                const rollPattern = new RegExp(`^${student.rollNumber.toLowerCase()}@`, 'i');
+                user = await User.findOne({ email: rollPattern, role: 'student' });
+                
+                // CRITICAL: We will send the reset link to the personal email we just found
+                if (user) {
+                    user.tempResetEmail = student.personalEmail; // Temporary store to know where to send
                 }
+            } else {
+                // For non-students (Staff/HOD/Principal), use exact email lookup
+                user = await User.findOne({ email: email.toLowerCase() });
             }
         }
 
         if (!user) {
-            return res.status(404).json({ message: 'No account found with that email, register number, or personal email.' });
+            return res.status(404).json({ message: 'No account found with this personal email or roll number.' });
         }
 
         // Generate reset token
@@ -214,12 +207,14 @@ const forgotPassword = async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        const success = await sendResetEmail(user.email, resetToken);
+        // Determine recipient email: Personal email for students, official for others
+        const recipientEmail = user.tempResetEmail || user.email;
+        const success = await sendResetEmail(recipientEmail, resetToken);
 
         if (success) {
             res.json({ 
                 success: true, 
-                message: 'Password reset link sent to your email.',
+                message: `Password reset link sent to ${recipientEmail.split('@')[0].substring(0, 3)}****@${recipientEmail.split('@')[1]}.`,
                 resetToken: resetToken // Bypassing for dev environment
             });
         } else {
