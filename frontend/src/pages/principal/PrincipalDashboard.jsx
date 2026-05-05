@@ -393,65 +393,72 @@ const PrincipalDashboard = () => {
                                                             }}
                                                         />
                                                     </div>
-                                                </div>
-
-                                                <div className="grid-2-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
-                                                    {drilldown.data.map((yData) => (
-                                                        <div key={yData.year} className="card" style={{ border: '1px solid #f3f4f6', boxShadow: 'none' }}>
-                                                            <div className="card-header" style={{ padding: '12px 16px', background: '#f9fafb' }}>
-                                                                <div style={{ fontWeight: 700, fontSize: 16, color: 'var(--primary)' }}>
-                                                                    📅 {yData.year}{['st', 'nd', 'rd', 'th'][yData.year - 1]} Year
+                                                              <div className="grid-2-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
+                                                    {drilldown.data.map((yData, idx) => {
+                                                        const gradients = [
+                                                            'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)', // 1st Year - Indigo
+                                                            'linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)', // 2nd Year - Sky
+                                                            'linear-gradient(135deg, #10B981 0%, #059669 100%)', // 3rd Year - Emerald
+                                                            'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'  // 4th Year - Amber
+                                                        ];
+                                                        return (
+                                                            <div key={yData.year} className="card" style={{ border: 'none', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}>
+                                                                <div className="card-header" style={{ padding: '16px 20px', background: gradients[idx % 4], border: 'none' }}>
+                                                                    <div style={{ fontWeight: 800, fontSize: 18, color: 'white', display: 'flex', alignItems: 'center', gap: 10 }}>
+                                                                        <span style={{ background: 'rgba(255,255,255,0.2)', padding: '6px', borderRadius: '8px' }}>📅</span>
+                                                                        {yData.year}{['st', 'nd', 'rd', 'th'][yData.year - 1]} Year
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="card-body" style={{ padding: 0 }}>
-                                                                {yData.sections.length > 0 ? (
-                                                                    <table className="table-sm">
-                                                                        <thead style={{ background: '#fff' }}>
-                                                                            <tr>
-                                                                                <th style={{ paddingLeft: 16 }}>Section</th>
-                                                                                <th>Total Students</th>
-                                                                                <th style={{ textAlign: 'right', paddingRight: 16 }}>Absentees</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            {yData.sections.map((sec) => (
-                                                                                <tr key={sec.sectionName}>
-                                                                                    <td style={{ paddingLeft: 16, fontWeight: 600 }}>Section {sec.sectionName}</td>
-                                                                                    <td>{sec.totalStudents}</td>
-                                                                                    <td style={{ textAlign: 'right', paddingRight: 16 }}>
-                                                                                        <span style={{
-                                                                                            background: '#FEE2E2',
-                                                                                            color: '#B91C1C',
-                                                                                            padding: '2px 10px',
-                                                                                            borderRadius: 12,
-                                                                                            fontSize: 12,
-                                                                                            fontWeight: 700
-                                                                                        }}>
-                                                                                            {sec.absentCount}
-                                                                                        </span>
+                                                                <div className="card-body" style={{ padding: 0 }}>
+                                                                    {yData.sections.length > 0 ? (
+                                                                        <table className="table-sm">
+                                                                            <thead>
+                                                                                <tr style={{ background: 'rgba(0,0,0,0.02)' }}>
+                                                                                    <th style={{ paddingLeft: 20, color: '#6B7280', textTransform: 'uppercase', fontSize: 11, letterSpacing: 1 }}>Section</th>
+                                                                                    <th style={{ color: '#6B7280', textTransform: 'uppercase', fontSize: 11, letterSpacing: 1 }}>Total</th>
+                                                                                    <th style={{ textAlign: 'right', paddingRight: 20, color: '#6B7280', textTransform: 'uppercase', fontSize: 11, letterSpacing: 1 }}>Absentees</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                {yData.sections.map((sec) => (
+                                                                                    <tr key={sec.sectionName}>
+                                                                                        <td style={{ paddingLeft: 20, fontWeight: 700, color: '#1F2937' }}>Section {sec.sectionName}</td>
+                                                                                        <td style={{ fontWeight: 600, color: '#4B5563' }}>{sec.totalStudents}</td>
+                                                                                        <td style={{ textAlign: 'right', paddingRight: 20 }}>
+                                                                                            <span style={{
+                                                                                                background: sec.absentCount > 0 ? '#FEE2E2' : '#DCFCE7',
+                                                                                                color: sec.absentCount > 0 ? '#B91C1C' : '#166534',
+                                                                                                padding: '4px 12px',
+                                                                                                borderRadius: '20px',
+                                                                                                fontSize: 12,
+                                                                                                fontWeight: 800
+                                                                                            }}>
+                                                                                                {sec.absentCount}
+                                                                                            </span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))}
+                                                                                <tr style={{ background: 'rgba(0,0,0,0.04)', fontWeight: 900 }}>
+                                                                                    <td style={{ paddingLeft: 20, color: '#111827' }}>Total</td>
+                                                                                    <td style={{ color: '#111827' }}>
+                                                                                        {yData.sections.reduce((acc, s) => acc + s.totalStudents, 0)}
+                                                                                    </td>
+                                                                                    <td style={{ textAlign: 'right', paddingRight: 20, color: '#EF4444' }}>
+                                                                                        {yData.sections.reduce((acc, s) => acc + s.absentCount, 0)}
                                                                                     </td>
                                                                                 </tr>
-                                                                            ))}
-                                                                            <tr style={{ background: '#f9fafb', fontWeight: 700 }}>
-                                                                                <td style={{ paddingLeft: 16 }}>Total</td>
-                                                                                <td>
-                                                                                    {yData.sections.reduce((acc, s) => acc + s.totalStudents, 0)}
-                                                                                </td>
-                                                                                <td style={{ textAlign: 'right', paddingRight: 16, color: 'var(--danger)' }}>
-                                                                                    {yData.sections.reduce((acc, s) => acc + s.absentCount, 0)}
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                ) : (
-                                                                    <div style={{ padding: 20, textAlign: 'center', color: '#9CA3AF', fontSize: 13 }}>
-                                                                        No attendance records for this year today
-                                                                    </div>
-                                                                )}
+                                                                            </tbody>
+                                                                        </table>
+                                                                    ) : (
+                                                                        <div style={{ padding: 40, textAlign: 'center', color: '#9CA3AF', fontSize: 14, fontWeight: 600 }}>
+                                                                            No attendance records today
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                        );
+                                                    })}
+                                                </div>                                         </div>
                                             </div>
                                         ) : (
                                             <div className="empty-state">
