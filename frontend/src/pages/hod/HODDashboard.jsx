@@ -291,32 +291,32 @@ const HODDashboard = () => {
                         <>
                             {/* Stats Grid */}
                             <div className="dashboard-grid">
-                                <div className="stat-card" style={{ borderLeft: '5px solid var(--accent)' }}>
-                                    <div className="stat-icon" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent)' }}>🎓</div>
+                                <div className="stat-card" style={{ background: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)', color: 'white', border: 'none' }}>
+                                    <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>🎓</div>
                                     <div className="stat-info">
-                                        <p>TOTAL STRENGTH</p>
-                                        <h3>{overall?.totalStudents || 0}</h3>
+                                        <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>TOTAL STRENGTH</p>
+                                        <h3 style={{ color: 'white' }}>{overall?.totalStudents || 0}</h3>
                                     </div>
                                 </div>
-                                <div className="stat-card" style={{ borderLeft: '5px solid var(--success)' }}>
-                                    <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)' }}>👨‍🏫</div>
+                                <div className="stat-card" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: 'white', border: 'none' }}>
+                                    <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>👨‍🏫</div>
                                     <div className="stat-info">
-                                        <p>ACTIVE STAFF</p>
-                                        <h3>{staffList.length || 0}</h3>
+                                        <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>ACTIVE STAFF</p>
+                                        <h3 style={{ color: 'white' }}>{staffList.length || 0}</h3>
                                     </div>
                                 </div>
-                                <div className="stat-card" style={{ borderLeft: '5px solid var(--info)' }}>
-                                    <div className="stat-icon" style={{ background: 'rgba(59, 130, 246, 0.1)', color: 'var(--info)' }}>📈</div>
+                                <div className="stat-card" style={{ background: 'linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)', color: 'white', border: 'none' }}>
+                                    <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>📈</div>
                                     <div className="stat-info">
-                                        <p>AVG ATTENDANCE</p>
-                                        <h3>{overall?.percentage || 0}%</h3>
+                                        <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>AVG ATTENDANCE</p>
+                                        <h3 style={{ color: 'white' }}>{overall?.percentage || 0}%</h3>
                                     </div>
                                 </div>
-                                <div className="stat-card" style={{ borderLeft: '5px solid var(--danger)' }}>
-                                    <div className="stat-icon" style={{ background: 'rgba(244, 63, 94, 0.1)', color: 'var(--danger)' }}>🚨</div>
+                                <div className="stat-card" style={{ background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)', color: 'white', border: 'none' }}>
+                                    <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>🚨</div>
                                     <div className="stat-info">
-                                        <p>CRITICAL ALERTS</p>
-                                        <h3>{alerts.length || 0}</h3>
+                                        <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>CRITICAL ALERTS</p>
+                                        <h3 style={{ color: 'white' }}>{alerts.length || 0}</h3>
                                     </div>
                                 </div>
                             </div>

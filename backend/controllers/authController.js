@@ -36,12 +36,44 @@ const login = async (req, res) => {
             return res.status(400).json({ message: 'Please provide email and password' });
         }
 
-        let user = await User.findOne({ email, isActive: true }).populate('department');
+        let user = await User.findOne({ email: email.toLowerCase(), isActive: true }).populate('department');
 
         if (!user) {
-            // Try searching by Roll Number for students (email starts with roll number)
-            const usernamePattern = new RegExp(`^${email.toLowerCase()}@`, 'i');
-            user = await User.findOne({ email: usernamePattern, role: 'student', isActive: true }).populate('department');
+            // Try searching by Roll Number or Register Number for students
+            const student = await Student.findOne({
+                $or: [
+                    { rollNumber: new RegExp(`^${email}$`, 'i') },
+                    { registerNumber: new RegExp(`^${email}$`, 'i') }
+                ]
+            });
+
+            if (student) {
+                // Try to find user by student's official email (starts with registerNumber)
+                const usernamePattern = new RegExp(`^${student.registerNumber.toLowerCase()}@`, 'i');
+                user = await User.findOne({ email: usernamePattern, role: 'student', isActive: true }).populate('department');
+
+                // --- LAZY REGISTRATION: Auto-create user account if student exists but user record doesn't ---
+                if (!user && password === student.registerNumber) {
+                    const officialEmail = student.email || `${student.registerNumber.toLowerCase()}@student.mec.edu.in`;
+                    user = await User.create({
+                        name: student.name,
+                        email: officialEmail,
+                        password: student.registerNumber,
+                        role: 'student',
+                        department: student.department,
+                        year: student.year,
+                        section: student.section?._id || student.section
+                    });
+                    user = await User.findById(user._id).populate('department');
+                    console.log(`[LazyReg] Auto-created user account for student: ${student.name}`);
+                }
+            }
+            
+            // Fallback: If still no user, try the old pattern matching directly on email
+            if (!user) {
+                const usernamePattern = new RegExp(`^${email.toLowerCase()}@`, 'i');
+                user = await User.findOne({ email: usernamePattern, role: 'student', isActive: true }).populate('department');
+            }
         }
 
         if (!user || !(await user.comparePassword(password))) {

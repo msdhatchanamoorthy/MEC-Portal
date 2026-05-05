@@ -62,7 +62,9 @@ const StudentDashboard = () => {
 
                     {/* Today's Morning Attendance Section */}
                     <div style={{
-                        background: 'rgba(255, 255, 255, 0.03)',
+                        background: todayStatus 
+                            ? (todayStatus.status === 'Present' ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)')
+                            : 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
                         backdropFilter: 'blur(10px)',
                         borderRadius: 24,
                         padding: '24px 30px',
@@ -70,64 +72,65 @@ const StudentDashboard = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                        borderLeft: `6px solid ${todayStatus ? (todayStatus.status === 'Present' ? '#10b981' : '#ef4444') : '#f59e0b'}`,
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+                        border: 'none',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                        color: 'white'
                     }}>
                         <div>
-                            <h4 style={{ margin: 0, color: 'rgba(255, 255, 255, 0.5)', fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2 }}>
+                            <h4 style={{ margin: 0, color: 'rgba(255, 255, 255, 0.8)', fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 2 }}>
                                 Today's Status
                             </h4>
-                            <h2 style={{ margin: '8px 0 0 0', fontSize: 22, fontWeight: 800, color: 'white' }}>
+                            <h2 style={{ margin: '8px 0 0 0', fontSize: 22, fontWeight: 900, color: 'white' }}>
                                 {todayStatus ? (
                                     <>
-                                        Morning Attendance: <span style={{ color: todayStatus.status === 'Present' ? '#10b981' : '#ef4444' }}>{todayStatus.status}</span>
+                                        Morning Attendance: <span style={{ textDecoration: 'underline' }}>{todayStatus.status}</span>
                                     </>
                                 ) : (
-                                    <span style={{ opacity: 0.8 }}>Morning Attendance: Not yet marked</span>
+                                    <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Morning Attendance: Not yet marked</span>
                                 )}
                             </h2>
                             {todayStatus && (
-                                <p style={{ margin: '8px 0 0 0', fontSize: 14, color: 'rgba(255, 255, 255, 0.6)', fontWeight: 500 }}>
-                                    Marked by <span style={{ color: 'white' }}>{todayStatus.isCA ? 'Class Advisor' : 'Staff'} {todayStatus.staffName}</span> for Period {todayStatus.period}
+                                <p style={{ margin: '8px 0 0 0', fontSize: 14, color: 'rgba(255, 255, 255, 0.85)', fontWeight: 600 }}>
+                                    Marked by <span style={{ fontWeight: 800 }}>{todayStatus.isCA ? 'Class Advisor' : 'Staff'} {todayStatus.staffName}</span> for Period {todayStatus.period}
                                 </p>
                             )}
                         </div>
                         <div style={{
-                            width: 56,
-                            height: 56,
-                            borderRadius: 16,
-                            background: todayStatus ? (todayStatus.status === 'Present' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)') : 'rgba(245, 158, 11, 0.15)',
+                            width: 64,
+                            height: 64,
+                            borderRadius: 20,
+                            background: 'rgba(255, 255, 255, 0.2)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            fontSize: 28,
-                            boxShadow: 'inset 0 0 20px rgba(255,255,255,0.05)'
+                            fontSize: 32,
+                            boxShadow: 'inset 0 0 20px rgba(0,0,0,0.05)',
+                            border: '2px solid rgba(255, 255, 255, 0.3)'
                         }}>
                             {todayStatus ? (todayStatus.status === 'Present' ? '✅' : '❌') : '⏳'}
                         </div>
                     </div>
 
                     <div className="dashboard-grid">
-                        <div className="stat-card">
-                            <div className="stat-icon" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent)' }}>📊</div>
+                        <div className="stat-card" style={{ background: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)', color: 'white', border: 'none' }}>
+                            <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>📊</div>
                             <div className="stat-info">
-                                <p>ATTENDANCE</p>
-                                <h3>{stats.attendance}%</h3>
+                                <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>ATTENDANCE</p>
+                                <h3 style={{ color: 'white' }}>{stats.attendance}%</h3>
                             </div>
                         </div>
-                        <div className="stat-card">
-                            <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)' }}>📤</div>
+                        <div className="stat-card" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: 'white', border: 'none' }}>
+                            <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>📤</div>
                             <div className="stat-info">
-                                <p>MY UPLOADS</p>
-                                <h3>{stats.uploads}</h3>
+                                <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>MY UPLOADS</p>
+                                <h3 style={{ color: 'white' }}>{stats.uploads}</h3>
                             </div>
                         </div>
-                        <div className="stat-card">
-                            <div className="stat-icon" style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)' }}>💬</div>
+                        <div className="stat-card" style={{ background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', color: 'white', border: 'none' }}>
+                            <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>💬</div>
                             <div className="stat-info">
-                                <p>MESSAGES</p>
-                                <h3>{stats.messages}</h3>
+                                <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>MESSAGES</p>
+                                <h3 style={{ color: 'white' }}>{stats.messages}</h3>
                             </div>
                         </div>
                     </div>

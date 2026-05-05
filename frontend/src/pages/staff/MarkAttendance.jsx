@@ -116,26 +116,7 @@ const MarkAttendance = () => {
             const s = params.get('sectionId');
             const subj = params.get('subject');
             
-            // --- STAFF RESTRICTION: Default to current period ---
-            if (user?.email?.includes('.staff@mec.in')) {
-                const now = new Date();
-                const hours = now.getHours();
-                const mins = now.getMinutes();
-                const time = hours * 60 + mins;
-                let autoPeriod = null;
-                if (time >= 550 && time < 605) autoPeriod = 1;
-                else if (time >= 605 && time < 660) autoPeriod = 2;
-                else if (time >= 675 && time < 730) autoPeriod = 3;
-                else if (time >= 730 && time < 780) autoPeriod = 4;
-                else if (time >= 825 && time < 880) autoPeriod = 5;
-                else if (time >= 880 && time < 935) autoPeriod = 6;
-                else if (time >= 935 && time < 990) autoPeriod = 7;
-                
-                if (autoPeriod) setPeriod(autoPeriod.toString());
-                else setPeriod(p || '1');
-            } else {
-                if (p) setPeriod(p);
-            }
+            if (p) setPeriod(p);
 
             if (s) setSectionId(s);
             if (subj) setSubject(subj);
@@ -483,17 +464,13 @@ const MarkAttendance = () => {
                                         className="form-control"
                                         value={period}
                                         onChange={(e) => setPeriod(e.target.value)}
-                                        disabled={editMode || user?.email?.includes('.staff@mec.in')}
+                                        disabled={editMode}
                                     >
                                         {PERIODS.map((p) => (
                                             <option key={p} value={p}>Period {p}</option>
                                         ))}
                                     </select>
-                                    {user?.email?.includes('.staff@mec.in') && !editMode && (
-                                        <p style={{ fontSize: 11, color: 'var(--accent)', marginTop: 4, fontWeight: 600 }}>
-                                            ⚠️ Auto-locked to current session
-                                        </p>
-                                    )}
+
                                 </div>
 
                                 <div className="form-group">

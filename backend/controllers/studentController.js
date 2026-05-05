@@ -108,7 +108,40 @@ exports.createStudent = async (req, res) => {
 // @desc    Update student
 exports.updateStudent = async (req, res) => {
     try {
-        const student = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        const studentId = req.params.id;
+        const oldStudent = await Student.findById(studentId);
+        if (!oldStudent) return res.status(404).json({ message: 'Student not found' });
+
+        const student = await Student.findByIdAndUpdate(studentId, req.body, { new: true, runValidators: true });
+        
+        // --- SYNC WITH USER MODEL ---
+        // If registerNumber or email changed, update the corresponding User record
+        if (req.body.registerNumber || req.body.email || req.body.name) {
+            const user = await User.findOne({ 
+                $or: [
+                    { email: oldStudent.email },
+                    { email: new RegExp(`^${oldStudent.registerNumber}@`, 'i') }
+                ],
+                role: 'student'
+            });
+
+            if (user) {
+                if (req.body.name) user.name = req.body.name;
+                if (req.body.email) user.email = req.body.email;
+                else if (req.body.registerNumber) {
+                    // If email wasn't explicitly provided but registerNumber changed, update default email
+                    user.email = `${req.body.registerNumber.toLowerCase()}@student.mec.edu.in`;
+                }
+                
+                if (req.body.department) user.department = req.body.department;
+                if (req.body.year) user.year = req.body.year;
+                if (req.body.section) user.section = req.body.section;
+                
+                await user.save();
+                console.log(`[Sync] Updated User record for student: ${student.name}`);
+            }
+        }
+
         res.json({ success: true, data: student });
     } catch (error) {
         res.status(400).json({ message: error.message });

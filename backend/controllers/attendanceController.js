@@ -39,6 +39,7 @@ const markAttendance = async (req, res) => {
         if (req.user.role === 'staff') {
             const isStaffMember = req.user.email.includes('.staff@mec.in');
             
+            /* 
             // 1. Only mark for current hour if they are a regular Staff
             if (isStaffMember) {
                 const currentSystemPeriod = getCurrentPeriod();
@@ -48,6 +49,7 @@ const markAttendance = async (req, res) => {
                     });
                 }
             }
+            */
 
             // 2. Check department
             if (req.user.department._id.toString() !== departmentId) {

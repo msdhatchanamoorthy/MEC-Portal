@@ -171,35 +171,35 @@ const PrincipalDashboard = () => {
                         <>
                             {/* Stats Cards */}
                             <div className="dashboard-grid">
-                                <div className="stat-card blue">
-                                    <div className="stat-icon blue">🏛️</div>
+                                <div className="stat-card" style={{ background: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)', color: 'white', border: 'none' }}>
+                                    <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>🏛️</div>
                                     <div className="stat-info">
-                                        <h3>15</h3>
-                                        <p>Total Departments</p>
+                                        <h3 style={{ color: 'white' }}>15</h3>
+                                        <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Total Departments</p>
                                     </div>
                                 </div>
-                                <div className="stat-card green">
-                                    <div className="stat-icon green">👥</div>
+                                <div className="stat-card" style={{ background: 'linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)', color: 'white', border: 'none' }}>
+                                    <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>👥</div>
                                     <div className="stat-info">
-                                        <h3>{overview?.overall?.totalStudents?.toLocaleString() || 0}</h3>
-                                        <p>Total Students (Today)</p>
+                                        <h3 style={{ color: 'white' }}>{overview?.overall?.totalStudents?.toLocaleString() || 0}</h3>
+                                        <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Total Students (Today)</p>
                                     </div>
                                 </div>
-                                <div className="stat-card green">
-                                    <div className="stat-icon green">✅</div>
+                                <div className="stat-card" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: 'white', border: 'none' }}>
+                                    <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>✅</div>
                                     <div className="stat-info">
-                                        <h3>{overview?.overall?.presentCount?.toLocaleString() || 0}</h3>
-                                        <p>Present Today</p>
-                                        <div className={`stat-trend ${parseFloat(overview?.overall?.percentage) >= 75 ? 'up' : 'down'}`}>
+                                        <h3 style={{ color: 'white' }}>{overview?.overall?.presentCount?.toLocaleString() || 0}</h3>
+                                        <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Present Today</p>
+                                        <div className={`stat-trend up`} style={{ background: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 800 }}>
                                             {overview?.overall?.percentage}% attendance
                                         </div>
                                     </div>
                                 </div>
-                                <div className="stat-card red">
-                                    <div className="stat-icon red">❌</div>
+                                <div className="stat-card" style={{ background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)', color: 'white', border: 'none' }}>
+                                    <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>❌</div>
                                     <div className="stat-info">
-                                        <h3>{overview?.overall?.absentCount?.toLocaleString() || 0}</h3>
-                                        <p>Absent Today</p>
+                                        <h3 style={{ color: 'white' }}>{overview?.overall?.absentCount?.toLocaleString() || 0}</h3>
+                                        <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Absent Today</p>
                                     </div>
                                 </div>
                             </div>

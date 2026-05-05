@@ -386,6 +386,7 @@ const StudentsPage = () => {
                                             <th>Residency</th>
                                             <th>Section</th>
                                             {user?.role === 'principal' && <th>Department</th>}
+                                            <th>College Email</th>
                                             <th>Personal Email</th>
                                             <th>Marks</th>
                                             <th>Phone</th>
@@ -421,9 +422,10 @@ const StudentsPage = () => {
                                                 </td>
                                                 <td><span className="badge badge-gray">Sec {s.section?.name}</span></td>
                                                 {user?.role === 'principal' && <td style={{ fontSize: 12 }}>{s.department?.shortName}</td>}
-                                                <td style={{ fontSize: 12, color: '#6B7280' }} title={s.email}>{s.personalEmail || '—'}</td>
+                                                <td style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 600 }}>{s.email || '—'}</td>
+                                                <td style={{ fontSize: 11, color: '#6B7280' }}>{s.personalEmail || '—'}</td>
                                                 <td><span className="badge badge-success" style={{ fontSize: 11, fontWeight: 800 }}>{s.internalMarks || 0}</span></td>
-                                                <td style={{ fontSize: 12, color: '#6B7280' }}>{s.phone || '—'}</td>
+                                                <td style={{ fontSize: 11, color: '#6B7280' }}>{s.phone || '—'}</td>
                                                 {(user?.role === 'principal' || user?.role === 'hod' || user?.role === 'staff') && (
                                                     <td>
                                                         <button

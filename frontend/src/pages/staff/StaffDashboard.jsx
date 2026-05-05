@@ -386,33 +386,47 @@ const StaffDashboard = () => {
 
                     {/* Stats Grid */}
                     <div className="dashboard-grid">
-                        <div className="stat-card" style={{ borderLeft: '5px solid var(--accent)' }}>
-                            <div className="stat-icon" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent)' }}>📋</div>
+                        <div className="stat-card" style={{ 
+                            background: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)',
+                            color: 'white',
+                            border: 'none'
+                        }}>
+                            <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>📋</div>
                             <div className="stat-info">
-                                <p>TOTAL SUBMISSIONS</p>
-                                <h3>{myRecords.length}</h3>
+                                <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>TOTAL SUBMISSIONS</p>
+                                <h3 style={{ color: 'white' }}>{myRecords.length}</h3>
                             </div>
                         </div>
-                        <div className="stat-card" style={{ borderLeft: '5px solid var(--warning)' }}>
-                            <div className="stat-icon" style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)' }}>⏳</div>
+                        <div className="stat-card" style={{ 
+                            background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+                            color: 'white',
+                            border: 'none'
+                        }}>
+                            <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>⏳</div>
                             <div className="stat-info">
-                                <p>PENDING REVIEW</p>
-                                <h3>{pendingCount}</h3>
+                                <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>PENDING REVIEW</p>
+                                <h3 style={{ color: 'white' }}>{pendingCount}</h3>
                             </div>
                         </div>
-                        <div className="stat-card" style={{ borderLeft: '5px solid var(--success)' }}>
-                            <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)' }}>✅</div>
+                        <div className="stat-card" style={{ 
+                            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                            color: 'white',
+                            border: 'none'
+                        }}>
+                            <div className="stat-icon" style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white' }}>✅</div>
                             <div className="stat-info">
-                                <p>APPROVED RECORDS</p>
-                                <h3>{approvedCount}</h3>
-                                <p>Performance</p>
+                                <p style={{ color: 'rgba(255, 255, 255, 0.8)' }}>APPROVED RECORDS</p>
+                                <h3 style={{ color: 'white' }}>{approvedCount}</h3>
+                                <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: 10 }}>Overall Performance</p>
                             </div>
                         </div>
 
                         {/* Integrated Alerts Card */}
                         {user?.email?.includes('.ca@mec.in') && (
                             <div className="stat-card" style={{ 
-                                borderLeft: '5px solid #F43F5E', 
+                                background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+                                color: 'white',
+                                border: 'none',
                                 display: 'flex', 
                                 flexDirection: 'column', 
                                 alignItems: 'stretch',
@@ -423,8 +437,8 @@ const StaffDashboard = () => {
                             }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                        <span style={{ background: 'rgba(244, 63, 94, 0.1)', color: '#F43F5E', width: 28, height: 28, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🔔</span>
-                                        <p style={{ margin: 0, fontSize: 11, fontWeight: 900, color: '#F43F5E', letterSpacing: 0.5 }}>ALERTS</p>
+                                        <span style={{ background: 'rgba(255, 255, 255, 0.2)', color: 'white', width: 28, height: 28, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🔔</span>
+                                        <p style={{ margin: 0, fontSize: 11, fontWeight: 900, color: 'white', letterSpacing: 0.5 }}>ALERTS</p>
                                     </div>
                                     {notifications.filter(n => !n.read).length > 0 && (
                                         <button 
@@ -432,7 +446,7 @@ const StaffDashboard = () => {
                                                 await api.put('/notifications/read-all');
                                                 setNotifications(prev => prev.map(n => ({ ...n, read: true })));
                                             }}
-                                            style={{ background: 'none', border: 'none', color: 'var(--gray-400)', fontSize: 9, fontWeight: 800, cursor: 'pointer' }}
+                                            style={{ background: 'none', border: 'none', color: 'rgba(255, 255, 255, 0.6)', fontSize: 9, fontWeight: 800, cursor: 'pointer' }}
                                         >
                                             DISMISS
                                         </button>
@@ -442,13 +456,13 @@ const StaffDashboard = () => {
                                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6, overflowY: 'auto' }}>
                                     {notifications.filter(n => !n.read).length > 0 ? (
                                         notifications.filter(n => !n.read).slice(0, 2).map(n => (
-                                            <div key={n._id} style={{ background: 'var(--gray-50)', padding: '8px 12px', borderRadius: 10, border: '1px solid var(--gray-100)' }}>
-                                                <span style={{ fontWeight: 800, fontSize: 11, color: 'var(--gray-800)', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.title}</span>
-                                                <p style={{ margin: 0, fontSize: 10, color: 'var(--gray-500)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.message}</p>
+                                            <div key={n._id} style={{ background: 'rgba(255, 255, 255, 0.15)', padding: '8px 12px', borderRadius: 10, border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                                                <span style={{ fontWeight: 800, fontSize: 11, color: 'white', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.title}</span>
+                                                <p style={{ margin: 0, fontSize: 10, color: 'rgba(255, 255, 255, 0.8)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.message}</p>
                                             </div>
                                         ))
                                     ) : (
-                                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--gray-400)', fontSize: 11, fontWeight: 600 }}>
+                                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255, 255, 255, 0.5)', fontSize: 11, fontWeight: 600 }}>
                                             No new alerts
                                         </div>
                                     )}
