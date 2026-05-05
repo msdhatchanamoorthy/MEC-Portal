@@ -164,12 +164,23 @@ const forgotPassword = async (req, res) => {
                 return res.status(404).json({ message: 'No student found with this roll number.' });
             }
 
-            // 2. Verify if the entered email matches personal email (Official email no longer allowed for reset per user request)
-            const isPersonalMatch = student.personalEmail && student.personalEmail.toLowerCase() === trimmedEmail;
+            // 2. Verify if the entered email matches personal email
+            const studentEmail = (student.personalEmail || '').trim().toLowerCase();
+            const isPersonalMatch = studentEmail === trimmedEmail;
 
             if (!isPersonalMatch) {
+                if (!student.personalEmail) {
+                    return res.status(400).json({ 
+                        message: `No Personal Email is registered for this account. Please contact your Class Advisor or HOD to update it.` 
+                    });
+                }
+                
+                // Provide a masked hint for the personal email
+                const [userPart, domainPart] = student.personalEmail.split('@');
+                const masked = userPart.substring(0, 3) + '****' + '@' + domainPart;
+                
                 return res.status(400).json({ 
-                    message: `For security, please use your Personal Email to reset your password.` 
+                    message: `The email does not match. Hint: ${masked}` 
                 });
             }
 
