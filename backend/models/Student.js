@@ -22,6 +22,29 @@ const studentSchema = new mongoose.Schema({
     isActive: { type: Boolean, default: true },
     gender: { type: String, enum: ['Male', 'Female', 'Other'], default: 'Male' },
     residency: { type: String, enum: ['Day Scholar', 'Hosteller'], default: 'Day Scholar' },
+    
+    // Detailed Profile Fields from Excel
+    tenthPercentage: { type: Number, default: 0 },
+    twelfthPercentage: { type: Number, default: 0 },
+    diplomaPercentage: { type: Number, default: 0 },
+    cgpa: { type: Number, default: 0 },
+    currentArrear: { type: Number, default: 0 },
+    historyOfArrear: { type: Number, default: 0 },
+    dob: { type: String, default: '' },
+    bloodGroup: { type: String, default: '' },
+    college: { type: String, default: 'Muthayammal Engineering College' },
+    firstGraduate: { type: String, default: 'No' },
+    address: { type: String, default: '' },
+    nativePlace: { type: String, default: '' },
+    nativeState: { type: String, default: '' },
+    twelfthMedium: { type: String, default: 'English' },
+    placementStatus: { type: String, default: 'Not Placed' },
+    placementCompany: { type: String, default: '' },
+    placementRole: { type: String, default: '' },
+    placementType: { type: String, default: '' },
+    placementPackage: { type: String, default: '' },
+    placementDate: { type: String, default: '' },
+
     createdAt: { type: Date, default: Date.now },
 });
 

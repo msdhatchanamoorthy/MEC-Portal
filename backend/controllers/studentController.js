@@ -254,3 +254,116 @@ exports.getMessages = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+// @desc    Search students by register number or name
+// @route   GET /api/students/search
+exports.searchStudents = async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q) {
+            return res.json({ success: true, data: [] });
+        }
+
+        const regex = new RegExp(q, 'i');
+        const students = await Student.find({
+            $or: [
+                { registerNumber: regex },
+                { name: regex }
+            ]
+        })
+        .populate('department', 'name shortName')
+        .sort({ registerNumber: 1 })
+        .limit(50);
+
+        const formatted = students.map(s => ({
+            registerNo: s.registerNumber,
+            name: s.name,
+            gender: s.gender,
+            cgpa: s.cgpa || 0,
+            currentArrears: s.currentArrear || 0,
+            placementStatus: s.placementStatus || 'Not Placed'
+        }));
+
+        res.json({ success: true, data: formatted });
+    } catch (error) {
+        console.error('Search students error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// @desc    Get full student object by register number
+// @route   GET /api/students/:registerNo
+exports.getStudentByRegisterNumber = async (req, res) => {
+    try {
+        const { registerNo } = req.params;
+        const student = await Student.findOne({ registerNumber: registerNo })
+            .populate('department', 'name shortName')
+            .populate('section', 'name year');
+        
+        if (!student) {
+            return res.status(404).json({ message: 'Student not found' });
+        }
+
+        // Format DOB if it's an Excel serial date
+        const formatDOB = (dobVal) => {
+            if (!dobVal) return '—';
+            const num = Number(dobVal);
+            if (!isNaN(num) && num > 0) {
+                try {
+                    const date = new Date((num - 25569) * 86400 * 1000);
+                    const dd = String(date.getDate()).padStart(2, '0');
+                    const mm = String(date.getMonth() + 1).padStart(2, '0');
+                    const yyyy = date.getFullYear();
+                    return `${dd}/${mm}/${yyyy}`;
+                } catch (e) {
+                    return dobVal;
+                }
+            }
+            return dobVal;
+        };
+
+        const mapped = {
+            registerNo: student.registerNumber,
+            name: student.name,
+            department: student.department ? (student.department.shortName || student.department.name) : '',
+            gender: student.gender,
+            dob: formatDOB(student.dob),
+            bloodGroup: student.bloodGroup || '—',
+            
+            // Contact
+            phone: student.phone || '—',
+            email: student.email || '—',
+            personalEmail: student.personalEmail || '—',
+            address: student.address || '—',
+            nativePlace: student.nativePlace || '—',
+            nativeState: student.nativeState || '—',
+            
+            // Academic
+            tenthPercentage: student.tenthPercentage || 0,
+            twelfthPercentage: student.twelfthPercentage || 0,
+            diplomaPercentage: student.diplomaPercentage || 0,
+            cgpa: student.cgpa || 0,
+            currentArrears: student.currentArrear || 0,
+            historyArrears: student.historyOfArrear || 0,
+            twelfthMedium: student.twelfthMedium || 'English',
+            
+            // Personal
+            transport: student.residency || '—', // Maps residency (Hostel/Dayscholar) -> transport
+            firstGraduate: student.firstGraduate || 'No',
+            college: student.college || 'MEC',
+            
+            // Placement
+            placementStatus: student.placementStatus || 'Not Placed',
+            placementCompany: student.placementCompany || '—',
+            placementRole: student.placementRole || '—',
+            placementPackage: student.placementPackage || '—',
+            placementType: student.placementType || '—',
+            placementDate: student.placementDate || '—'
+        };
+
+        res.json({ success: true, data: mapped });
+    } catch (error) {
+        console.error('Get student details error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

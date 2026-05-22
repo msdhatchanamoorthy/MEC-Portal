@@ -427,9 +427,9 @@ const AttendanceReports = () => {
                 }}>
                     <div className="modal-content card" style={{
                         maxWidth: 700, width: '100%', maxHeight: '90vh', overflowY: 'auto',
-                        padding: 0, background: 'white', borderRadius: 24, 
+                        padding: 0, background: 'var(--glass-bg)', backdropFilter: 'blur(20px)', borderRadius: 24, 
                         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.2)',
-                        border: '1px solid var(--gray-200)'
+                        border: '1px solid var(--glass-border)'
                     }}>
                         <div className="card-header" style={{
                             display: 'flex', justifyContent: 'space-between', alignItems: 'center',

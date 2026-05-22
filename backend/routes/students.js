@@ -6,11 +6,16 @@ const {
     updateStudent,
     deleteStudent,
     uploadExcel,
-    deleteSection
+    deleteSection,
+    searchStudents,
+    getStudentByRegisterNumber
 } = require('../controllers/studentController');
 const { protect, roleCheck } = require('../middleware/auth');
 
 router.use(protect);
+
+router.get('/search', roleCheck('hod', 'staff'), searchStudents);
+router.get('/:registerNo', roleCheck('hod', 'staff'), getStudentByRegisterNumber);
 
 router.get('/', getStudents);
 router.post('/', roleCheck('principal', 'hod'), createStudent);

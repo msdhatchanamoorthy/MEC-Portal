@@ -43,6 +43,7 @@ const NAV_CONFIG = {
         {
             section: 'Department', items: [
                 { icon: '🎓', label: 'Students', path: '/hod/students' },
+                { icon: '👤', label: 'Student Management', path: '/student-management' },
                 { icon: '⚙️', label: 'Academic Setup', path: '/hod/setup' },
                 { icon: '🗓️', label: 'Manage Timetable', path: '/hod/timetable' },
             ]
@@ -62,7 +63,7 @@ const NAV_CONFIG = {
         },
         {
             section: 'Academic', items: [
-                { icon: '📈', label: 'Student Performance', path: '/staff/performance' },
+                { icon: '📈', label: 'Student Management', path: '/student-management' },
             ]
         },
     ],
@@ -104,7 +105,7 @@ const Sidebar = () => {
     if (user?.role === 'staff' && user?.email?.includes('.ca@')) {
         const advisorItems = [
             {
-                section: 'Student Management', items: [
+                section: 'Advisor Space', items: [
                     { icon: '📁', label: 'Student Documents', path: '/advisor/documents' },
                     { icon: '💬', label: 'Student Messages', path: '/advisor/messages' },
                 ]

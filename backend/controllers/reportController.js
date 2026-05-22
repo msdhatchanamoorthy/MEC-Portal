@@ -148,7 +148,13 @@ const exportPDF = async (req, res) => {
         const filename = filterType === 'absentees' ? 'absentee_report.pdf' : 'attendance_report.pdf';
         res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
 
-        const doc = new PDFDocument({ margin: 30, size: 'A4', layout: 'landscape', bufferPages: true });
+        const doc = new PDFDocument({ 
+            size: 'A4', 
+            layout: 'landscape', 
+            margins: { top: 30, bottom: 10, left: 30, right: 30 },
+            bufferPages: true,
+            autoFirstPage: true
+        });
         doc.pipe(res);
 
         const colors = {
@@ -175,7 +181,7 @@ const exportPDF = async (req, res) => {
                 doc.fillColor('#FFFFFF').fontSize(8).font('Helvetica');
                 doc.text(`DATE: ${new Date().toLocaleDateString('en-GB')}`, 550, 35, { align: 'right', width: 240 });
                 doc.text(`TIME: ${new Date().toLocaleTimeString('en-US')}`, 550, 47, { align: 'right', width: 240 });
-                doc.text(`ISSUED BY: ${req.user.name.toUpperCase()}`, 550, 59, { align: 'right', width: 240 });
+                doc.text(`ISSUED BY: ${(req.user?.name || '').toUpperCase()}`, 550, 59, { align: 'right', width: 240 });
                 doc.restore();
 
                 if (isFirstPage) {
@@ -193,11 +199,11 @@ const exportPDF = async (req, res) => {
                     };
 
                     const deptName = records[0].department?.name || 'ALL DEPARTMENTS';
-                    const yNum = parseInt(year);
+                    const yNum = parseInt(year) || records[0].year;
                     const yText = !isNaN(yNum) ? `${yNum}${['st', 'nd', 'rd', 'th'][yNum - 1] || ''} Year` : '';
                     
                     drawCard('DEPARTMENT', deptName, 40);
-                    drawCard('YEAR / SECTION', sectionId ? `${yText} - Sec ${records[0].section?.name || 'N/A'}` : 'CONSOLIDATED', 235);
+                    drawCard('YEAR / SECTION', (sectionId || records[0].section) ? `${yText} - Sec ${records[0].section?.name || 'N/A'}` : 'CONSOLIDATED', 235);
                     
                     const statsX = 430;
                     doc.save();
@@ -248,16 +254,28 @@ const exportPDF = async (req, res) => {
             return y + 35;
         };
 
+        const pageHeight = 595.28;
+        const bottomMargin = 55;
+        const topMargin = 140;
+
         let currentY = drawTableHeader(205);
         let rowCount = 0;
 
-        allEntries.forEach((item) => {
-            if (currentY > 530) {
-                doc.addPage({ size: 'A4', layout: 'landscape' });
+        allEntries.forEach((item, idx) => {
+            const nextRowHeight = 21;
+            
+            // Fix page-break logic: Only add a page when we are CERTAIN more content follows immediately and doesn't fit
+            if (currentY + nextRowHeight > pageHeight - bottomMargin) {
+                doc.addPage({ size: 'A4', layout: 'landscape', margins: { top: 30, bottom: 10, left: 30, right: 30 } });
                 drawHeader(false);
-                currentY = drawTableHeader(140);
+                currentY = drawTableHeader(topMargin);
             }
-            if (rowCount % 2 === 1) doc.fillColor('#F8FAFC').rect(40, currentY - 5, 750, 25).fill();
+
+            if (rowCount % 2 === 1) {
+                doc.save();
+                doc.fillColor('#F8FAFC').rect(40, currentY - 4, 750, 21).fill();
+                doc.restore();
+            }
 
             const { record, entry, isSummary, stats } = item;
             doc.fontSize(8).font('Helvetica').fillColor(colors.textMain);
@@ -283,20 +301,23 @@ const exportPDF = async (req, res) => {
                 doc.fontSize(7).text(entry.student?.gender === 'Male' ? 'MALE' : 'FEMALE', columns.gender.x + 8, currentY);
                 doc.fontSize(7).text(record.staffName || '---', columns.staff.x + 8, currentY, { width: 100, ellipsis: true });
                 const sColor = entry.status === 'Present' ? colors.success : (entry.status === 'OD' ? colors.info : colors.danger);
-                doc.save(); doc.roundedRect(columns.status.x, currentY - 5, 50, 16, 8).fill(sColor);
+                doc.save(); doc.roundedRect(columns.status.x, currentY - 3, 50, 14, 7).fill(sColor);
                 doc.fillColor('#FFFFFF').fontSize(7).font('Helvetica-Bold').text(entry.status.toUpperCase().charAt(0), columns.status.x, currentY - 1, { width: 50, align: 'center' });
                 doc.restore();
             }
-            currentY += 25;
+            currentY += 21;
             rowCount++;
         });
 
-        if (currentY > 480) {
-            doc.addPage({ size: 'A4', layout: 'landscape' });
+        // Remove addPage() after last row - Signature block fitting check
+        const sigBlockHeight = 50;
+        if (currentY + sigBlockHeight > pageHeight - bottomMargin) {
+            doc.addPage({ size: 'A4', layout: 'landscape', margins: { top: 30, bottom: 10, left: 30, right: 30 } });
             drawHeader(false);
-            currentY = 140;
+            currentY = topMargin;
         }
-        const signY = currentY + 70;
+
+        const signY = currentY + 30;
         doc.save();
         doc.lineWidth(0.5).strokeColor(colors.border).moveTo(40, signY).lineTo(220, signY).stroke();
         doc.fontSize(9).font('Helvetica-Bold').fillColor(colors.textMain).text('CLASS IN-CHARGE', 40, signY + 10, { width: 180, align: 'center' });
@@ -306,14 +327,17 @@ const exportPDF = async (req, res) => {
         doc.fontSize(9).font('Helvetica-Bold').fillColor(colors.textMain).text('HEAD OF THE DEPARTMENT', doc.page.width - 220, signY + 10, { width: 180, align: 'center' });
         doc.restore();
 
-        const pages = doc.bufferedPageRange();
-        for (let i = 0; i < pages.count; i++) {
+        // Fix the page counter / footer loop
+        const range = doc.bufferedPageRange();
+        for (let i = range.start; i < range.start + range.count; i++) {
             doc.switchToPage(i);
             doc.save();
             doc.rect(0, doc.page.height - 40, doc.page.width, 40).fill(colors.primary);
-            doc.fillColor('rgba(255,255,255,0.6)').fontSize(8).font('Helvetica').text(`PAGE ${i + 1} OF ${pages.count} | SECURE DIGITAL REPORT | © MUTHAYAMMAL ENGINEERING COLLEGE`, 0, doc.page.height - 25, { align: 'center', width: doc.page.width });
+            doc.fillColor('rgba(255,255,255,0.6)').fontSize(8).font('Helvetica').text(`PAGE ${i + 1} OF ${range.count} | SECURE DIGITAL REPORT | © MUTHAYAMMAL ENGINEERING COLLEGE`, 0, doc.page.height - 25, { align: 'center', width: doc.page.width });
             doc.restore();
         }
+        
+        // End the stream correctly
         doc.end();
     } catch (error) {
         console.error('PDF export error:', error);

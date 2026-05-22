@@ -18,6 +18,7 @@ import StaffDashboard from './pages/staff/StaffDashboard';
 import MarkAttendance from './pages/staff/MarkAttendance';
 import AttendanceReports from './pages/shared/AttendanceReports';
 import StudentsPage from './pages/shared/StudentsPage';
+import StudentManagement from './pages/shared/StudentManagement';
 import ManageUsers from './pages/principal/ManageUsers';
 import ManageAcademicData from './pages/shared/ManageAcademicData';
 import ProfileSettings from './pages/shared/ProfileSettings';
@@ -308,6 +309,16 @@ function App() {
                         element={
                             <ProtectedRoute>
                                 <ProfileSettings />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* Student Management */}
+                    <Route
+                        path="/student-management"
+                        element={
+                            <ProtectedRoute roles={['hod', 'staff']}>
+                                <StudentManagement />
                             </ProtectedRoute>
                         }
                     />

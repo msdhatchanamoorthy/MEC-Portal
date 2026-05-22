@@ -84,23 +84,24 @@ const StaffDashboard = () => {
                 const wb = XLSX.read(bstr, { type: 'binary' });
                 const wsname = wb.SheetNames[0];
                 const ws = wb.Sheets[wsname];
-                const data = XLSX.utils.sheet_to_json(ws);
+                const sheetRows = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
-                if (data.length === 0) {
+                if (sheetRows.length <= 1) {
                     toast.error('Excel file is empty. Please add student data and try again.');
                     return;
                 }
 
-                // Helper to find value by flexible column name
-                const getVal = (row, ...keys) => {
-                    const rowKeys = Object.keys(row);
-                    for (const key of keys) {
-                        const foundKey = rowKeys.find(rk =>
-                            rk.toLowerCase().replace(/[^a-z0-9]/g, '') === key.toLowerCase().replace(/[^a-z0-9]/g, '')
-                        );
-                        if (foundKey) return row[foundKey];
+                // Helper to safely get row value by 0-indexed column
+                const getVal = (row, idx) => (row && row[idx] !== undefined && row[idx] !== null) ? row[idx].toString().trim() : '';
+
+                const parsePercentage = (val) => {
+                    let num = parseFloat(val);
+                    if (isNaN(num)) return null;
+                    // Excel percentage: 0.7233 is 72.33%, 1.0 is 100%
+                    if (num > 0 && num <= 1.0) {
+                        return parseFloat((num * 100).toFixed(2));
                     }
-                    return null;
+                    return num;
                 };
 
                 // Determine the staff's own section (the only section they upload for)
@@ -113,47 +114,84 @@ const StaffDashboard = () => {
                 const studentsToUpload = [];
                 const rowErrors = [];
 
-                data.forEach((row, index) => {
-                    const rowNum = index + 2;
+                // Skip the first row (headers) and skip empty rows or headers
+                sheetRows.slice(1).forEach((row, index) => {
+                    const rowNum = index + 2;                    
+                    if (!row || row.length === 0) return;
 
-                    let name = '', regNo = '', rollNo = '', genderVal = '', resVal = '', personalMail = '', marks = 0;
+                    const sNo = getVal(row, 0);
+                    const regNo = getVal(row, 1);
+                    const name = getVal(row, 2);
 
-                    // Use the same smart scanner logic as StudentsPage
-                    Object.keys(row).forEach(key => {
-                        const k = key.toLowerCase().trim();
-                        const val = row[key] ? row[key].toString().trim() : '';
+                    if (!sNo && !regNo && !name) return; // completely empty row, skip silently
+                    if (sNo.toLowerCase().includes('s.no') || regNo.toLowerCase() === 'register number') return; // header row, skip
 
-                        if (k.includes('name')) name = val;
-                        if (k.includes('num') || k.includes('reg') || k.includes('roll')) {
-                            if (!regNo) regNo = val;
-                            else rollNo = val;
-                        }
-                        if (k.includes('gender') || k.includes('sex')) genderVal = val.toLowerCase();
-                        if (k.includes('residency') || k.includes('type') || k.includes('status')) resVal = val.toLowerCase();
-                        if (k.includes('personal') || k.includes('mail')) personalMail = val;
-                        if (k.includes('mark')) marks = parseFloat(val) || 0;
-                    });
+                    if (!regNo) {
+                        rowErrors.push(`Row ${rowNum}: Register Number is missing`);
+                        return;
+                    }
+                    if (!name) {
+                        rowErrors.push(`Row ${rowNum}: Student Name is missing`);
+                        return;
+                    }
 
-                    if (!regNo && rollNo) regNo = rollNo;
-                    if (!rollNo && regNo) rollNo = regNo;
-
-                    if (!name) { rowErrors.push(`Row ${rowNum}: Student Name is missing`); return; }
-                    if (!regNo) { rowErrors.push(`Row ${rowNum}: Register Number is missing`); return; }
-
-                    const staffSectionId = typeof staffSection === 'string' ? staffSection : staffSection?._id;
+                    const tenth = parsePercentage(getVal(row, 4));
+                    const twelfth = parsePercentage(getVal(row, 5));
+                    const diploma = parsePercentage(getVal(row, 6));
+                    const cgpaVal = parseFloat(getVal(row, 7)) || 0;
+                    const currArrear = parseInt(getVal(row, 8)) || 0;
+                    const histArrear = parseInt(getVal(row, 9)) || 0;
+                    const emailVal = getVal(row, 10);
+                    const phoneVal = getVal(row, 11);
+                    const dobVal = getVal(row, 12);
+                    const genderVal = getVal(row, 13).toLowerCase();
+                    const blood = getVal(row, 14);
+                    const coll = getVal(row, 15) || 'Muthayammal Engineering College';
+                    const residencyVal = getVal(row, 16).toLowerCase();
+                    const firstGrad = getVal(row, 17) || 'No';
+                    const addr = getVal(row, 18);
+                    const nativePl = getVal(row, 19);
+                    const nativeSt = getVal(row, 20);
+                    const medium = getVal(row, 21) || 'English';
+                    const placement = getVal(row, 22) || 'Not Placed';
+                    const placementCompany = getVal(row, 23);
+                    const placementRole = getVal(row, 24);
+                    const placementType = getVal(row, 25);
+                    const placementPackage = getVal(row, 26);
+                    const placementDate = getVal(row, 27);
 
                     studentsToUpload.push({
-                        name: name.toString().trim(),
-                        rollNumber: rollNo.toString().trim(),
-                        registerNumber: regNo.toString().trim(),
+                        name: name,
+                        rollNumber: regNo,
+                        registerNumber: regNo,
                         year: staffYear || 1,
                         section: staffSectionId,
                         department: staffDeptId,
-                        email: `${regNo.toString().trim().toLowerCase()}@student.mec.edu.in`,
-                        personalEmail: personalMail,
-                        internalMarks: marks,
+                        email: emailVal || `${regNo.toLowerCase()}@student.mec.edu.in`,
+                        personalEmail: emailVal || '',
+                        phone: phoneVal,
                         gender: (genderVal.includes('girl') || genderVal.includes('female') || genderVal === 'f') ? 'Female' : 'Male',
-                        residency: (resVal.includes('hostel')) ? 'Hosteller' : 'Day Scholar'
+                        residency: (residencyVal.includes('hostel') || residencyVal.includes('hosteller')) ? 'Hosteller' : 'Day Scholar',
+                        tenthPercentage: tenth,
+                        twelfthPercentage: twelfth,
+                        diplomaPercentage: diploma,
+                        cgpa: cgpaVal,
+                        currentArrear: currArrear,
+                        historyOfArrear: histArrear,
+                        dob: dobVal,
+                        bloodGroup: blood,
+                        college: coll,
+                        firstGraduate: firstGrad,
+                        address: addr,
+                        nativePlace: nativePl,
+                        nativeState: nativeSt,
+                        twelfthMedium: medium,
+                        placementStatus: placement,
+                        placementCompany: placementCompany || '',
+                        placementRole: placementRole || '',
+                        placementType: placementType || '',
+                        placementPackage: placementPackage || '',
+                        placementDate: placementDate || ''
                     });
                 });
 

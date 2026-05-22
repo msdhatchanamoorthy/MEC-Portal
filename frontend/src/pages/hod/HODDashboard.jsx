@@ -669,7 +669,7 @@ const HODDashboard = () => {
                                 ) : (
                                     <div className="empty-state" style={{ padding: '60px 20px' }}>
                                         <div className="empty-state-icon" style={{ fontSize: 48, marginBottom: 16 }}>📢</div>
-                                        <h3 style={{ fontSize: 18, fontWeight: 600, color: '#374151' }}>No Reports Yet</h3>
+                                        <h3 style={{ fontSize: 18, fontWeight: 600, color: 'var(--gray-900)' }}>No Reports Yet</h3>
                                         <p style={{ color: '#6B7280', maxWidth: 300, margin: '8px auto' }}>
                                             Staff members can manually report their duty names here.
                                         </p>

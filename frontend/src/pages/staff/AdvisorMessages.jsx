@@ -114,12 +114,13 @@ const AdvisorMessages = () => {
                         display: 'flex', 
                         justifyContent: 'space-between', 
                         alignItems: 'center', 
-                        background: 'white', 
+                        background: 'var(--glass-bg)', 
+                        backdropFilter: 'blur(24px)',
                         padding: '12px 24px', 
                         borderRadius: 16, 
                         marginBottom: 16,
-                        border: '1px solid var(--gray-200)',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+                        border: '1px solid var(--glass-border)',
+                        boxShadow: 'var(--glass-shadow)'
                     }}>
                         <div style={{ display: 'flex', gap: 20 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -143,18 +144,19 @@ const AdvisorMessages = () => {
                         display: 'flex', 
                         gap: 24, 
                         height: 'calc(100vh - 180px)',
-                        background: 'white',
+                        background: 'var(--glass-bg)',
+                        backdropFilter: 'blur(24px)',
                         borderRadius: 24,
                         overflow: 'hidden',
-                        border: '1px solid var(--gray-200)',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.08)'
+                        border: '1px solid var(--glass-border)',
+                        boxShadow: 'var(--glass-shadow)'
                     }}>
                         {/* Student Search & List */}
                         <div style={{ 
                             width: 320, 
                             display: 'flex', 
                             flexDirection: 'column',
-                            borderRight: '1px solid var(--gray-100)',
+                            borderRight: '1px solid var(--glass-border)',
                             background: 'var(--gray-50)'
                         }}>
                             <div style={{ padding: 20 }}>
@@ -166,7 +168,9 @@ const AdvisorMessages = () => {
                                         value={searchTerm}
                                         onChange={e => setSearchTerm(e.target.value)}
                                         style={{ 
-                                            background: 'rgba(255, 255, 255, 0.05)', 
+                                            background: 'var(--gray-100)', 
+                                            color: 'var(--gray-800)',
+                                            border: '1px solid var(--gray-200)',
                                             borderRadius: 12,
                                             paddingLeft: 40,
                                             fontSize: 13
@@ -224,11 +228,11 @@ const AdvisorMessages = () => {
                                 <>
                                     <div style={{ 
                                         padding: '20px 24px', 
-                                        borderBottom: '1px solid var(--gray-100)',
+                                        borderBottom: '1px solid var(--glass-border)',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: 15,
-                                        background: 'white'
+                                        background: 'transparent'
                                     }}>
                                         <div style={{ 
                                             width: 40, 
@@ -242,7 +246,7 @@ const AdvisorMessages = () => {
                                             color: 'white'
                                         }}>{selectedStudent.name[0]}</div>
                                         <div>
-                                            <div style={{ fontWeight: 700, fontSize: 15 }}>{selectedStudent.name}</div>
+                                            <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--gray-900)' }}>{selectedStudent.name}</div>
                                             <div style={{ fontSize: 11, color: 'var(--gray-500)' }}>{selectedStudent.registerNumber}</div>
                                         </div>
                                     </div>
@@ -253,7 +257,7 @@ const AdvisorMessages = () => {
                                         display: 'flex', 
                                         flexDirection: 'column', 
                                         gap: 12,
-                                        background: '#F1F5F9' // Solid light gray for chat
+                                        background: 'var(--gray-100)'
                                     }}>
                                         <AnimatePresence initial={false}>
                                             {messages.map((msg, i) => (
@@ -265,7 +269,7 @@ const AdvisorMessages = () => {
                                                     style={{ 
                                                         maxWidth: '70%', 
                                                         alignSelf: msg.sender === user._id ? 'flex-end' : 'flex-start',
-                                                        background: msg.sender === user._id ? 'var(--accent-gradient)' : 'white',
+                                                        background: msg.sender === user._id ? 'var(--accent-gradient)' : 'var(--gray-50)',
                                                         color: msg.sender === user._id ? 'white' : 'var(--gray-800)',
                                                         padding: '12px 20px',
                                                         borderRadius: msg.sender === user._id ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
@@ -282,7 +286,7 @@ const AdvisorMessages = () => {
                                             ))}
                                         </AnimatePresence>
                                     </div>
-                                    <div style={{ padding: 24, background: 'rgba(255, 255, 255, 0.02)', borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                                    <div style={{ padding: 24, background: 'transparent', borderTop: '1px solid var(--glass-border)' }}>
                                         <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: 12 }}>
                                             <input 
                                                 type="text" 
@@ -291,11 +295,12 @@ const AdvisorMessages = () => {
                                                 value={newMessage}
                                                 onChange={e => setNewMessage(e.target.value)}
                                                 style={{ 
-                                                    background: 'rgba(255, 255, 255, 0.05)', 
+                                                    background: 'var(--gray-50)', 
+                                                    color: 'var(--gray-800)',
                                                     borderRadius: 16, 
                                                     height: 50,
                                                     padding: '0 20px',
-                                                    border: '1px solid rgba(255, 255, 255, 0.1)'
+                                                    border: '1px solid var(--gray-200)'
                                                 }}
                                             />
                                             <motion.button 

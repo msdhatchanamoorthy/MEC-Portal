@@ -122,14 +122,15 @@ export function NotificationCenter() {
                     top: '50px',
                     right: '0',
                     width: '320px',
-                    background: 'white',
+                    background: 'var(--glass-bg)',
+                    backdropFilter: 'blur(24px)',
                     borderRadius: '16px',
-                    boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
+                    boxShadow: 'var(--glass-shadow)',
                     zIndex: 1000,
                     overflow: 'hidden',
-                    border: '1px solid var(--gray-200)'
+                    border: '1px solid var(--glass-border)'
                 }}>
-                    <div style={{ padding: '16px', borderBottom: '1px solid var(--gray-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ padding: '16px', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: 'var(--primary-dark)' }}>Notifications</h4>
                         {unreadCount > 0 && (
                             <button onClick={markAllAsRead} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
@@ -150,8 +151,8 @@ export function NotificationCenter() {
                                     onClick={() => !n.read && markAsRead(n._id)}
                                     style={{
                                         padding: '16px',
-                                        borderBottom: '1px solid var(--gray-50)',
-                                        background: n.read ? 'transparent' : 'rgba(99, 102, 241, 0.05)',
+                                        borderBottom: '1px solid var(--glass-border)',
+                                        background: n.read ? 'transparent' : 'rgba(99, 102, 241, 0.08)',
                                         cursor: 'pointer',
                                         transition: 'background 0.2s'
                                     }}

@@ -245,7 +245,7 @@ const HODTopStudents = () => {
                         </form>
                     </div>
 
-                    <h2 style={{ fontSize: '20px', fontWeight: 600, color: '#1E3A5F', marginBottom: '15px' }}>
+                    <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--gray-900)', marginBottom: '15px' }}>
                         🏆 Department Top Achievers
                     </h2>
 
@@ -255,10 +255,17 @@ const HODTopStudents = () => {
                             <p style={{ color: '#6B7280' }}>Calculating attendance rankings...</p>
                         </div>
                     ) : (topStudents.length === 0 && groupedData.length === 0) ? (
-                        <div className="empty-state" style={{ padding: '60px 0', textAlign: 'center', background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+                        <div className="empty-state" style={{ 
+                            padding: '60px 0', 
+                            textAlign: 'center', 
+                            background: 'var(--glass-bg)', 
+                            border: '1px solid var(--glass-border)',
+                            borderRadius: '12px', 
+                            boxShadow: 'var(--glass-shadow)' 
+                        }}>
                             <div className="empty-icon" style={{ fontSize: '48px', marginBottom: '15px' }}>📊</div>
-                            <h3 style={{ fontSize: '18px', color: '#374151', marginBottom: '8px' }}>No Data Available</h3>
-                            <p style={{ color: '#6B7280', fontSize: '14px', maxWidth: '300px', margin: '0 auto' }}>
+                            <h3 style={{ fontSize: '18px', color: 'var(--gray-900)', marginBottom: '8px' }}>No Data Available</h3>
+                            <p style={{ color: 'var(--gray-600)', fontSize: '14px', maxWidth: '300px', margin: '0 auto' }}>
                                 We couldn't find any attendance logs matching your selected filters securely.
                             </p>
                         </div>
@@ -270,7 +277,7 @@ const HODTopStudents = () => {
                                         <div style={{ background: '#1D4ED8', color: '#fff', padding: '4px 12px', borderRadius: '8px', fontWeight: 700 }}>
                                             {group.year}{['st', 'nd', 'rd', 'th'][group.year - 1]} Yr
                                         </div>
-                                        <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1E3A5F', margin: 0 }}>
+                                        <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--gray-900)', margin: 0 }}>
                                             Section {group.sectionName} — Top Performers
                                         </h3>
                                     </div>
