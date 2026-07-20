@@ -162,12 +162,92 @@ exports.deleteStudent = async (req, res) => {
 exports.uploadExcel = async (req, res) => {
     try {
         const { students, department, year, section } = req.body;
-        // Clear existing students for this section to prevent duplicates or stale data
-        await Student.deleteMany({ department, year, section });
-        
-        const created = await Student.insertMany(students);
-        res.json({ success: true, count: created.length });
+        if (!students || !Array.isArray(students) || students.length === 0) {
+            return res.status(400).json({ message: 'No student data provided' });
+        }
+
+        // 1. Deduplicate incoming students by rollNumber / registerNumber
+        const studentMap = new Map();
+        for (const s of students) {
+            const rollNo = (s.rollNumber || s.registerNumber || '').toString().trim();
+            if (!rollNo) continue;
+            studentMap.set(rollNo.toUpperCase(), s);
+        }
+
+        const uniqueStudents = Array.from(studentMap.values());
+        if (uniqueStudents.length === 0) {
+            return res.status(400).json({ message: 'No valid student roll numbers found' });
+        }
+
+        const uploadedRolls = uniqueStudents.map(s => (s.rollNumber || s.registerNumber || '').toString().trim());
+
+        // 2. Clear old students from this specific section who are not in the new upload list
+        if (department && year && section) {
+            await Student.deleteMany({
+                department,
+                year: Number(year),
+                section,
+                rollNumber: { $nin: uploadedRolls }
+            });
+        }
+
+        // 3. Find existing students across all sections by rollNumber or registerNumber
+        const existingStudents = await Student.find({
+            $or: [
+                { rollNumber: { $in: uploadedRolls.map(r => new RegExp(`^${r}$`, 'i')) } },
+                { registerNumber: { $in: uploadedRolls.map(r => new RegExp(`^${r}$`, 'i')) } }
+            ]
+        });
+
+        const existingMap = new Map();
+        existingStudents.forEach(st => {
+            if (st.rollNumber) existingMap.set(st.rollNumber.toUpperCase(), st._id);
+            if (st.registerNumber) existingMap.set(st.registerNumber.toUpperCase(), st._id);
+        });
+
+        // 4. Build bulkWrite operations (update existing, upsert new)
+        const bulkOps = uniqueStudents.map(s => {
+            const rollNo = (s.rollNumber || s.registerNumber || '').toString().trim();
+            const regNo = (s.registerNumber || s.rollNumber || '').toString().trim();
+            const { _id, ...cleanStudentData } = s;
+
+            const updateFields = {
+                ...cleanStudentData,
+                rollNumber: rollNo,
+                registerNumber: regNo,
+            };
+
+            if (department) updateFields.department = department;
+            if (year) updateFields.year = Number(year);
+            if (section) updateFields.section = section;
+
+            const matchedId = existingMap.get(rollNo.toUpperCase());
+
+            if (matchedId) {
+                return {
+                    updateOne: {
+                        filter: { _id: matchedId },
+                        update: { $set: updateFields }
+                    }
+                };
+            } else {
+                return {
+                    updateOne: {
+                        filter: { rollNumber: rollNo },
+                        update: { $set: updateFields },
+                        upsert: true
+                    }
+                };
+            }
+        });
+
+        if (bulkOps.length > 0) {
+            await Student.bulkWrite(bulkOps);
+        }
+
+        res.json({ success: true, count: uniqueStudents.length });
     } catch (error) {
+        console.error('Upload Excel Error:', error);
         res.status(400).json({ message: error.message });
     }
 };

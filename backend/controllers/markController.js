@@ -17,8 +17,12 @@ const uploadMarks = async (req, res) => {
         for (const m of marks) {
             if (!m.rollNumber) continue;
             
-            const student = await Student.findOne({ 
-                rollNumber: m.rollNumber.toString().trim() 
+            const cleanRoll = m.rollNumber.toString().trim();
+            const student = await Student.findOne({
+                $or: [
+                    { rollNumber: new RegExp(`^${cleanRoll}$`, 'i') },
+                    { registerNumber: new RegExp(`^${cleanRoll}$`, 'i') }
+                ]
             });
 
             if (student) {
