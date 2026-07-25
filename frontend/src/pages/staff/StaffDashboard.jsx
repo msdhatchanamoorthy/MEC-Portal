@@ -110,7 +110,40 @@ const StaffDashboard = () => {
                 const staffDeptId = user?.department?._id || user?.department;
                 const staffYear = user?.year || (sections[0]?.year);
 
-                // Map Excel rows to student objects
+                // Map Excel rows to student objects dynamically based on header names
+                const headers = (sheetRows[0] || []).map(h => (h || '').toString().trim().toLowerCase());
+                const findHeaderIdx = (patterns, defaultIdx) => {
+                    const idx = headers.findIndex(h => patterns.some(p => h.includes(p)));
+                    return idx !== -1 ? idx : defaultIdx;
+                };
+
+                const regIdx = findHeaderIdx(['register number', 'roll number', 'reg no', 'roll no', 'reg_no', 'roll_no', 'register num', 'roll num', 'register', 'roll', 'ister num'], 1);
+                const nameIdx = findHeaderIdx(['student name', 'student_name', 'name', 'student'], 2);
+                const tenthIdx = findHeaderIdx(['10th', 'tenth'], 4);
+                const twelfthIdx = findHeaderIdx(['12th', 'twelfth'], 5);
+                const diplomaIdx = findHeaderIdx(['diploma'], 6);
+                const cgpaIdx = findHeaderIdx(['cgpa'], 7);
+                const currArrearIdx = findHeaderIdx(['current arrear', 'current_arrear', 'current arrears', 'arrear'], 8);
+                const histArrearIdx = findHeaderIdx(['history'], 9);
+                const emailIdx = findHeaderIdx(['email', 'e-mail', 'mail'], 10);
+                const phoneIdx = findHeaderIdx(['phone', 'mobile', 'contact'], 11);
+                const dobIdx = findHeaderIdx(['dob', 'date of birth', 'd.o.b'], 12);
+                const genderIdx = findHeaderIdx(['gender'], 13);
+                const bloodIdx = findHeaderIdx(['blood'], 14);
+                const collegeIdx = findHeaderIdx(['college'], 15);
+                const residencyIdx = findHeaderIdx(['residency', 'hostel', 'day scholar', 'dayscholar', 'transport'], 16);
+                const firstGradIdx = findHeaderIdx(['first graduate', 'first_graduate', 'first grad'], 17);
+                const addressIdx = findHeaderIdx(['address'], 18);
+                const nativePlIdx = findHeaderIdx(['native place', 'native_place', 'native'], 19);
+                const nativeStIdx = findHeaderIdx(['native state', 'native_state', 'state'], 20);
+                const mediumIdx = findHeaderIdx(['medium'], 21);
+                const placementIdx = findHeaderIdx(['placement status', 'placement'], 22);
+                const placementCompanyIdx = findHeaderIdx(['company', 'placement company'], 23);
+                const placementRoleIdx = findHeaderIdx(['role', 'placement role'], 24);
+                const placementTypeIdx = findHeaderIdx(['placement type'], 25);
+                const placementPackageIdx = findHeaderIdx(['package', 'salary', 'placement package'], 26);
+                const placementDateIdx = findHeaderIdx(['placement date'], 27);
+
                 const studentsToUpload = [];
                 const rowErrors = [];
 
@@ -120,11 +153,11 @@ const StaffDashboard = () => {
                     if (!row || row.length === 0) return;
 
                     const sNo = getVal(row, 0);
-                    const regNo = getVal(row, 1);
-                    const name = getVal(row, 2);
+                    const regNo = getVal(row, regIdx);
+                    const name = getVal(row, nameIdx);
 
                     if (!sNo && !regNo && !name) return; // completely empty row, skip silently
-                    if (sNo.toLowerCase().includes('s.no') || regNo.toLowerCase() === 'register number') return; // header row, skip
+                    if (sNo.toLowerCase().includes('s.no') || regNo.toLowerCase() === 'register number' || regNo.toLowerCase() === 'roll number') return; // header row, skip
 
                     if (!regNo) {
                         rowErrors.push(`Row ${rowNum}: Register Number is missing`);
@@ -135,30 +168,30 @@ const StaffDashboard = () => {
                         return;
                     }
 
-                    const tenth = parsePercentage(getVal(row, 4));
-                    const twelfth = parsePercentage(getVal(row, 5));
-                    const diploma = parsePercentage(getVal(row, 6));
-                    const cgpaVal = parseFloat(getVal(row, 7)) || 0;
-                    const currArrear = parseInt(getVal(row, 8)) || 0;
-                    const histArrear = parseInt(getVal(row, 9)) || 0;
-                    const emailVal = getVal(row, 10);
-                    const phoneVal = getVal(row, 11);
-                    const dobVal = getVal(row, 12);
-                    const genderVal = getVal(row, 13).toLowerCase();
-                    const blood = getVal(row, 14);
-                    const coll = getVal(row, 15) || 'Muthayammal Engineering College';
-                    const residencyVal = getVal(row, 16).toLowerCase();
-                    const firstGrad = getVal(row, 17) || 'No';
-                    const addr = getVal(row, 18);
-                    const nativePl = getVal(row, 19);
-                    const nativeSt = getVal(row, 20);
-                    const medium = getVal(row, 21) || 'English';
-                    const placement = getVal(row, 22) || 'Not Placed';
-                    const placementCompany = getVal(row, 23);
-                    const placementRole = getVal(row, 24);
-                    const placementType = getVal(row, 25);
-                    const placementPackage = getVal(row, 26);
-                    const placementDate = getVal(row, 27);
+                    const tenth = parsePercentage(getVal(row, tenthIdx));
+                    const twelfth = parsePercentage(getVal(row, twelfthIdx));
+                    const diploma = parsePercentage(getVal(row, diplomaIdx));
+                    const cgpaVal = parseFloat(getVal(row, cgpaIdx)) || 0;
+                    const currArrear = parseInt(getVal(row, currArrearIdx)) || 0;
+                    const histArrear = parseInt(getVal(row, histArrearIdx)) || 0;
+                    const emailVal = getVal(row, emailIdx);
+                    const phoneVal = getVal(row, phoneIdx);
+                    const dobVal = getVal(row, dobIdx);
+                    const genderVal = getVal(row, genderIdx).toLowerCase();
+                    const blood = getVal(row, bloodIdx);
+                    const coll = getVal(row, collegeIdx) || 'Muthayammal Engineering College';
+                    const residencyVal = getVal(row, residencyIdx).toLowerCase();
+                    const firstGrad = getVal(row, firstGradIdx) || 'No';
+                    const addr = getVal(row, addressIdx);
+                    const nativePl = getVal(row, nativePlIdx);
+                    const nativeSt = getVal(row, nativeStIdx);
+                    const medium = getVal(row, mediumIdx) || 'English';
+                    const placement = getVal(row, placementIdx) || 'Not Placed';
+                    const placementCompany = getVal(row, placementCompanyIdx);
+                    const placementRole = getVal(row, placementRoleIdx);
+                    const placementType = getVal(row, placementTypeIdx);
+                    const placementPackage = getVal(row, placementPackageIdx);
+                    const placementDate = getVal(row, placementDateIdx);
 
                     studentsToUpload.push({
                         name: name,

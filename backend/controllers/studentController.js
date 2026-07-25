@@ -82,11 +82,25 @@ const findAdvisorForStudent = async (student) => {
 // @route   GET /api/students
 exports.getStudents = async (req, res) => {
     try {
-        const { departmentId, year, sectionId } = req.query;
+        const { departmentId, year, sectionId, search } = req.query;
         const query = {};
-        if (departmentId) query.department = departmentId;
+        
+        let targetDeptId = departmentId;
+        if (req.user && ['hod', 'staff'].includes(req.user.role)) {
+            targetDeptId = req.user.department?._id || req.user.department;
+        }
+
+        if (targetDeptId) query.department = targetDeptId;
         if (year) query.year = year;
         if (sectionId) query.section = sectionId;
+
+        if (search) {
+            const regex = new RegExp(search, 'i');
+            query.$or = [
+                { name: regex },
+                { registerNumber: regex }
+            ];
+        }
 
         const students = await Student.find(query).populate('department section').sort({ rollNumber: 1 });
         res.json({ success: true, count: students.length, data: students });
@@ -345,15 +359,24 @@ exports.searchStudents = async (req, res) => {
         }
 
         const regex = new RegExp(q, 'i');
-        const students = await Student.find({
+        const queryObj = {
             $or: [
                 { registerNumber: regex },
                 { name: regex }
             ]
-        })
-        .populate('department', 'name shortName')
-        .sort({ registerNumber: 1 })
-        .limit(50);
+        };
+
+        if (req.user && ['hod', 'staff'].includes(req.user.role)) {
+            const deptId = req.user.department?._id || req.user.department;
+            if (deptId) {
+                queryObj.department = deptId;
+            }
+        }
+
+        const students = await Student.find(queryObj)
+            .populate('department', 'name shortName')
+            .sort({ registerNumber: 1 })
+            .limit(50);
 
         const formatted = students.map(s => ({
             registerNo: s.registerNumber,
@@ -376,7 +399,15 @@ exports.searchStudents = async (req, res) => {
 exports.getStudentByRegisterNumber = async (req, res) => {
     try {
         const { registerNo } = req.params;
-        const student = await Student.findOne({ registerNumber: registerNo })
+        const queryObj = { registerNumber: registerNo };
+        if (req.user && ['hod', 'staff'].includes(req.user.role)) {
+            const deptId = req.user.department?._id || req.user.department;
+            if (deptId) {
+                queryObj.department = deptId;
+            }
+        }
+
+        const student = await Student.findOne(queryObj)
             .populate('department', 'name shortName')
             .populate('section', 'name year');
         

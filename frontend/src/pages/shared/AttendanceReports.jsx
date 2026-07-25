@@ -14,20 +14,27 @@ const AttendanceReports = () => {
     const [exporting, setExporting] = useState('');
     const [absenteeModal, setAbsenteeModal] = useState({ open: false, data: null, loading: false });
 
+    const initialDeptId = ['hod', 'staff'].includes(user?.role) ? user?.department?._id || user?.department || '' : '';
+    const initialSectionId = user?.role === 'staff' ? user?.assignedSections?.[0]?._id || user?.assignedSections?.[0] || '' : '';
+    const initialYear = user?.role === 'staff' ? user?.assignedSections?.[0]?.year || user?.year || '' : '';
+
     // Filters
     const [filters, setFilters] = useState({
-        departmentId: user?.role === 'hod' ? user?.department?._id || '' : '',
-        year: '',
-        sectionId: '',
+        departmentId: initialDeptId,
+        year: initialYear,
+        sectionId: initialSectionId,
         date: new Date().toISOString().split('T')[0],
         status: '',
     });
 
     useEffect(() => {
         if (user?.role === 'principal') fetchDepartments();
-        fetchSections();
         fetchRecords();
     }, []);
+
+    useEffect(() => {
+        fetchSections();
+    }, [filters.departmentId, filters.year]);
 
     const fetchDepartments = async () => {
         try {
@@ -39,10 +46,28 @@ const AttendanceReports = () => {
     const fetchSections = async () => {
         try {
             const params = new URLSearchParams();
-            if (filters.departmentId) params.append('departmentId', filters.departmentId);
-            if (filters.year) params.append('year', filters.year);
+            const deptId = filters.departmentId || (user?.role === 'staff' ? user?.department?._id || user?.department : '');
+            if (deptId) params.append('departmentId', deptId);
+            
+            // For HOD / Principal, filter sections by selected year
+            if (user?.role !== 'staff' && filters.year) {
+                params.append('year', filters.year);
+            }
+            
             const res = await api.get(`/admin/sections?${params}`);
-            setSections(res.data.data || []);
+            let secs = res.data.data || [];
+            
+            if (user?.role === 'staff') {
+                if (user?.assignedSections?.length > 0) {
+                    const assignedIds = user.assignedSections.map((s) =>
+                        typeof s === 'string' ? s : s._id
+                    );
+                    secs = secs.filter((s) => assignedIds.includes(s._id));
+                } else if (user?.year && user?.section) {
+                    secs = secs.filter((s) => s.year === Number(user.year) && s.name.toUpperCase() === user.section.toUpperCase());
+                }
+            }
+            setSections(secs);
         } catch { }
     };
 
@@ -190,10 +215,16 @@ const AttendanceReports = () => {
                                     value={filters.year}
                                     onChange={(e) => handleFilterChange('year', e.target.value)}
                                 >
-                                    <option value="">All Years</option>
-                                    {[1, 2, 3, 4].map((y) => (
-                                        <option key={y} value={y}>{y}{['st', 'nd', 'rd', 'th'][y - 1]} Year</option>
-                                    ))}
+                                    {user?.role !== 'staff' && <option value="">All Years</option>}
+                                    {user?.role === 'staff' ? (
+                                        [...new Set(sections.map(s => s.year))].sort().map((y) => (
+                                            <option key={y} value={y}>{y}{['st', 'nd', 'rd', 'th'][y - 1]} Year</option>
+                                        ))
+                                    ) : (
+                                        [1, 2, 3, 4].map((y) => (
+                                            <option key={y} value={y}>{y}{['st', 'nd', 'rd', 'th'][y - 1]} Year</option>
+                                        ))
+                                    )}
                                 </select>
                             </div>
 
@@ -204,7 +235,7 @@ const AttendanceReports = () => {
                                     value={filters.sectionId}
                                     onChange={(e) => handleFilterChange('sectionId', e.target.value)}
                                 >
-                                    <option value="">All Sections</option>
+                                    {user?.role !== 'staff' && <option value="">All Sections</option>}
                                     {sections.map((s) => (
                                         <option key={s._id} value={s._id}>
                                             {s.year}{['st', 'nd', 'rd', 'th'][s.year - 1]} Yr — Sec {s.name}
