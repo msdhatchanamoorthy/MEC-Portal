@@ -52,7 +52,7 @@ const ProtectedRoute = ({ children, roles }) => {
         return (
             <div className="loading-fullscreen">
                 <div className="spinner spinner-dark" />
-                <p>Loading MEC Attendance System...</p>
+                <p>Loading Presenza...</p>
             </div>
         );
     }
@@ -71,7 +71,7 @@ const RoleRedirect = () => {
         return (
             <div className="loading-fullscreen">
                 <div className="spinner spinner-dark" />
-                <p>Loading MEC Attendance System...</p>
+                <p>Loading Presenza...</p>
             </div>
         );
     }

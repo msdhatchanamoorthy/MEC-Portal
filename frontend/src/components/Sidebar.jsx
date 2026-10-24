@@ -151,14 +151,14 @@ const Sidebar = () => {
                         whileHover={{ scale: 1.05 }}
                         className="sidebar-logo-inner" style={{ display: 'flex', alignItems: 'center', gap: 12 }}
                     >
-                        <motion.div
-                            animate={{ rotate: [0, 10, -10, 0] }}
-                            transition={{ repeat: Infinity, duration: 5 }}
-                            className="sidebar-logo-icon"
-                        >M</motion.div>
+                        <img 
+                            src="/presenza_logo.png" 
+                            alt="Presenza" 
+                            style={{ width: 38, height: 38, borderRadius: 10, objectFit: 'cover', boxShadow: '0 4px 12px rgba(124, 58, 237, 0.3)' }} 
+                        />
                         <div className="sidebar-logo-text">
-                            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--primary-dark)', letterSpacing: -1, margin: 0 }}>MEC SYS</h2>
-                            <span style={{ fontSize: 10, color: 'var(--gray-600)', textTransform: 'uppercase', letterSpacing: 1.5 }}>Premium Edition</span>
+                            <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--primary-dark)', letterSpacing: -1, margin: 0 }}>Presenza</h2>
+                            <span style={{ fontSize: 10, color: 'var(--gray-600)', textTransform: 'uppercase', letterSpacing: 1.5 }}>Attendance System</span>
                         </div>
                     </motion.div>
                 </div>

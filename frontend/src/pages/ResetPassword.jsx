@@ -37,7 +37,7 @@ const ResetPassword = () => {
                         🛡️
                     </div>
                     <h2 className="text-3xl font-black tracking-tight" style={{ color: 'var(--gray-900)', fontFamily: 'Syne, sans-serif' }}>Set New Password</h2>
-                    <p className="text-sm mt-2 font-medium" style={{ color: 'var(--gray-500)' }}>Create a secure password for your MEC Portal account.</p>
+                    <p className="text-sm mt-2 font-medium" style={{ color: 'var(--gray-500)' }}>Create a secure password for your Presenza account.</p>
                 </div>
 
                 <form onSubmit={handleSubmit}>

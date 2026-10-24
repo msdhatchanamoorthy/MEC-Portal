@@ -339,13 +339,13 @@ const Login = () => {
 
                         {/* Top Official Logo */}
                         <div className="flex justify-center mb-6">
-                            <div className="w-24 h-24 rounded-[2rem] flex items-center justify-center shadow-xl p-2 border border-white/10" style={{ background: 'var(--glass-bg)' }}>
-                                <img src="/logo.png" alt="MEC Logo" className="w-full h-full object-contain drop-shadow-md" />
+                            <div className="w-24 h-24 rounded-[2rem] flex items-center justify-center shadow-2xl p-1.5 border border-white/15 overflow-hidden" style={{ background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(12px)' }}>
+                                <img src="/presenza_logo.png" alt="Presenza Logo" className="w-full h-full object-cover rounded-[1.6rem] drop-shadow-lg" />
                             </div>
                         </div>
 
-                        <h1 className="text-3xl font-black text-center mb-2 font-['Syne',sans-serif] tracking-tight" style={{ color: 'var(--gray-900)' }}>MEC Portal</h1>
-                        <p className="text-center text-sm mb-8 font-medium" style={{ color: 'var(--gray-500)' }}>MEC Attendance System</p>
+                        <h1 className="text-3xl font-black text-center mb-2 font-['Syne',sans-serif] tracking-tight" style={{ color: 'var(--gray-900)' }}>Presenza</h1>
+                        <p className="text-center text-sm mb-8 font-medium" style={{ color: 'var(--gray-500)' }}>Attendance System</p>
 
                         {/* Role Selection */}
                         <div className="flex p-1 rounded-2xl mb-8 border border-white/5" style={{ background: 'var(--gray-100)' }}>

@@ -1,9 +1,38 @@
+# Dependencies
 node_modules/
+*/node_modules/
+
+# Environment Variables & Secrets
 .env
+*.env
+backend/.env
+frontend/.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Production Builds
 build/
 dist/
-.DS_Store
+
+# Scratch & Logs
+scratch/
+backend/scratch/
 *.log
-frontend/public/*.mp4
+*.log.txt
+backend/server_log.txt
+backend/test_output.txt
+backend/test_all_output*.txt
+backend/data_output.txt
+backend/debug_output.txt
+backend/list_output.txt
+backend/section_users.txt
+
+# OS & Temp
+.DS_Store
+Thumbs.db
+
+# Uploads
 backend/uploads/*
 !backend/uploads/.gitkeep
